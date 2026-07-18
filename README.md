@@ -107,7 +107,7 @@ No real candidate data or credentials are committed. The files under [demo/](dem
 
 1. Start the public-safe stack: `docker compose -p careeros-publication --env-file .env.example up -d --build`.
 2. Apply migrations: `docker compose -p careeros-publication --env-file .env.example exec backend alembic upgrade head`.
-3. Register a new local account, or set `SEED_ADMIN_EMAIL` and `SEED_ADMIN_PASSWORD` locally before first startup.
+3. Register a new local account, or set `SEED_DEMO_EMAIL` and `SEED_DEMO_PASSWORD` privately before an explicit demo seed step.
 4. Upload `demo/synthetic-resume.txt` from Knowledge Hub.
 5. Seed one fictional opportunity: `docker compose -p careeros-publication --env-file .env.example exec backend python scripts/seed_public_demo.py`.
 6. Analyze the resume and compare it with `demo/synthetic-job-description.md`.
@@ -115,7 +115,7 @@ No real candidate data or credentials are committed. The files under [demo/](dem
 
 The seed command is explicit, idempotent, and local-only. It never runs at application startup and does not replace live provider ingestion.
 
-Demo credentials are intentionally not stored in Git. A deployer may publish separate temporary credentials through the hackathon submission portal.
+Demo credentials are intentionally not stored in Git. A deployer may publish separate temporary non-admin demo-user credentials through the hackathon submission portal.
 
 ## Screenshots
 
@@ -125,8 +125,8 @@ Publication-safe screenshots are captured only from the synthetic/local demo flo
 
 Public readiness notes, validation scope, and known limitations are in [docs/PUBLICATION_READINESS.md](docs/PUBLICATION_READINESS.md).
 
-- Backend: `1088` tests collected; `1040` passed, `48` skipped, `0` failed, with `207` warnings in the latest full local gate.
-- Integration marker: `1` passed, `14` skipped, `1073` deselected, `0` failed.
+- Backend: `1090` tests collected; `1042` passed, `48` skipped, `0` failed, with `199` warnings in the latest full local gate.
+- Integration marker: `1` passed, `14` skipped, `1075` deselected, `0` failed.
 - Schema: Alembic head is `033_schema_contract_alignment`; fresh upgrade and `alembic check` passed with `0` detected upgrade operations.
 - Frontend: typecheck passed; Vitest ran `1` real CareerOS test file with `10` tests passed; lint had `0` errors and `211` warnings; production build passed with `30` app routes.
 - Synthetic E2E: authentication, resume upload/analysis, local Qdrant RAG indexing, grounded chatbot answer with citations, fictional opportunity retrieval, skill-gap analysis, and non-admin access blocking passed.
@@ -134,9 +134,9 @@ Public readiness notes, validation scope, and known limitations are in [docs/PUB
 
 ## Deployment
 
-Public deployment URL: **to be supplied by the hackathon team after deployment**.
+Public deployment URL: **pending deployment-provider selection**.
 
-The repository contains local and production Compose variants plus Nginx configuration. Treat production deployment as blocked until credentials are supplied through a secret manager, migrations are reviewed, health checks pass, and deployment verification is completed for the target environment.
+The repository contains local and production Compose variants plus Nginx configuration. The current production path is a Docker Compose/Nginx topology with PostgreSQL, Redis, Qdrant, FastAPI, ARQ worker, and Next.js. Public deployment remains blocked until an authenticated hosting target or VPS is available and credentials are supplied through a secret manager.
 
 ## Privacy and security
 

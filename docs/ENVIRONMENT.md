@@ -82,9 +82,11 @@ Public/demo setups must retain `OUTBOUND_CALL_DRY_RUN=true` and `CALL_ALERT_DRY_
 | `LANGSMITH_ENABLED` | Optional | Backend, worker | LangSmith tracing switch | `false` |
 | `LANGSMITH_FAIL_OPEN` | Recommended | Backend, worker | Keep workflows running if tracing fails | `true` |
 | `LANGCHAIN_API_KEY` | Required only for LangSmith | Backend, worker | LangSmith credential | blank |
-| `SEED_ADMIN_EMAIL` | Optional | Backend startup | Create one local admin only when DB has no users | blank |
-| `SEED_ADMIN_PASSWORD` | Required with seed email | Backend startup | Local seeded admin password | blank |
-| `SEED_ADMIN_NAME` | Optional | Backend startup | Seeded admin display name | `CareerOS Demo Administrator` |
+| `SEED_DEMO_EMAIL` | Optional | Explicit seed step | Create one fictional non-admin demo user only when DB has no users | blank |
+| `SEED_DEMO_PASSWORD` | Required with demo email | Explicit seed step | Temporary demo-user password stored only in a secret manager or ignored `.env` | blank |
+| `SEED_DEMO_NAME` | Optional | Explicit seed step | Seeded demo-user display name | `CareerOS Demo User` |
+| `SEED_DEMO_ROLE` | Optional | Explicit seed step | Seeded role; public demos must use non-admin `User` | `User` |
+| `SEED_ADMIN_EMAIL` / `SEED_ADMIN_PASSWORD` / `SEED_ADMIN_NAME` / `SEED_ADMIN_ROLE` | Legacy alias | Explicit seed step | Backward-compatible alias only; prefer `SEED_DEMO_*` | blank |
 
 ## Deployment-only variables
 

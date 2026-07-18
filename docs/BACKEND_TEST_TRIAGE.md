@@ -8,9 +8,9 @@ This file records the backend publication gate outcome and the test fixes made t
 
 | Gate | Result |
 |---|---|
-| Test collection | 1088 collected |
-| Full suite | 1040 passed, 48 skipped, 0 failed |
-| Integration marker | 1 passed, 14 skipped, 1073 deselected, 0 failed |
+| Test collection | 1090 collected |
+| Full suite | 1042 passed, 48 skipped, 0 failed |
+| Integration marker | 1 passed, 14 skipped, 1075 deselected, 0 failed |
 | Warning count | 207 warnings in the full suite |
 | Schema head | `033_schema_contract_alignment` |
 | Fresh migration | Passed |

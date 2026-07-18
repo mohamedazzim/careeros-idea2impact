@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   # PostgreSQL Database
   db:
@@ -34,16 +32,49 @@ services:
   redis:
     image: redis:7-alpine
     container_name: careeros-redis
-    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-}
+    command: >
+      sh -c 'if [ -n "$$REDIS_PASSWORD" ]; then
+        exec redis-server --appendonly yes --requirepass "$$REDIS_PASSWORD";
+      else
+        exec redis-server --appendonly yes;
+      fi'
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
     volumes:
       - redis_data:/data
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ["CMD-SHELL", "if [ -n \"$$REDIS_PASSWORD\" ]; then redis-cli -a \"$$REDIS_PASSWORD\" ping; else redis-cli ping; fi"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 5s
+    networks:
+      - careeros-net
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Qdrant Vector Store
+  qdrant:
+    image: qdrant/qdrant:v1.14.1
+    container_name: careeros-qdrant
+    ports:
+      - "127.0.0.1:6333:6333"  # Bind to localhost only; do not expose publicly
+      - "127.0.0.1:6334:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "timeout 5 bash -c '</dev/tcp/127.0.0.1/6333'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
     networks:
       - careeros-net
     security_opt:
@@ -64,13 +95,14 @@ services:
     ports:
       - "127.0.0.1:8000:8000"  # Bind to localhost only
     environment:
-      DATABASE_URL: ${DATABASE_URL}
-      REDIS_URL: ${REDIS_URL}
-      REDIS_HOST: ${REDIS_HOST}
-      QDRANT_URL: ${QDRANT_URL}
+      DATABASE_URL: ${DATABASE_URL:-postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+      REDIS_HOST: ${REDIS_HOST:-redis}
+      QDRANT_URL: ${QDRANT_URL:-http://qdrant:6333}
       QDRANT_API_KEY: ${QDRANT_API_KEY}
       SECRET_KEY: ${SECRET_KEY}
       ENVIRONMENT: ${ENVIRONMENT}
+      BACKEND_CORS_ORIGINS: ${BACKEND_CORS_ORIGINS}
       NVIDIA_API_KEY: ${NVIDIA_API_KEY}
       GEMINI_API_KEY: ${GEMINI_API_KEY}
       GEMINI_PRIMARY_MODEL: ${GEMINI_PRIMARY_MODEL:-gemini-2.5-flash}
@@ -110,13 +142,25 @@ services:
       QDRANT_RAG_DOCS_COLLECTION: ${QDRANT_RAG_DOCS_COLLECTION:-careeros_rag_docs}
       RAG_EMBEDDING_MODEL: ${RAG_EMBEDDING_MODEL:-nvidia/nv-embed-v1}
       RAG_LLM_MODEL: ${RAG_LLM_MODEL:-gemini-2.5-flash}
-      RAG_USE_MAKE: ${RAG_USE_MAKE:-true}
+      RAG_USE_MAKE: ${RAG_USE_MAKE:-false}
+      CALL_ALERT_DRY_RUN: ${CALL_ALERT_DRY_RUN:-true}
+      OUTBOUND_CALL_DRY_RUN: ${OUTBOUND_CALL_DRY_RUN:-true}
+      PIPEDREAM_WEBHOOK_URL: ${PIPEDREAM_WEBHOOK_URL:-}
+      STORAGE_TYPE: ${STORAGE_TYPE:-local}
+      STORAGE_BASE_PATH: ${STORAGE_BASE_PATH:-/tmp/careeros_storage}
+      SEED_DEMO_EMAIL: ${SEED_DEMO_EMAIL:-}
+      SEED_DEMO_PASSWORD: ${SEED_DEMO_PASSWORD:-}
+      SEED_DEMO_NAME: ${SEED_DEMO_NAME:-CareerOS Demo User}
+      SEED_DEMO_ROLE: ${SEED_DEMO_ROLE:-User}
     volumes:
       - ./docs:/app/docs:ro
+      - backend_storage:/tmp/careeros_storage
     depends_on:
       db:
         condition: service_healthy
       redis:
+        condition: service_healthy
+      qdrant:
         condition: service_healthy
     restart: unless-stopped
     healthcheck:
@@ -144,13 +188,14 @@ services:
     container_name: careeros-worker
     command: python -m src.workers.arq_worker
     environment:
-      DATABASE_URL: ${DATABASE_URL}
-      REDIS_URL: ${REDIS_URL}
-      REDIS_HOST: ${REDIS_HOST}
-      QDRANT_URL: ${QDRANT_URL}
+      DATABASE_URL: ${DATABASE_URL:-postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+      REDIS_HOST: ${REDIS_HOST:-redis}
+      QDRANT_URL: ${QDRANT_URL:-http://qdrant:6333}
       QDRANT_API_KEY: ${QDRANT_API_KEY}
       SECRET_KEY: ${SECRET_KEY}
       ENVIRONMENT: ${ENVIRONMENT}
+      BACKEND_CORS_ORIGINS: ${BACKEND_CORS_ORIGINS}
       NVIDIA_API_KEY: ${NVIDIA_API_KEY}
       GEMINI_API_KEY: ${GEMINI_API_KEY}
       GEMINI_PRIMARY_MODEL: ${GEMINI_PRIMARY_MODEL:-gemini-2.5-flash}
@@ -188,13 +233,21 @@ services:
       QDRANT_RAG_DOCS_COLLECTION: ${QDRANT_RAG_DOCS_COLLECTION:-careeros_rag_docs}
       RAG_EMBEDDING_MODEL: ${RAG_EMBEDDING_MODEL:-nvidia/nv-embed-v1}
       RAG_LLM_MODEL: ${RAG_LLM_MODEL:-gemini-2.5-flash}
-      RAG_USE_MAKE: ${RAG_USE_MAKE:-true}
+      RAG_USE_MAKE: ${RAG_USE_MAKE:-false}
+      CALL_ALERT_DRY_RUN: ${CALL_ALERT_DRY_RUN:-true}
+      OUTBOUND_CALL_DRY_RUN: ${OUTBOUND_CALL_DRY_RUN:-true}
+      PIPEDREAM_WEBHOOK_URL: ${PIPEDREAM_WEBHOOK_URL:-}
+      STORAGE_TYPE: ${STORAGE_TYPE:-local}
+      STORAGE_BASE_PATH: ${STORAGE_BASE_PATH:-/tmp/careeros_storage}
     volumes:
       - ./docs:/app/docs:ro
+      - backend_storage:/tmp/careeros_storage
     depends_on:
       db:
         condition: service_healthy
       redis:
+        condition: service_healthy
+      qdrant:
         condition: service_healthy
     restart: unless-stopped
     deploy:
@@ -228,8 +281,8 @@ services:
     ports:
       - "127.0.0.1:3000:3000"  # Bind to localhost only
     environment:
-      NEXT_PUBLIC_API_URL: /api/v1
-      NEXT_PUBLIC_WS_URL: ws://localhost:8000/api/v1/realtime
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-/api/v1}
+      NEXT_PUBLIC_WS_URL: ${NEXT_PUBLIC_WS_URL}
       NODE_ENV: production
     depends_on:
       - backend
@@ -278,6 +331,10 @@ volumes:
   postgres_data:
     driver: local
   redis_data:
+    driver: local
+  qdrant_data:
+    driver: local
+  backend_storage:
     driver: local
 
 networks:
