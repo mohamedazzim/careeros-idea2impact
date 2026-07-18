@@ -7,7 +7,7 @@ import io
 from typing import List, Optional
 
 from fastapi import (
-    APIRouter, Depends, HTTPException, 
+    APIRouter, Depends, HTTPException,
     Query, status
 )
 from fastapi.responses import StreamingResponse
@@ -47,7 +47,7 @@ async def list_resumes(
 ) -> ResumeListResponse:
     """
     List resumes for the current user.
-    
+
     Supports pagination and status filtering.
     Delegates to retrieval service.
     """
@@ -74,7 +74,7 @@ async def get_resume(
 ) -> ResumeDetailResponse:
     """
     Get details for a specific resume.
-    
+
     Includes metadata and processing status.
     """
     try:
@@ -104,7 +104,7 @@ async def get_resume_versions(
 ) -> List[ResumeVersionResponse]:
     """
     Get version history for a resume.
-    
+
     Each processing creates a new version with extracted content.
     """
     try:
@@ -133,7 +133,7 @@ async def download_resume(
 ):
     """
     Download the original resume file.
-    
+
     Returns the file with original filename and content type.
     """
     try:
@@ -156,7 +156,7 @@ async def download_resume(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to read file"
         )
-    
+
     return StreamingResponse(
         io.BytesIO(content),
         media_type=content_type,

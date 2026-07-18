@@ -26,7 +26,7 @@ async def get_task_status_endpoint(
 ) -> TaskStatusResponse:
     """
     Check the status of a background resume processing task.
-    
+
     Returns current status, result (if complete), and error (if failed).
     """
     try:
@@ -37,13 +37,13 @@ async def get_task_status_endpoint(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to retrieve task status"
         )
-    
+
     if not status_info.get("exists"):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Task not found"
         )
-    
+
     return TaskStatusResponse(
         task_id=task_id,
         status=status_info.get("status", "unknown"),

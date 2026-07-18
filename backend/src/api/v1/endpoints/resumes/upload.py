@@ -5,7 +5,7 @@ Thin controller - delegates all business logic to services.
 import logging
 
 from fastapi import (
-    APIRouter, File, UploadFile, Depends, HTTPException, 
+    APIRouter, File, UploadFile, Depends, HTTPException,
     status, BackgroundTasks
 )
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -42,10 +42,10 @@ async def upload_resume(
 ) -> ResumeUploadResponse:
     """
     Upload a resume file for processing.
-    
+
     The file is validated, stored, and queued for background processing.
     Use the returned task_id to check processing status.
-    
+
     Controller flow:
     1. Validate file (service)
     2. Process upload (service)
@@ -60,7 +60,7 @@ async def upload_resume(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=str(e)
         )
-    
+
     # Step 2: Process upload via service
     try:
         resume = await upload_service.process_upload(
@@ -79,12 +79,12 @@ async def upload_resume(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to process upload"
         )
-    
+
     # Step 3: Enqueue for processing
     try:
         job_id = await enqueue_resume_processing(resume.id)
         await upload_service.update_task_id(db, resume, job_id)
-        
+
         logger.info("Resume uploaded and queued", extra={
             "resume_id": resume.id,
             "user_id": current_user,
@@ -97,5 +97,5 @@ async def upload_resume(
             "user_id": current_user
         })
         # Don't fail the upload, user can retry processing later
-    
+
     return ResumeUploadResponse.model_validate(resume)

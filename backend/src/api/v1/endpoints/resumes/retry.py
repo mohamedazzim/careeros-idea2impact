@@ -36,7 +36,7 @@ async def retry_resume(
 ) -> ResumeRetryResponse:
     """
     Retry processing for a failed resume.
-    
+
     Only resumes in 'failed' or 'error' status can be retried.
     Use force=true to retry regardless of status.
     """
@@ -47,13 +47,13 @@ async def retry_resume(
             user_id=current_user,
             force=force
         )
-        
+
         return ResumeRetryResponse(
             resume_id=resume_id,
             job_id=job_id,
             message="Processing retry queued successfully"
         )
-        
+
     except ResumeNotRetryableError as e:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,

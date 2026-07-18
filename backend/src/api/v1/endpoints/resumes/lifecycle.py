@@ -33,7 +33,7 @@ async def delete_resume(
 ) -> None:
     """
     Delete a resume and all its data.
-    
+
     This includes:
     - The resume record
     - All versions and chunks
