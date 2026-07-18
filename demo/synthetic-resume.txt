@@ -1,0 +1,37 @@
+SYNTHETIC DEMO RESUME - NOT A REAL PERSON
+
+Jordan Example
+AI Platform Engineer Candidate
+jordan.candidate@example.com
+Location: Bengaluru, India
+
+SUMMARY
+Software engineer with five years of fictional demonstration experience building Python APIs, data pipelines, and AI-assisted products. Interested in reliable retrieval systems, explainable recommendations, and cloud-native backend engineering.
+
+SKILLS
+- Python, FastAPI, Pydantic, SQLAlchemy
+- PostgreSQL, Redis, Qdrant
+- Docker, GitHub Actions, REST APIs
+- Retrieval-augmented generation, embeddings, prompt evaluation
+- React, TypeScript, Next.js
+- Testing with pytest and API contract tests
+
+EXPERIENCE
+Platform Engineer, Example Systems (fictional), 2022-2026
+- Built asynchronous FastAPI services backed by PostgreSQL and Redis.
+- Added vector retrieval with Qdrant and citation-aware response assembly.
+- Implemented structured logging, health checks, retry policies, and CI validation.
+- Partnered with frontend engineers to ship typed React workflows.
+
+Software Engineer, Sample Works (fictional), 2020-2022
+- Developed Python services and SQL reporting pipelines.
+- Containerized local development with Docker Compose.
+- Improved unit-test coverage and incident diagnostics.
+
+EDUCATION
+Bachelor of Technology in Computer Science, Example Institute (fictional), 2020
+
+LEARNING GOALS
+- Deepen Kubernetes production operations.
+- Improve cloud cost and reliability engineering.
+- Practice system-design communication for AI platforms.

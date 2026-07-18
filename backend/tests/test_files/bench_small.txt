@@ -1,0 +1,14 @@
+John Alexander Smith
+Software Engineer | San Francisco, CA
+john.smith@example.com | (555) 123-4567
+
+SUMMARY
+Senior software engineer with 8+ years of experience building scalable web applications.
+Proficient in Python, React, TypeScript, and cloud infrastructure.
+
+EXPERIENCE
+Senior Software Engineer, Acme Corp
+January 2019 - Present
+- Led migration of monolithic application to microservices architecture
+- Improved API response time by 40% through caching and query optimization
+- Mentored team of

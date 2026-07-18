@@ -1,0 +1,162 @@
+[
+  {
+    "query": "Senior React engineer with AWS experience",
+    "relevant_ids": [
+      "09e3eba1-00e1-51c0-9d43-1eec068db03e",
+      "9d4606aa-d3d1-528b-97d6-a99ea19f5f6c",
+      "1ceb8a2e-4071-59c3-bc6b-f158399be2eb",
+      "63fcf12a-3527-5656-a954-99950302d33d",
+      "ef834f41-79df-5e04-a7dd-bbef237a0d8d",
+      "87e05bfe-3d51-5737-835a-3a1b12613dfe",
+      "6ce8d210-7ace-5753-8f48-3d9770ddde6f",
+      "a45b4a5d-6228-52b2-9fcf-7a65c221e649",
+      "e769a9af-0190-5601-9563-f46070cfdef5",
+      "74ad2e45-1a97-5a5d-a671-65969f508ce0"
+    ],
+    "description": "Senior frontend role with cloud infrastructure"
+  },
+  {
+    "query": "Full stack developer TypeScript Node.js PostgreSQL",
+    "relevant_ids": [
+      "09e3eba1-00e1-51c0-9d43-1eec068db03e",
+      "63fcf12a-3527-5656-a954-99950302d33d",
+      "ef834f41-79df-5e04-a7dd-bbef237a0d8d",
+      "87e05bfe-3d51-5737-835a-3a1b12613dfe",
+      "6ce8d210-7ace-5753-8f48-3d9770ddde6f",
+      "a45b4a5d-6228-52b2-9fcf-7a65c221e649",
+      "e769a9af-0190-5601-9563-f46070cfdef5",
+      "74ad2e45-1a97-5a5d-a671-65969f508ce0",
+      "ff070531-eae5-5981-acb7-baa4cf8baa24",
+      "9d4606aa-d3d1-528b-97d6-a99ea19f5f6c"
+    ],
+    "description": "Full-stack TypeScript with backend database"
+  },
+  {
+    "query": "Machine Learning Engineer Python PyTorch",
+    "relevant_ids": [
+      "39877336-ff75-5f00-b4f4-ff773259da6a",
+      "09e3eba1-00e1-51c0-9d43-1eec068db03e",
+      "f5515a66-4f59-5259-9e36-fd0fad0edf21",
+      "ef834f41-79df-5e04-a7dd-bbef237a0d8d",
+      "9d4606aa-d3d1-528b-97d6-a99ea19f5f6c",
+      "99818118-2111-5f53-af05-5ec23af53b79",
+      "ffa27391-fa87-5d06-9a91-c7c37c35a9a1",
+      "e479442d-5a4c-5b15-bbfd-feb6525fce5f",
+      "73c2121e-d25a-542e-b6e2-7334b071e884",
+      "79425937-0071-5db9-8ebe-ca1c1038c98f"
+    ],
+    "description": "ML engineering with deep learning frameworks"
+  },
+  {
+    "query": "DevOps engineer Kubernetes Docker Terraform CI/CD",
+    "relevant_ids": [
+      "09e3eba1-00e1-51c0-9d43-1eec068db03e",
+      "1df6a7f1-9701-5827-a8b3-f1b988752324",
+      "068a665a-fb06-5eec-a4cf-c98e2fe7e2c4",
+      "79425937-0071-5db9-8ebe-ca1c1038c98f",
+      "1f3f4b1c-0977-5988-85d2-48b73ce72808",
+      "73c2121e-d25a-542e-b6e2-7334b071e884",
+      "34364a8c-4aeb-508d-80a0-cb96daa4c4e5",
+      "63fcf12a-3527-5656-a954-99950302d33d",
+      "39877336-ff75-5f00-b4f4-ff773259da6a",
+      "f5515a66-4f59-5259-9e36-fd0fad0edf21"
+    ],
+    "description": "Infrastructure and platform engineering"
+  },
+  {
+    "query": "Engineering manager agile team leadership",
+    "relevant_ids": [
+      "9d4606aa-d3d1-528b-97d6-a99ea19f5f6c",
+      "09e3eba1-00e1-51c0-9d43-1eec068db03e",
+      "975b5cb5-b564-5c18-b9cb-a5a90bda00af",
+      "ef834f41-79df-5e04-a7dd-bbef237a0d8d",
+      "068a665a-fb06-5eec-a4cf-c98e2fe7e2c4",
+      "79425937-0071-5db9-8ebe-ca1c1038c98f",
+      "73c2121e-d25a-542e-b6e2-7334b071e884",
+      "1f3f4b1c-0977-5988-85d2-48b73ce72808",
+      "1df6a7f1-9701-5827-a8b3-f1b988752324",
+      "39877336-ff75-5f00-b4f4-ff773259da6a"
+    ],
+    "description": "Engineering management and leadership"
+  },
+  {
+    "query": "Backend engineer FastAPI microservices",
+    "relevant_ids": [
+      "09e3eba1-00e1-51c0-9d43-1eec068db03e",
+      "ef834f41-79df-5e04-a7dd-bbef237a0d8d",
+      "63fcf12a-3527-5656-a954-99950302d33d",
+      "1df6a7f1-9701-5827-a8b3-f1b988752324",
+      "068a665a-fb06-5eec-a4cf-c98e2fe7e2c4",
+      "1f3f4b1c-0977-5988-85d2-48b73ce72808",
+      "73c2121e-d25a-542e-b6e2-7334b071e884",
+      "79425937-0071-5db9-8ebe-ca1c1038c98f",
+      "39877336-ff75-5f00-b4f4-ff773259da6a",
+      "e479442d-5a4c-5b15-bbfd-feb6525fce5f"
+    ],
+    "description": "Python backend with microservice architecture"
+  },
+  {
+    "query": "Data scientist SQL Python pandas",
+    "relevant_ids": [
+      "39877336-ff75-5f00-b4f4-ff773259da6a",
+      "09e3eba1-00e1-51c0-9d43-1eec068db03e",
+      "ef834f41-79df-5e04-a7dd-bbef237a0d8d",
+      "9d4606aa-d3d1-528b-97d6-a99ea19f5f6c",
+      "975b5cb5-b564-5c18-b9cb-a5a90bda00af",
+      "62de7918-fbce-5094-a57d-933b588d2613",
+      "68e23c63-dbf1-5611-a9f7-1af1195cf063",
+      "1bc897c9-8566-5e57-a8f5-dc173347c36a",
+      "bf5a383b-8fdc-547c-90ba-49926d372210",
+      "71e6f630-6140-5428-aac1-539d908d3215"
+    ],
+    "description": "Data science and analytics engineering"
+  },
+  {
+    "query": "Frontend developer React TypeScript CSS",
+    "relevant_ids": [
+      "09e3eba1-00e1-51c0-9d43-1eec068db03e",
+      "9d4606aa-d3d1-528b-97d6-a99ea19f5f6c",
+      "1ceb8a2e-4071-59c3-bc6b-f158399be2eb",
+      "92799313-45cd-5842-9427-df4d0ecad5ac",
+      "63fcf12a-3527-5656-a954-99950302d33d",
+      "ef834f41-79df-5e04-a7dd-bbef237a0d8d",
+      "6ce8d210-7ace-5753-8f48-3d9770ddde6f",
+      "5efde4bb-7c6c-516d-9892-d85f754a3f46",
+      "87e05bfe-3d51-5737-835a-3a1b12613dfe",
+      "39877336-ff75-5f00-b4f4-ff773259da6a"
+    ],
+    "description": "Frontend development with modern frameworks"
+  },
+  {
+    "query": "Platform engineer AWS EKS Terraform",
+    "relevant_ids": [
+      "09e3eba1-00e1-51c0-9d43-1eec068db03e",
+      "9d4606aa-d3d1-528b-97d6-a99ea19f5f6c",
+      "ef834f41-79df-5e04-a7dd-bbef237a0d8d",
+      "34364a8c-4aeb-508d-80a0-cb96daa4c4e5",
+      "068a665a-fb06-5eec-a4cf-c98e2fe7e2c4",
+      "79425937-0071-5db9-8ebe-ca1c1038c98f",
+      "73c2121e-d25a-542e-b6e2-7334b071e884",
+      "1f3f4b1c-0977-5988-85d2-48b73ce72808",
+      "1df6a7f1-9701-5827-a8b3-f1b988752324",
+      "39877336-ff75-5f00-b4f4-ff773259da6a"
+    ],
+    "description": "Cloud platform and infrastructure automation"
+  },
+  {
+    "query": "AI engineer LangGraph LLM RAG",
+    "relevant_ids": [
+      "9d4606aa-d3d1-528b-97d6-a99ea19f5f6c",
+      "ef834f41-79df-5e04-a7dd-bbef237a0d8d",
+      "39877336-ff75-5f00-b4f4-ff773259da6a",
+      "09e3eba1-00e1-51c0-9d43-1eec068db03e",
+      "975b5cb5-b564-5c18-b9cb-a5a90bda00af",
+      "68e23c63-dbf1-5611-a9f7-1af1195cf063",
+      "bf5a383b-8fdc-547c-90ba-49926d372210",
+      "1bc897c9-8566-5e57-a8f5-dc173347c36a",
+      "0b4c5e17-7af0-5500-bd66-277b2bf06a38",
+      "67793f14-ebc5-5a9e-9fe6-0baefcb78675"
+    ],
+    "description": "AI/ML engineering with LLM frameworks"
+  }
+]

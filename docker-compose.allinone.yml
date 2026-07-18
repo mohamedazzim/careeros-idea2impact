@@ -1,0 +1,88 @@
+version: '3.9'
+
+services:
+  careeros-all-in-one:
+    build:
+      context: .
+      dockerfile: Dockerfile.allinone
+    container_name: careeros-all-in-one
+    ports:
+      - "3000:3000"      # Frontend (Next.js)
+      - "8000:8000"      # Backend API (FastAPI)
+      - "6379:6379"      # Redis
+      - "6333:6333"      # Qdrant API
+      - "6334:6334"      # Qdrant gRPC
+      - "5432:5432"      # PostgreSQL (if available)
+    environment:
+      # Backend Configuration
+      - DATABASE_URL=postgresql+asyncpg://careeros:careeros@localhost:5432/careeros_db
+      - REDIS_URL=redis://localhost:6379/0
+      - REDIS_HOST=localhost
+      - QDRANT_URL=http://localhost:6333
+      - SECRET_KEY=your-secret-key-change-me-in-production
+      - ENVIRONMENT=production
+      - DEBUG=false
+      
+      # API Keys (set in production)
+      - NVIDIA_API_KEY=${NVIDIA_API_KEY:-}
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-}
+      - GEMINI_PRIMARY_MODEL=${GEMINI_PRIMARY_MODEL:-gemini-2.5-flash}
+      - GEMINI_REASONING_MODEL=${GEMINI_REASONING_MODEL:-gemini-2.5-flash}
+      - LANGCHAIN_TRACING_V2=${LANGCHAIN_TRACING_V2:-false}
+      - LANGCHAIN_API_KEY=${LANGCHAIN_API_KEY:-}
+      - LANGCHAIN_PROJECT=${LANGCHAIN_PROJECT:-careeros}
+      
+      # Twilio (Optional)
+      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID:-}
+      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN:-}
+      - TWILIO_PHONE_NUMBER=${TWILIO_PHONE_NUMBER:-}
+      
+      # ElevenLabs (Optional)
+      - ELEVENLABS_API_KEY=${ELEVENLABS_API_KEY:-}
+      
+      # TheirStack (Optional)
+      - THEIRSTACK_API_KEY=${THEIRSTACK_API_KEY:-}
+      - THEIRSTACK_MAX_QUERIES_PER_REFRESH=${THEIRSTACK_MAX_QUERIES_PER_REFRESH:-5}
+      
+      # Worker Configuration
+      - WORKER_MAX_JOBS=${WORKER_MAX_JOBS:-10}
+      - WORKER_JOB_TIMEOUT=${WORKER_JOB_TIMEOUT:-300}
+      - JOB_AUTO_REFRESH_ENABLED=${JOB_AUTO_REFRESH_ENABLED:-true}
+      - JOB_AUTO_REFRESH_INTERVAL_MINUTES=${JOB_AUTO_REFRESH_INTERVAL_MINUTES:-30}
+      - JOB_AUTO_REFRESH_EMBED_BATCH_SIZE=${JOB_AUTO_REFRESH_EMBED_BATCH_SIZE:-50}
+      
+      # Frontend Configuration
+      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - NEXT_PUBLIC_WS_URL=ws://localhost:8000/api/v1/realtime
+      - NODE_ENV=production
+      - NEXT_TELEMETRY_DISABLED=1
+    
+    volumes:
+      # Persistent data (optional)
+      - careeros-data:/var/lib/careeros
+      - careeros-logs:/var/log/careeros
+    
+    restart: unless-stopped
+    
+    healthcheck:
+      test: ["CMD-SHELL", "/usr/local/bin/healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    
+    # Resource limits (adjust based on your needs)
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 4G
+        reservations:
+          cpus: '1'
+          memory: 2G
+
+volumes:
+  careeros-data:
+    driver: local
+  careeros-logs:
+    driver: local

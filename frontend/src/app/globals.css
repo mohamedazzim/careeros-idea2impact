@@ -1,0 +1,52 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+  --background: #020617;
+  --foreground: #e2e8f0;
+}
+
+html {
+  min-height: 100%;
+  background: var(--background);
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  color: var(--foreground);
+  background:
+    radial-gradient(circle at top left, rgba(34, 211, 238, 0.14), transparent 28%),
+    radial-gradient(circle at top right, rgba(59, 130, 246, 0.1), transparent 24%),
+    linear-gradient(180deg, #0f172a 0%, #020617 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  background: rgba(34, 211, 238, 0.25);
+  color: #f8fafc;
+}
+
+select,
+select option {
+  color: #0f172a;
+  background-color: #ffffff;
+}
+
+select {
+  color-scheme: light;
+}
+
+select:disabled {
+  color: #94a3b8;
+}
+
+select option:checked,
+select option:hover,
+select option:focus {
+  background-color: #e0e7ff;
+  color: #0f172a;
+}

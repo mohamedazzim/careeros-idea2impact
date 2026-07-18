@@ -1,0 +1,245 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "post-clean-status",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/c",
+				"cd /d \"${workspaceFolder}\" && git status --short --branch"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "none"
+		},
+		{
+			"label": "up-backend-frontend",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/c",
+				"cd /d \"${workspaceFolder}\" && docker compose up -d backend frontend"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "none"
+		},
+		{
+			"label": "ps-status",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/c",
+				"cd /d \"${workspaceFolder}\" && docker ps --format \"table {{.Names}}\\t{{.Status}}\\t{{.Ports}}\""
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "none"
+		},
+		{
+			"label": "compose-logs",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/c",
+				"cd /d \"${workspaceFolder}\" && docker compose logs --tail 50 db redis qdrant"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "none"
+		},
+		{
+			"label": "docker-ps-basic",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/c",
+				"docker ps"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "none"
+		},
+		{
+			"label": "compose-up-all",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/c",
+				"cd /d \"${workspaceFolder}\" && docker compose up -d --build"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "none"
+		},
+		{
+			"label": "docker-ps-after-up",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/c",
+				"docker ps"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "none"
+		},
+		{
+			"label": "docker-ps-final",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/c",
+				"docker ps"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "none"
+		},
+		{
+			"label": "docker-ps-last",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/c",
+				"docker ps"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "none"
+		},
+		{
+			"label": "worker-logs",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/c",
+				"cd /d \"${workspaceFolder}\" && docker compose logs --tail 80 worker"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "none"
+		},
+		{
+			"label": "restart-worker",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/c",
+				"cd /d \"${workspaceFolder}\" && docker compose up -d --build worker"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "none"
+		},
+		{
+			"label": "final-stack-status",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/c",
+				"docker ps"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "none"
+		},
+		{
+			"label": "rebuild-frontend-healthcheck",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/c",
+				"cd /d \"${workspaceFolder}\" && docker compose up -d --build frontend"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "none"
+		},
+		{
+			"label": "final-health-snapshot",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/c",
+				"docker ps"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "none"
+		},
+		{
+			"label": "compose-rebuild-cors",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/c",
+				"cd /d \"${workspaceFolder}\" && docker compose up -d --build backend frontend"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "none"
+		},
+		{
+			"label": "frontend-warning-validation",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/c",
+				"cd /d \"${workspaceFolder}\" && docker compose build frontend"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "none"
+		},
+		{
+			"label": "frontend-build-recheck",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/c",
+				"cd /d \"${workspaceFolder}\" && docker compose build frontend"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "none"
+		},
+		{
+			"label": "frontend-build-final-check",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/c",
+				"cd /d \"${workspaceFolder}\" && docker compose build frontend"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "none"
+		},
+		{
+			"label": "frontend-final-build-check",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/c",
+				"cd /d \"${workspaceFolder}\" && docker compose build frontend"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "none"
+		},
+		{
+			"label": "frontend-warning-free-check",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/c",
+				"cd /d \"${workspaceFolder}\" && docker compose build frontend"
+			],
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "none"
+		}
+	]
+}

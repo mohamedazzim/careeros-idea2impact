@@ -1,0 +1,46 @@
+John Alexander Smith
+Software Engineer | San Francisco, CA
+john.smith@example.com | (555) 123-4567
+
+SUMMARY
+Senior software engineer with 8+ years of experience building scalable web applications.
+Proficient in Python, React, TypeScript, and cloud infrastructure.
+
+EXPERIENCE
+Senior Software Engineer, Acme Corp
+January 2019 - Present
+- Led migration of monolithic application to microservices architecture
+- Improved API response time by 40% through caching and query optimization
+- Mentored team of 5 junior engineers
+
+Software Engineer, TechStart Inc.
+June 2016 - December 2018
+- Developed customer-facing dashboard used by 50,000+ users
+- Implemented real-time notification system using WebSockets
+- Reduced deployment time from 2 hours to 15 minutes via CI/CD
+
+EDUCATION
+Master of Science, Computer Science
+Stanford University, 2014-2016
+
+Bachelor of Science, Computer Science
+UC Berkeley, 2010-2014
+
+SKILLS
+Programming: Python, JavaScript, TypeScript, Go, Java
+Frontend: React, Vue.js, HTML5, CSS3, Tailwind
+Backend: FastAPI, Django, Node.js, Express
+Databases: PostgreSQL, MongoDB, Redis, Elasticsearch
+DevOps: Docker, Kubernetes, AWS, Terraform, CI/CD
+Tools: Git, JIRA, Confluence, Datadog
+
+CERTIFICATIONS
+AWS Solutions Architect Professional
+Google Cloud Professional Data Engineer
+
+LANGUAGES
+English (Native), Spanish (Fluent), Mandarin (Basic)
+
+PROJECTS
+OpenSourceML: Contributed to popular Python ML library
+DevTools: Built CLI productivity tool with 2,000+ GitHub stars

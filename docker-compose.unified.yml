@@ -1,0 +1,35 @@
+# Experimental single-container sandbox. Do not use this file for production.
+# Prefer docker-compose.yml for local development and docker-compose.prod.yml for deployment.
+
+version: '3.9'
+
+services:
+  careeros:
+    image: ubuntu:24.04
+    container_name: careeros-unified
+    ports:
+      - "3000:3000"      # Frontend
+      - "8000:8000"      # Backend  
+      - "6379:6379"      # Redis
+      - "5432:5432"      # PostgreSQL
+      - "6333:6333"      # Qdrant
+      - "6334:6334"      # Qdrant gRPC
+    environment:
+      - DEBIAN_FRONTEND=noninteractive
+      - PYTHONUNBUFFERED=1
+      - NODE_ENV=production
+    volumes:
+      - careeros-data:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+    command: >-
+      /bin/bash -c "apt-get update &&
+      apt-get install -y curl git npm python3-pip python3.12 postgresql redis-server supervisor &&
+      echo 'Sandbox dependencies installed' &&
+      exec /bin/bash"
+
+volumes:
+  careeros-data:
+    driver: local

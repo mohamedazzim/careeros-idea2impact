@@ -1,0 +1,175 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: careeros-db
+    environment:
+      POSTGRES_USER: careeros
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: careeros_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U careeros"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - careeros
+    security_opt:
+      - no-new-privileges:true
+
+  redis:
+    image: redis:7-alpine
+    container_name: careeros-redis
+    command: >-
+      /bin/sh -c 'if [ -n "$${REDIS_PASSWORD}" ]; then
+      exec redis-server --appendonly yes --requirepass "$${REDIS_PASSWORD}";
+      else exec redis-server --appendonly yes; fi'
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD-SHELL", "if [ -n \"$${REDIS_PASSWORD}\" ]; then redis-cli -a \"$${REDIS_PASSWORD}\" ping; else redis-cli ping; fi"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - careeros
+    security_opt:
+      - no-new-privileges:true
+
+  backend:
+    image: ${REGISTRY}/careeros-backend:${BACKEND_VERSION}
+    container_name: careeros-backend
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      QDRANT_URL: ${QDRANT_URL}
+      QDRANT_API_KEY: ${QDRANT_API_KEY}
+      NVIDIA_API_KEY: ${NVIDIA_API_KEY}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      GEMINI_PRIMARY_MODEL: ${GEMINI_PRIMARY_MODEL:-gemini-2.5-flash}
+      GEMINI_REASONING_MODEL: ${GEMINI_REASONING_MODEL:-gemini-2.5-flash}
+      BACKEND_CORS_ORIGINS: ${BACKEND_CORS_ORIGINS}
+      ENVIRONMENT: ${ENVIRONMENT}
+      DEBUG: ${DEBUG}
+      LOG_LEVEL: ${LOG_LEVEL}
+      SECRET_KEY: ${SECRET_KEY}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS}
+      LANGCHAIN_TRACING_V2: ${LANGCHAIN_TRACING_V2}
+      LANGCHAIN_API_KEY: ${LANGCHAIN_API_KEY}
+      LANGCHAIN_PROJECT: ${LANGCHAIN_PROJECT}
+      MAKE_RAG_WEBHOOK_URL: ${MAKE_RAG_WEBHOOK_URL}
+      MAKE_RAG_API_KEY: ${MAKE_RAG_API_KEY}
+      QDRANT_RAG_DOCS_COLLECTION: ${QDRANT_RAG_DOCS_COLLECTION:-careeros_rag_docs}
+      RAG_EMBEDDING_MODEL: ${RAG_EMBEDDING_MODEL:-nvidia/nv-embed-v1}
+      RAG_LLM_MODEL: ${RAG_LLM_MODEL:-gemini-2.5-flash}
+      RAG_USE_MAKE: ${RAG_USE_MAKE:-true}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./docs:/app/docs:ro
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health/live"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    networks:
+      - careeros
+    security_opt:
+      - no-new-privileges:true
+    read_only: false
+    cap_drop:
+      - ALL
+    cap_add:
+      - NET_BIND_SERVICE
+
+  worker:
+    image: ${REGISTRY}/careeros-worker:${WORKER_VERSION}
+    container_name: careeros-worker
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: ${REDIS_URL}
+      QDRANT_URL: ${QDRANT_URL}
+      QDRANT_API_KEY: ${QDRANT_API_KEY}
+      NVIDIA_API_KEY: ${NVIDIA_API_KEY}
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      GEMINI_PRIMARY_MODEL: ${GEMINI_PRIMARY_MODEL:-gemini-2.5-flash}
+      GEMINI_REASONING_MODEL: ${GEMINI_REASONING_MODEL:-gemini-2.5-flash}
+      ENVIRONMENT: ${ENVIRONMENT}
+      DEBUG: ${DEBUG}
+      LOG_LEVEL: ${LOG_LEVEL}
+      WORKER_MAX_JOBS: ${WORKER_MAX_JOBS}
+      WORKER_JOB_TIMEOUT: ${WORKER_JOB_TIMEOUT}
+      LANGCHAIN_TRACING_V2: ${LANGCHAIN_TRACING_V2}
+      LANGCHAIN_API_KEY: ${LANGCHAIN_API_KEY}
+      LANGCHAIN_PROJECT: ${LANGCHAIN_PROJECT}
+      MAKE_RAG_WEBHOOK_URL: ${MAKE_RAG_WEBHOOK_URL}
+      MAKE_RAG_API_KEY: ${MAKE_RAG_API_KEY}
+      QDRANT_RAG_DOCS_COLLECTION: ${QDRANT_RAG_DOCS_COLLECTION:-careeros_rag_docs}
+      RAG_EMBEDDING_MODEL: ${RAG_EMBEDDING_MODEL:-nvidia/nv-embed-v1}
+      RAG_LLM_MODEL: ${RAG_LLM_MODEL:-gemini-2.5-flash}
+      RAG_USE_MAKE: ${RAG_USE_MAKE:-true}
+    volumes:
+      - ./docs:/app/docs:ro
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - careeros
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+
+  frontend:
+    image: ${REGISTRY}/careeros-frontend:${FRONTEND_VERSION}
+    container_name: careeros-frontend
+    environment:
+      NEXT_PUBLIC_API_URL: https://${DOMAIN}/api/v1
+      NEXT_PUBLIC_WS_URL: wss://${DOMAIN}/api/v1/realtime
+      NODE_ENV: production
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+    networks:
+      - careeros
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+
+networks:
+  careeros:
+    driver: bridge

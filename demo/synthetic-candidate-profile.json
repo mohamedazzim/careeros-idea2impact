@@ -1,0 +1,23 @@
+{
+  "synthetic": true,
+  "notice": "Fictional hackathon demo data. Not a real person.",
+  "candidate": {
+    "name": "Jordan Example",
+    "email": "jordan.candidate@example.com",
+    "location": "Bengaluru, India",
+    "target_roles": ["AI Platform Engineer", "Backend Engineer"],
+    "years_experience": 5
+  },
+  "skills": [
+    "Python",
+    "FastAPI",
+    "PostgreSQL",
+    "Redis",
+    "Qdrant",
+    "Docker",
+    "React",
+    "TypeScript",
+    "RAG"
+  ],
+  "learning_goals": ["Kubernetes", "cloud reliability", "system design"]
+}

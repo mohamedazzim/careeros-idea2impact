@@ -1,0 +1,121 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+/lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Next.js / Frontend
+.next/
+out/
+build/
+coverage/
+.vercel/
+.eslintcache
+*.tsbuildinfo
+frontend/test-results/
+playwright-report/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Env files
+.env*
+!.env.example
+
+# Editor directories and files
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Auth tokens
+token.txt
+token.json
+
+# Temp files
+temp_*.txt
+temp_token.json
+*.tmp
+*.bak
+*.patch
+*.rej
+
+# Runtime databases and local generated state
+*.db
+*.sqlite
+*.sqlite3
+backend/data/*.db
+
+# Private/local development-tool state
+.agents/
+.cursor/
+.windsurf/
+.continue/
+.aider/
+AGENTS.md
+CLAUDE.md
+project-memory/
+
+# Private local candidate artifacts
+resume/
+resumes/
+uploads/
+artifacts/
+BEFORE_AFTER_SCREENSHOTS/
+
+# Additional sensitive local files
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+manifest.secrets.json

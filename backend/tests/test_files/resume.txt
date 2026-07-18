@@ -1,0 +1,5 @@
+John Doe
+Software Engineer
+Skills: Python, React, TypeScript
+Experience: 5 years at Acme Corp
+Education: BS Computer Science

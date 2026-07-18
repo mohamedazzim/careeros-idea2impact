@@ -1,0 +1,24 @@
+services:
+  qdrant:
+    profiles:
+      - local-qdrant
+
+  backend:
+    depends_on:
+      qdrant:
+        condition: service_started
+        required: false
+    environment:
+      - QDRANT_URL=${QDRANT_URL}
+      - QDRANT_API_KEY=${QDRANT_API_KEY}
+      - QDRANT_RAG_DOCS_COLLECTION=${QDRANT_RAG_DOCS_COLLECTION}
+
+  worker:
+    depends_on:
+      qdrant:
+        condition: service_started
+        required: false
+    environment:
+      - QDRANT_URL=${QDRANT_URL}
+      - QDRANT_API_KEY=${QDRANT_API_KEY}
+      - QDRANT_RAG_DOCS_COLLECTION=${QDRANT_RAG_DOCS_COLLECTION}

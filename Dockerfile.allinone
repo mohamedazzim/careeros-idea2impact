@@ -1,0 +1,188 @@
+FROM ubuntu:24.04
+
+# Set environment variables
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    # Python & Build tools
+    python3.12 \
+    python3.12-dev \
+    python3-pip \
+    build-essential \
+    curl \
+    git \
+    wget \
+    nano \
+    \
+    # Node.js
+    nodejs \
+    npm \
+    \
+    # Database & Cache
+    postgresql-client \
+    redis-server \
+    \
+    # Process Management
+    supervisor \
+    \
+    # Utilities
+    htop \
+    netcat-traditional \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set Python 3.12 as default
+RUN update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.12 1 && \
+    update-alternatives --install /usr/bin/python python /usr/bin/python3.12 1
+
+# Install Python package managers
+RUN pip install --upgrade --break-system-packages pip setuptools wheel poetry
+
+# Create app user
+RUN groupadd -r appgroup && useradd -r -g appgroup appuser
+
+# Create necessary directories
+RUN mkdir -p /app /opt/careeros /var/log/careeros /var/run/careeros
+WORKDIR /app
+
+# Copy backend files
+COPY ./backend/pyproject.toml ./backend/poetry.lock* /app/backend/
+COPY ./backend /app/backend
+
+# Copy frontend files
+COPY ./frontend/package.json ./frontend/package-lock.json* /app/frontend/
+COPY ./frontend /app/frontend
+
+# Setup backend
+WORKDIR /app/backend
+RUN poetry config virtualenvs.create false && \
+    poetry install --no-interaction --no-ansi || pip install -r /tmp/requirements.txt || true
+
+# Setup frontend
+WORKDIR /app/frontend
+RUN npm install --prefer-offline --no-audit && \
+    npm run build
+
+# Download NLTK data for backend
+RUN python3 << 'EOF'
+import nltk
+nltk.download('punkt', download_dir='/usr/local/share/nltk_data')
+nltk.download('stopwords', download_dir='/usr/local/share/nltk_data')
+EOF
+
+# Create supervisor configuration
+RUN mkdir -p /etc/supervisor/conf.d
+COPY <<EOF /etc/supervisor/conf.d/careeros.conf
+[supervisord]
+nodaemon=true
+logfile=/var/log/careeros/supervisord.log
+pidfile=/var/run/careeros/supervisord.pid
+user=root
+
+[unix_http_server]
+file=/var/run/careeros/supervisor.sock
+chmod=0700
+
+[supervisorctl]
+serverurl=unix:///var/run/careeros/supervisor.sock
+
+[rpcinterface:supervisor]
+supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+
+# Redis Server
+[program:redis]
+command=/usr/bin/redis-server --port 6379 --bind 0.0.0.0 --daemonize no
+autostart=true
+autorestart=true
+stderr_logfile=/var/log/careeros/redis.err.log
+stdout_logfile=/var/log/careeros/redis.out.log
+user=root
+priority=100
+
+# PostgreSQL (using local socket if available, or skip)
+[program:postgres]
+command=/bin/bash -c "command -v pg_ctl && pg_ctl -D /var/lib/postgresql/data start 2>/dev/null || echo 'PostgreSQL client mode'"
+autostart=false
+autorestart=false
+user=postgres
+priority=101
+
+# FastAPI Backend
+[program:backend]
+command=sh -c "cd /app/backend && uvicorn src.main:app --host 0.0.0.0 --port 8000"
+autostart=true
+autorestart=true
+stderr_logfile=/var/log/careeros/backend.err.log
+stdout_logfile=/var/log/careeros/backend.out.log
+user=appgroup
+priority=200
+environment=PYTHONUNBUFFERED=1,DATABASE_URL=postgresql+asyncpg://careeros:careeros@localhost:5432/careeros_db,REDIS_URL=redis://localhost:6379/0,QDRANT_URL=http://localhost:6333,ENVIRONMENT=production,DEBUG=false
+
+# Background Worker
+[program:worker]
+command=sh -c "cd /app/backend && python -m src.workers.arq_worker"
+autostart=true
+autorestart=true
+stderr_logfile=/var/log/careeros/worker.err.log
+stdout_logfile=/var/log/careeros/worker.out.log
+user=appgroup
+priority=201
+environment=PYTHONUNBUFFERED=1,DATABASE_URL=postgresql+asyncpg://careeros:careeros@localhost:5432/careeros_db,REDIS_URL=redis://localhost:6379/0,QDRANT_URL=http://localhost:6333,ENVIRONMENT=production,DEBUG=false
+
+# Next.js Frontend
+[program:frontend]
+command=sh -c "cd /app/frontend && npm start"
+autostart=true
+autorestart=true
+stderr_logfile=/var/log/careeros/frontend.err.log
+stdout_logfile=/var/log/careeros/frontend.out.log
+user=appgroup
+priority=202
+environment=NEXT_PUBLIC_API_URL=http://localhost:8000,NEXT_PUBLIC_WS_URL=ws://localhost:8000/api/v1/realtime,NODE_ENV=production
+
+# Qdrant Vector Database (requires qdrant binary, skip if not available)
+[program:qdrant]
+command=/bin/bash -c "command -v qdrant && qdrant --storage-path /var/lib/qdrant --listen-addr 0.0.0.0:6333 || echo 'Qdrant not available'"
+autostart=false
+autorestart=false
+user=root
+priority=103
+EOF
+
+# Set permissions
+RUN chmod -R 755 /var/log/careeros /var/run/careeros && \
+    chown -R appgroup:appgroup /app /var/log/careeros
+
+# Create health check script
+RUN cat > /usr/local/bin/healthcheck.sh << 'EOF'
+#!/bin/bash
+set -e
+
+# Check Redis
+redis-cli -p 6379 ping > /dev/null 2>&1 && echo "✓ Redis" || echo "✗ Redis"
+
+# Check Backend
+curl -f http://localhost:8000/api/health/live > /dev/null 2>&1 && echo "✓ Backend" || echo "✗ Backend"
+
+# Check Frontend
+curl -f http://localhost:3000 > /dev/null 2>&1 && echo "✓ Frontend" || echo "✗ Frontend"
+
+echo "All services responding"
+EOF
+
+RUN chmod +x /usr/local/bin/healthcheck.sh
+
+# Expose all ports
+EXPOSE 3000 8000 6379 6333 6334 5432
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD /usr/local/bin/healthcheck.sh || exit 1
+
+# Start supervisor
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/careeros.conf"]

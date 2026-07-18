@@ -1,0 +1,87 @@
+name: Enterprise Production Deployment Pipeline
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  validate-quality:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js 20
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+    - name: Install dependencies
+      run: npm ci
+    - run: cd frontend && npm run lint
+    - run: cd frontend && npm run build
+    - run: cd frontend && npx tsc --noEmit
+
+  deploy-cloud-run:
+    needs: validate-quality
+    runs-on: ubuntu-latest
+    env:
+      GCP_WORKLOAD_IDENTITY_PROVIDER: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+      GCP_SERVICE_ACCOUNT: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+      GCP_CREDENTIALS_JSON: ${{ secrets.GCP_CREDENTIALS_JSON }}
+      GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+      GCP_PROJECT: ${{ secrets.GCP_PROJECT }}
+      GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Detect GCP auth mode
+      id: gcp_auth
+      shell: bash
+      run: |
+        if [ -n "${GCP_WORKLOAD_IDENTITY_PROVIDER:-}" ] && [ -n "${GCP_SERVICE_ACCOUNT:-}" ]; then
+          echo "mode=wif" >> "$GITHUB_OUTPUT"
+        elif [ -n "${GCP_CREDENTIALS_JSON:-}" ] || [ -n "${GCP_SA_KEY:-}" ]; then
+          echo "mode=json" >> "$GITHUB_OUTPUT"
+        else
+          echo "mode=skip" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Skip deploy when GCP credentials are missing
+      if: ${{ steps.gcp_auth.outputs.mode == 'skip' }}
+      run: echo "Skipping Cloud Run deploy because GCP deployment secrets are not configured."
+
+    - name: Auth GCP SDK using Workload Identity
+      if: ${{ steps.gcp_auth.outputs.mode == 'wif' }}
+      uses: google-github-actions/auth@v2
+      with:
+        workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER }}
+        service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+
+    - name: Auth GCP SDK using JSON key
+      if: ${{ steps.gcp_auth.outputs.mode == 'json' }}
+      uses: google-github-actions/auth@v2
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+    - name: Setup Cloud SDK
+      if: ${{ steps.gcp_auth.outputs.mode != 'skip' }}
+      uses: google-github-actions/setup-gcloud@v2
+
+    - name: Build & Publish Container To Artifact Registry
+      if: ${{ steps.gcp_auth.outputs.mode != 'skip' }}
+      run: |
+        gcloud builds submit --tag us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/careeros/app:latest .
+
+    - name: Deploy to Cloud Run
+      if: ${{ steps.gcp_auth.outputs.mode != 'skip' }}
+      run: |
+        gcloud run deploy careeros-prod \
+          --image us-central1-docker.pkg.dev/${{ secrets.GCP_PROJECT }}/careeros/app:latest \
+          --platform managed \
+          --region us-central1 \
+          --set-env-vars GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }},NODE_ENV=production
+
+    - name: Verify deployment health
+      if: ${{ steps.gcp_auth.outputs.mode != 'skip' }}
+      run: |
+        DEPLOY_URL=$(gcloud run services describe careeros-prod --platform managed --region us-central1 --format='value(status.url)')
+        curl -f $DEPLOY_URL/api/health/live || exit 1
+        echo "Deployment URL: $DEPLOY_URL"

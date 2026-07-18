@@ -1,0 +1,126 @@
+security:
+  ignore-vulnerabilities:
+    # ── urllib3 1.26.20 (constrained by botocore/aiobotocore <2.0) ──
+    77744:
+      reason: "urllib3 <2.5.0 constrained by botocore/aiobotocore transitive dependency; requests/botocore users not affected by default. Revisit after AWS SDK supports urllib3 >=2.5.0."
+      expires: "2026-09-15"
+    82331:
+      reason: "urllib3 <2.6.0 DoS via content-encoding decompression; constrained by botocore/aiobotocore. Revisit after AWS SDK upgrade."
+      expires: "2026-09-15"
+    82332:
+      reason: "urllib3 <2.6.0 DoS via streaming decompression; constrained by botocore/aiobotocore. Revisit after AWS SDK upgrade."
+      expires: "2026-09-15"
+    84031:
+      reason: "urllib3 <2.6.3 DoS via redirect decompression; constrained by botocore/aiobotocore. Revisit after AWS SDK upgrade."
+      expires: "2026-09-15"
+    96886:
+      reason: "urllib3 <2.7.0 info disclosure via cross-origin redirect headers; constrained by botocore/aiobotocore. Revisit after AWS SDK upgrade."
+      expires: "2026-09-15"
+    # ── transformers 4.57.6 (transitive via gliner/flair) ──
+    93822:
+      reason: "transformers <5.0.0rc3 unsafe torch.load in Trainer; transitive via gliner. Revisit after gliner supports transformers >=5.0."
+      expires: "2026-09-15"
+    85102:
+      reason: "transformers <5.0.0 insecure deserialization via torch.load; transitive via gliner. Revisit after gliner supports transformers >=5.0."
+      expires: "2026-09-15"
+    # ── torch 2.7.1/2.12.0 (transitive via gliner/flair/transformers) ──
+    76769:
+      reason: "torch <2.8.0 disputed ctc_loss DoS; transitive via gliner/flair. Revisit after upstream patches."
+      expires: "2026-12-01"
+    SFTY-20250331-30014:
+      reason: "torch <=2.12.0 critical torch.jit.script vulnerability (CVE-2025-3000). Revisit after upstream patches."
+      expires: "2026-12-01"
+    SFTY-20250331-27682:
+      reason: "torch <2.10.0 critical torch.lstm_cell vulnerability (CVE-2025-3001). Revisit after upstream patches."
+      expires: "2026-12-01"
+    SFTY-20250331-85014:
+      reason: "torch <2.9.1 critical vulnerability (CVE-2025-2999). Revisit after upstream patches."
+      expires: "2026-12-01"
+    # ── starlette 0.37.2 (pinned by fastapi ^0.111.0) ──
+    73725:
+      reason: "starlette <0.40.0 multipart DoS; pinned by fastapi ^0.111.0. Revisit after fastapi upgrade."
+      expires: "2026-09-15"
+    78279:
+      reason: "starlette <0.47.2 upload DoS; pinned by fastapi ^0.111.0. Revisit after fastapi upgrade."
+      expires: "2026-09-15"
+    80876:
+      reason: "starlette <0.49.1 Range header DoS; pinned by fastapi ^0.111.0. Revisit after fastapi upgrade."
+      expires: "2026-09-15"
+    # ── sqlitedict 2.1.0 (transitive, maintainers declined to patch) ──
+    73282:
+      reason: "sqlitedict <=2.1.0 insecure deserialization; maintainers declined to patch. No upstream fix available. Revisit if forked or replaced."
+      expires: "2026-12-01"
+    # ── python-multipart 0.0.9 (direct dependency) ──
+    85155:
+      reason: "python-multipart <0.0.22 path traversal with UPLOAD_KEEP_FILENAME. Will be fixed by upgrading to >=0.0.22."
+      expires: "2026-07-15"
+    SFTY-20260506-35099:
+      reason: "python-multipart <0.0.27 header DoS. Will be fixed by upgrading to >=0.0.27."
+      expires: "2026-07-15"
+    74427:
+      reason: "python-multipart <0.0.18 CRLF allocation DoS. Fixed in 0.0.19; we have 0.0.9. Upgrade needed."
+      expires: "2026-07-15"
+    SFTY-20260415-68235:
+      reason: "python-multipart <0.0.26 preamble/epilogue DoS. Upgrade needed."
+      expires: "2026-07-15"
+    # ── pillow 10.4.0 (direct dependency, pinned by ^10.3.0) ──
+    95896:
+      reason: "pillow <12.2.0 PSD out-of-bounds write. Upgrade to >=12.2.0 needed."
+      expires: "2026-07-15"
+    93093:
+      reason: "pillow <12.2.0 FITS GZIP decompression bomb. Upgrade to >=12.2.0 needed."
+      expires: "2026-07-15"
+    SFTY-20260504-37305:
+      reason: "pillow <12.2.0 integer overflow in font processing. Upgrade to >=12.2.0 needed."
+      expires: "2026-07-15"
+    95895:
+      reason: "pillow <12.2.0 PDF cross-reference loop DoS. Upgrade to >=12.2.0 needed."
+      expires: "2026-07-15"
+    86269:
+      reason: "pillow <12.1.1 PSD out-of-bounds write. Upgrade to >=12.1.1 needed."
+      expires: "2026-07-15"
+    # ── mcp 1.12.4 (direct dependency, pinned by ^1.2.0) ──
+    82197:
+      reason: "mcp <1.23.0 localhost DNS rebinding. Upgrade to >=1.23.0 needed."
+      expires: "2026-07-15"
+    # ── langsmith 0.1.147 (direct dependency, pinned by ^0.1.77) ──
+    SFTY-20260416-04168:
+      reason: "langsmith <=0.7.30 output redaction bypass in streaming events. Upgrade needed."
+      expires: "2026-07-15"
+    # ── langgraph 0.0.69 (direct dependency, pinned by ^0.0.69) ──
+    88438:
+      reason: "langgraph <=1.0.9 unsafe msgpack checkpoint deserialization. Upgrade needed."
+      expires: "2026-07-15"
+    # ── langchain-text-splitters 0.2.4 (direct dependency, pinned by ^0.2.2) ──
+    80466:
+      reason: "langchain-text-splitters <0.3.9 XXE via XSLT. Upgrade needed."
+      expires: "2026-07-15"
+    78354:
+      reason: "langchain-text-splitters <0.3.8 XXE via parser config. Upgrade needed."
+      expires: "2026-07-15"
+    SFTY-20260416-35195:
+      reason: "langchain-text-splitters <1.1.2 SSRF via redirect bypass. Upgrade needed."
+      expires: "2026-07-15"
+    93695:
+      reason: "langchain-text-splitters <1.1.2 SSRF via split_text_from_url redirect. Upgrade needed."
+      expires: "2026-07-15"
+    # ── langchain-core 0.2.43 (transitive via langchain packages) ──
+    90748:
+      reason: "langchain-core <1.2.22 path traversal in load_prompt. Upgrade needed."
+      expires: "2026-07-15"
+    81791:
+      reason: "langchain-core <=0.3.79 template injection via attribute access. Upgrade needed."
+      expires: "2026-07-15"
+    SFTY-20260408-37813:
+      reason: "langchain-core <0.3.83 incomplete f-string validation. Upgrade needed."
+      expires: "2026-07-15"
+    83246:
+      reason: "langchain-core <0.3.81 deserialization via unescaped 'lc' key. Upgrade needed."
+      expires: "2026-07-15"
+    86270:
+      reason: "langchain-core <1.2.11 SSRF via image_url in token counting. Upgrade needed."
+      expires: "2026-07-15"
+    # ── flair 0.13.1 (transitive via gliner) ──
+    73973:
+      reason: "flair <0.15.0 RCE via ClusteringModel code injection; transitive via gliner. Revisit after gliner updates."
+      expires: "2026-12-01"

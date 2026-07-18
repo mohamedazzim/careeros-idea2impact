@@ -1,0 +1,62 @@
+name: Test Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  backend-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+    - name: Install dependencies
+      working-directory: backend
+      run: |
+        python -m pip install --upgrade pip
+        pip install poetry==2.4.1
+        poetry install --no-root 2>&1 || true
+        VENV_PATH=$(poetry env info --path 2>/dev/null || echo "")
+        if [ -n "$VENV_PATH" ] && [ -f "$VENV_PATH/bin/pip" ]; then
+          "$VENV_PATH/bin/pip" install pytorch-revgrad==0.2.0 2>&1 || true
+        fi
+    - name: Lint (flake8)
+      working-directory: backend
+      continue-on-error: true
+      run: poetry run flake8 src/ --count --max-line-length=120 --statistics --ignore=E501,W503
+    - name: Type check (mypy)
+      working-directory: backend
+      continue-on-error: true
+      run: poetry run mypy src/ --ignore-missing-imports --follow-imports=skip
+    - name: Run Pytest
+      working-directory: backend
+      env:
+        PYTHONPATH: ${{ github.workspace }}/backend
+        CI: "true"
+        CALL_ALERT_DRY_RUN: "true"
+        OUTBOUND_CALL_DRY_RUN: "true"
+        MOCK_RETRIEVAL_AGENT: "true"
+        MOCK_EVAL: "true"
+        MOCK_MCP: "true"
+      run: poetry run pytest -v --tb=short -m "not integration"
+
+  frontend-test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use Node.js 20
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+    - name: Install dependencies
+      run: npm ci
+    - name: Build check
+      run: cd frontend && npm run build
+    - name: TypeScript typecheck
+      run: cd frontend && npx tsc --noEmit
+    - name: Lint (ESLint)
+      run: cd frontend && npm run lint
