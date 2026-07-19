@@ -104,6 +104,7 @@ class Settings(BaseSettings):
     THEIRSTACK_MAX_PAID_REQUESTS_PER_REFRESH: int = Field(default=1, ge=1, le=1)
     THEIRSTACK_MAX_QUERIES_PER_REFRESH: int = Field(default=1, ge=1, le=1)
     THEIRSTACK_MAX_KEY_SLOTS: int = 15
+    THEIRSTACK_BILLING_COOLDOWN_SECONDS: int = Field(default=1800, ge=0)
     THEIRSTACK_JOB_FETCH_LIMIT: int = 5
     THEIRSTACK_JOB_FETCH_DAYS: int = 7
     THEIRSTACK_ENABLE_FREE_COUNT_PREVIEW: bool = False

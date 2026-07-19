@@ -342,6 +342,52 @@ def test_job_refresh_service_builds_existing_only_visibility_reason_and_enriched
     assert "api_key" not in json.dumps(payload).lower()
 
 
+def test_job_refresh_service_prefers_existing_only_reason_when_paid_provider_blocked_but_free_providers_updated():
+    from src.services.job_refresh import JobRefreshService
+
+    service = JobRefreshService()
+    reason = service._build_visibility_reason(
+        resume_doc_uid="resume-123",
+        provider_results=[
+            {
+                "provider": "theirstack",
+                "display_name": "TheirStack",
+                "status": "blocked",
+                "provider_blocked": True,
+                "billing_required": True,
+                "found": 0,
+                "added": 0,
+                "updated": 0,
+                "duplicates_removed": 0,
+                "expired_removed": 0,
+                "error_count": 0,
+            },
+            {
+                "provider": "remoteok",
+                "display_name": "RemoteOK",
+                "status": "completed",
+                "found": 100,
+                "added": 0,
+                "updated": 100,
+                "duplicates_removed": 0,
+                "expired_removed": 0,
+                "error_count": 0,
+            },
+        ],
+        refresh_summary={
+            "found": 100,
+            "added": 0,
+            "updated": 100,
+            "duplicates_removed": 0,
+            "expired_removed": 0,
+            "errors": 0,
+        },
+    )
+
+    assert reason["code"] == "providers_returned_only_existing_jobs"
+    assert "all matched existing records" in reason["message"]
+
+
 def test_job_ingestion_engine_builds_duplicate_only_visibility_reason():
     from src.services.jobs import JobIngestionEngine
 
@@ -402,6 +448,50 @@ def test_job_ingestion_engine_builds_existing_only_visibility_reason():
 
     assert reason["code"] == "providers_returned_only_existing_jobs"
     assert "no new job cards were added" in reason["message"]
+
+
+def test_job_ingestion_engine_prefers_existing_only_reason_when_theirstack_blocked_but_free_providers_updated():
+    from src.services.jobs import JobIngestionEngine
+
+    engine = JobIngestionEngine()
+    reason = engine._build_refresh_reason(
+        resume_profile={"status": "indexed"},
+        provider_results=[
+            {
+                "provider": "theirstack",
+                "display_name": "TheirStack",
+                "status": "blocked",
+                "provider_blocked": True,
+                "billing_required": True,
+                "found": 0,
+                "added": 0,
+                "updated": 0,
+                "duplicates_removed": 0,
+                "expired_removed": 0,
+                "error_count": 0,
+            },
+            {
+                "provider": "remoteok",
+                "display_name": "RemoteOK",
+                "status": "completed",
+                "found": 100,
+                "added": 0,
+                "updated": 100,
+                "duplicates_removed": 0,
+                "expired_removed": 0,
+                "error_count": 0,
+            },
+        ],
+        total_found=100,
+        total_added=0,
+        total_updated=100,
+        total_duplicates=0,
+        total_expired=0,
+        errors=0,
+    )
+
+    assert reason["code"] == "providers_returned_only_existing_jobs"
+    assert "all matched existing records" in reason["message"]
 
 
 def test_job_card_response_includes_provider_source_and_last_seen():

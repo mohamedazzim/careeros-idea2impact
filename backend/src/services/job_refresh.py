@@ -78,18 +78,18 @@ class JobRefreshService:
                 "code": "resume_missing",
                 "message": "Provider refresh ran, but no valid resume was selected for matching.",
             }
-        if blocked_provider:
-            provider_name = blocked_provider.get("display_name") or blocked_provider.get("provider") or "a provider"
-            if blocked_provider.get("billing_required"):
-                return {
-                    "code": "provider_billing_required",
-                    "message": f"{provider_name} is billing-blocked, so no new jobs were fetched from that source.",
-                }
-            return {
-                "code": "provider_blocked",
-                "message": f"{provider_name} was blocked, so refresh results from that source were not available.",
-            }
         if total_found <= 0:
+            if blocked_provider:
+                provider_name = blocked_provider.get("display_name") or blocked_provider.get("provider") or "a provider"
+                if blocked_provider.get("billing_required"):
+                    return {
+                        "code": "provider_billing_required",
+                        "message": f"{provider_name} is billing-blocked, so no new jobs were fetched from that source.",
+                    }
+                return {
+                    "code": "provider_blocked",
+                    "message": f"{provider_name} was blocked, so refresh results from that source were not available.",
+                }
             if total_errors > 0:
                 return {
                     "code": "provider_error",

@@ -183,19 +183,18 @@ class JobIngestionEngine:
             ),
             None,
         )
-        if blocked_provider:
-            provider_name = blocked_provider.get("display_name") or blocked_provider.get("provider") or "a provider"
-            if blocked_provider.get("billing_required"):
-                return {
-                    "code": "provider_billing_required",
-                    "message": f"{provider_name} returned a billing-required response, so no new jobs could be fetched from that source.",
-                }
-            return {
-                "code": "provider_blocked",
-                "message": f"{provider_name} was blocked, so its jobs were not included in the refresh.",
-            }
-
         if total_found <= 0:
+            if blocked_provider:
+                provider_name = blocked_provider.get("display_name") or blocked_provider.get("provider") or "a provider"
+                if blocked_provider.get("billing_required"):
+                    return {
+                        "code": "provider_billing_required",
+                        "message": f"{provider_name} returned a billing-required response, so no new jobs could be fetched from that source.",
+                    }
+                return {
+                    "code": "provider_blocked",
+                    "message": f"{provider_name} was blocked, so its jobs were not included in the refresh.",
+                }
             if errors > 0:
                 return {
                     "code": "provider_error",

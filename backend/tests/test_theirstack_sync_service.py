@@ -18,6 +18,7 @@ class _BillingBlockedClient:
         self.configured = True
         self.calls = 0
         self.payloads = []
+        self._slots = [object()]
 
     async def search_jobs(self, payload, use_cache=True):
         from src.integrations.theirstack.client import ClientSearchResult
@@ -41,6 +42,7 @@ class _FakeSearchClient:
         self.calls = 0
         self.payloads = []
         self.data = data
+        self._slots = [object()]
 
     async def search_jobs(self, payload, use_cache=True):
         from src.integrations.theirstack.client import ClientSearchResult
@@ -61,6 +63,8 @@ class _FakeSearchClient:
 async def test_search_from_resume_stops_on_billing_required(monkeypatch):
     from src.integrations.theirstack.sync_service import TheirStackSyncService
 
+    monkeypatch.setattr("src.integrations.theirstack.sync_service._BILLING_BLOCKED_UNTIL", None)
+    monkeypatch.setattr("src.integrations.theirstack.sync_service._BILLING_BLOCKED_SLOT_COUNT", 0)
     monkeypatch.setattr("src.integrations.theirstack.sync_service.settings.THEIRSTACK_ENABLE_FREE_COUNT_PREVIEW", False)
     monkeypatch.setattr("src.integrations.theirstack.sync_service.settings.THEIRSTACK_MAX_QUERIES_PER_REFRESH", 3)
 
@@ -80,9 +84,36 @@ async def test_search_from_resume_stops_on_billing_required(monkeypatch):
 
 
 @pytest.mark.asyncio
+async def test_search_from_resume_skips_http_during_billing_cooldown(monkeypatch):
+    from datetime import datetime, timedelta, timezone
+
+    from src.integrations.theirstack.sync_service import TheirStackSyncService
+
+    monkeypatch.setattr("src.integrations.theirstack.sync_service.settings.THEIRSTACK_BILLING_COOLDOWN_SECONDS", 1800)
+    monkeypatch.setattr(
+        "src.integrations.theirstack.sync_service._BILLING_BLOCKED_UNTIL",
+        datetime.now(timezone.utc) + timedelta(minutes=30),
+    )
+    monkeypatch.setattr("src.integrations.theirstack.sync_service._BILLING_BLOCKED_SLOT_COUNT", 1)
+
+    client = _BillingBlockedClient()
+    service = TheirStackSyncService(client=client)  # type: ignore[arg-type]
+
+    result = await service.search_from_resume({"skills": ["python"], "location": "India"}, {})
+
+    assert client.calls == 0
+    assert result["provider_blocked"] is True
+    assert result["billing_required"] is True
+    assert result["provider_http_call_count"] == 0
+    assert result["provider_health"]["billing_cooldown_until"]
+
+
+@pytest.mark.asyncio
 async def test_search_from_resume_makes_one_paid_call_no_preview_no_fallback(monkeypatch):
     from src.integrations.theirstack.sync_service import TheirStackSyncService
 
+    monkeypatch.setattr("src.integrations.theirstack.sync_service._BILLING_BLOCKED_UNTIL", None)
+    monkeypatch.setattr("src.integrations.theirstack.sync_service._BILLING_BLOCKED_SLOT_COUNT", 0)
     monkeypatch.setattr("src.integrations.theirstack.sync_service.settings.THEIRSTACK_ENABLE_FREE_COUNT_PREVIEW", False)
     monkeypatch.setattr("src.integrations.theirstack.sync_service.settings.THEIRSTACK_MAX_QUERIES_PER_REFRESH", 1)
     client = _FakeSearchClient([])
@@ -105,6 +136,8 @@ async def test_search_from_resume_makes_one_paid_call_no_preview_no_fallback(mon
 async def test_search_from_resume_explicit_broad_mode_makes_one_call(monkeypatch):
     from src.integrations.theirstack.sync_service import TheirStackSyncService
 
+    monkeypatch.setattr("src.integrations.theirstack.sync_service._BILLING_BLOCKED_UNTIL", None)
+    monkeypatch.setattr("src.integrations.theirstack.sync_service._BILLING_BLOCKED_SLOT_COUNT", 0)
     monkeypatch.setattr("src.integrations.theirstack.sync_service.settings.THEIRSTACK_ENABLE_FREE_COUNT_PREVIEW", False)
     client = _FakeSearchClient([_raw_job(1)])
     service = TheirStackSyncService(client=client)  # type: ignore[arg-type]
@@ -121,6 +154,8 @@ async def test_search_from_resume_explicit_broad_mode_makes_one_call(monkeypatch
 async def test_search_from_resume_caps_normalized_jobs_to_five(monkeypatch):
     from src.integrations.theirstack.sync_service import TheirStackSyncService
 
+    monkeypatch.setattr("src.integrations.theirstack.sync_service._BILLING_BLOCKED_UNTIL", None)
+    monkeypatch.setattr("src.integrations.theirstack.sync_service._BILLING_BLOCKED_SLOT_COUNT", 0)
     monkeypatch.setattr("src.integrations.theirstack.sync_service.settings.THEIRSTACK_ENABLE_FREE_COUNT_PREVIEW", False)
     client = _FakeSearchClient([_raw_job(i) for i in range(7)])
     service = TheirStackSyncService(client=client)  # type: ignore[arg-type]

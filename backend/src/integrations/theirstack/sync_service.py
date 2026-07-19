@@ -21,6 +21,9 @@ from .schemas import NormalizedTheirStackJob
 
 logger = logging.getLogger(__name__)
 
+_BILLING_BLOCKED_UNTIL: datetime | None = None
+_BILLING_BLOCKED_SLOT_COUNT = 0
+
 
 def _effective_theirstack_page_limit() -> int:
     requested_limit = max(
@@ -350,6 +353,8 @@ class TheirStackSyncService:
         resume_profile: Dict[str, Any],
         preferences: Dict[str, Any] | None = None,
     ) -> Dict[str, Any]:
+        global _BILLING_BLOCKED_UNTIL, _BILLING_BLOCKED_SLOT_COUNT
+
         key_slots_configured = len(getattr(self.client, "_slots", []) or [])
         provider_blocked = False
         billing_required = False
@@ -385,6 +390,73 @@ class TheirStackSyncService:
                     "billing_required": False,
                     "provider_blocked": False,
                     "key_slots_configured": 0,
+                },
+            }
+
+        now = datetime.now(timezone.utc)
+        cooldown_seconds = int(getattr(settings, "THEIRSTACK_BILLING_COOLDOWN_SECONDS", 1800) or 0)
+        if (
+            cooldown_seconds > 0
+            and _BILLING_BLOCKED_UNTIL is not None
+            and _BILLING_BLOCKED_UNTIL > now
+            and _BILLING_BLOCKED_SLOT_COUNT == key_slots_configured
+        ):
+            self.last_query_context = {
+                "provider": "theirstack",
+                "display_name": "TheirStack",
+                "query": "resume-driven technical feed",
+                "location": "India/Remote filters",
+                "limit": _effective_theirstack_page_limit(),
+                "since": f"{int(settings.THEIRSTACK_JOB_FETCH_DAYS)} days",
+                "configured": True,
+                "query_count": 1,
+                "search_mode": str((preferences or {}).get("search_mode") or "resume").strip().lower(),
+            }
+            retry_at = _BILLING_BLOCKED_UNTIL.isoformat().replace("+00:00", "Z")
+            return {
+                "provider": "theirstack",
+                "configured": True,
+                "provider_blocked": True,
+                "billing_required": True,
+                "provider_status_code": 402,
+                "found": 0,
+                "normalized": 0,
+                "india_likely": 0,
+                "non_india_rejected": 0,
+                "skipped_missing_apply": 0,
+                "skipped_duplicates": 0,
+                "skipped_invalid_jobs": 0,
+                "provider_http_call_count": 0,
+                "credit_upper_bound": 0,
+                "jobs": [],
+                "preview": None,
+                "queries": [],
+                "errors": [f"TheirStack billing cooldown is active until {retry_at}."],
+                "audit": {
+                    "selected_key_slot": "",
+                    "attempted_key_slots": [],
+                    "rate_limited_slots": [],
+                    "invalid_slots": [],
+                    "provider_status_code": 402,
+                    "billing_required": True,
+                    "provider_blocked": True,
+                    "provider_http_call_count": 0,
+                    "billing_cooldown_until": retry_at,
+                },
+                "provider_health": {
+                    "provider": "theirstack",
+                    "status": "blocked",
+                    "configured": True,
+                    "billing_required": True,
+                    "provider_blocked": True,
+                    "key_slots_configured": key_slots_configured,
+                    "selected_key_slot": "",
+                    "attempted_key_slots": [],
+                    "rate_limited_slots": [],
+                    "invalid_slots": [],
+                    "provider_status_code": 402,
+                    "provider_http_call_count": 0,
+                    "billing_cooldown_until": retry_at,
                 },
             }
 
@@ -530,6 +602,22 @@ class TheirStackSyncService:
             "provider_http_call_count": provider_http_call_count,
             "credit_upper_bound": min(total_fetched, int(payload.get("limit") or 5), 5),
         }
+        if (
+            cooldown_seconds > 0
+            and provider_blocked
+            and billing_required
+            and key_slots_configured > 0
+            and len(set(rate_limited_slots)) >= key_slots_configured
+        ):
+            _BILLING_BLOCKED_UNTIL = datetime.now(timezone.utc) + timedelta(seconds=cooldown_seconds)
+            _BILLING_BLOCKED_SLOT_COUNT = key_slots_configured
+            retry_at = _BILLING_BLOCKED_UNTIL.isoformat().replace("+00:00", "Z")
+            audit["billing_cooldown_until"] = retry_at
+            provider_health["billing_cooldown_until"] = retry_at
+            logger.warning(
+                "TheirStack billing/quota cooldown activated for %s seconds after all configured key slots were blocked",
+                cooldown_seconds,
+            )
 
         log_msg = (
             "TheirStack sync: fetched=%d, normalized=%d, india_likely=%d, "
