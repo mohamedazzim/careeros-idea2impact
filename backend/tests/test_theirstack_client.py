@@ -187,7 +187,7 @@ async def test_search_jobs_rotates_on_402_billing_required(monkeypatch):
     result = await client.search_jobs({"posted_at_gte": "2026-06-01", "limit": 1, "page": 0}, use_cache=False)
 
     assert result.success is True
-    assert result.billing_required is True
+    assert result.billing_required is False
     assert result.provider_blocked is False
     assert result.provider_status_code == 200
     assert result.selected_key_slot == "key_2"
@@ -196,6 +196,34 @@ async def test_search_jobs_rotates_on_402_billing_required(monkeypatch):
     assert fake_client.calls == 2
     assert result.provider_http_call_count == 2
     assert result.fetched_count == 1
+
+
+@pytest.mark.asyncio
+async def test_search_jobs_treats_200_billing_body_as_effective_402(monkeypatch):
+    from src.integrations.theirstack.client import TheirStackClient
+    from src.integrations.theirstack.credential_resolver import KeySlot
+
+    fake_client = _FakeAsyncClient([
+        _make_response(200, {"error": {"title": "credits exhausted"}}),
+        _make_response(200, {"error": {"title": "subscription expired"}}),
+    ])
+    monkeypatch.setattr("src.integrations.theirstack.client.httpx.AsyncClient", lambda *args, **kwargs: fake_client)
+
+    client = TheirStackClient("test-key")
+    client._slots = [
+        KeySlot(slot_name="primary", key="secret-1"),
+        KeySlot(slot_name="key_2", key="secret-2"),
+    ]
+
+    result = await client.search_jobs({"posted_at_gte": "2026-06-01", "limit": 1, "page": 0}, use_cache=False)
+
+    assert result.success is False
+    assert result.billing_required is True
+    assert result.provider_blocked is True
+    assert result.provider_status_code == 402
+    assert result.rate_limited_slots == ["primary", "key_2"]
+    assert result.attempted_key_slots == ["primary", "key_2"]
+    assert result.provider_http_call_count == 2
 
 
 @pytest.mark.asyncio

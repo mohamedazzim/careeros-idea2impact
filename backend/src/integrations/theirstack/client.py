@@ -239,6 +239,7 @@ class TheirStackClient:
         url = f"{self.base_url}/v1/jobs/search"
         result = ClientSearchResult()
         slot = get_next_valid_slot(self._slots)
+        billing_or_quota_seen = False
 
         while slot is not None:
             result.attempted_key_slots.append(slot.slot_name)
@@ -252,12 +253,14 @@ class TheirStackClient:
                 result.fetched_count = attempt_result.fetched_count
                 result.cache_hit = attempt_result.cache_hit
                 result.success = True
+                result.billing_required = False
+                result.provider_blocked = False
 
                 if use_cache and attempt_result.data:
                     await self.cache.set(payload, attempt_result.data)
                 break
             elif attempt_result.billing_required:
-                result.billing_required = True
+                billing_or_quota_seen = True
                 result.rate_limited_slots.append(slot.slot_name)
                 result.error = attempt_result.error or "TheirStack billing required"
                 mark_invalid(self._slots, slot.slot_name)
@@ -280,6 +283,8 @@ class TheirStackClient:
 
             slot = get_next_valid_slot(self._slots, after_slot=slot.slot_name)
 
+        if billing_or_quota_seen and not result.success:
+            result.billing_required = True
         if result.billing_required and not result.success and not get_next_valid_slot(self._slots):
             result.provider_blocked = True
 
@@ -345,9 +350,11 @@ class TheirStackClient:
                     if self._is_billing_required(response.status_code, response.text):
                         audit.billing_required = True
                         audit.provider_blocked = True
+                        if response.status_code < 400:
+                            audit.status_code = 402
                         body_snippet = self._safe_response_snippet(response.text)
                         audit.error = (
-                            f"HTTP {response.status_code} Payment Required"
+                            f"HTTP {audit.status_code} Payment Required"
                             + (f": {body_snippet}" if body_snippet else "")
                         )
                         return audit
