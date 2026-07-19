@@ -36,6 +36,9 @@ from src.schemas.package import (
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/packages", tags=["Application Packages"])
 
+SUPPORTED_PACKAGE_ASSETS = {"resume", "cover_letter", "outreach", "interview_guide"}
+SUPPORTED_PACKAGE_FORMATS = {"markdown"}
+
 
 class GeneratePackageRequest(BaseModel):
     job_id: str = Field(..., min_length=1)
@@ -229,7 +232,7 @@ async def _run_structured_generation(package_uid: str, user_id: str, job_uid: st
         knowledge_repo = KnowledgeRepository(db)
 
         try:
-            pkg = await repo.get_by_uid(package_uid)
+            pkg = await repo.get_by_uid_for_user(package_uid, user_id)
             if not pkg:
                 return
 
@@ -276,7 +279,7 @@ async def _run_structured_generation(package_uid: str, user_id: str, job_uid: st
 
         except Exception as gen_err:
             logger.exception("Package generation failed for %s", package_uid)
-            pkg = await repo.get_by_uid(package_uid)
+            pkg = await repo.get_by_uid_for_user(package_uid, user_id)
             if pkg:
                 await repo.update(
                     pkg.id,
@@ -420,10 +423,13 @@ async def download_package(
     user: dict = Depends(get_current_user),
 ):
     repo = PackageRepository(db)
-    job_repo = JobRepository(db)
     pkg = await repo.get_by_uid_for_user(pkg_id, user["sub"])
     if not pkg:
         raise HTTPException(status_code=404, detail="Package not found")
+    if asset not in SUPPORTED_PACKAGE_ASSETS:
+        raise HTTPException(status_code=400, detail=f"Unsupported package asset: {asset}")
+    if format not in SUPPORTED_PACKAGE_FORMATS:
+        raise HTTPException(status_code=400, detail=f"Unsupported package format: {format}")
 
     content = _deserialize_content(pkg)
     if not content:
@@ -437,8 +443,6 @@ async def download_package(
         text = f"## LinkedIn\n\n{content.outreach.linkedin_message}\n\n## Email\n\n{content.outreach.email_message}"
     elif asset == "interview_guide":
         text = _render_interview_markdown(content)
-    else:
-        text = ""
 
     return {
         "package_id": pkg_id,
