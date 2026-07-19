@@ -11,7 +11,7 @@ import httpx
 from src.core.config import settings
 
 from .cache import TheirStackCache
-from .credential_resolver import resolve_keys, KeySlot, get_next_valid_slot
+from .credential_resolver import resolve_keys, KeySlot, get_next_valid_slot, mark_invalid
 
 logger = logging.getLogger(__name__)
 
@@ -240,10 +240,10 @@ class TheirStackClient:
         result = ClientSearchResult()
         slot = get_next_valid_slot(self._slots)
 
-        if slot is not None:
+        while slot is not None:
             result.attempted_key_slots.append(slot.slot_name)
             attempt_result = await self._try_single_slot(url, payload, slot)
-            result.provider_http_call_count = attempt_result.provider_http_call_count
+            result.provider_http_call_count += attempt_result.provider_http_call_count
             result.selected_key_slot = slot.slot_name
             result.provider_status_code = attempt_result.status_code
 
@@ -255,23 +255,33 @@ class TheirStackClient:
 
                 if use_cache and attempt_result.data:
                     await self.cache.set(payload, attempt_result.data)
+                break
             elif attempt_result.billing_required:
                 result.billing_required = True
-                result.provider_blocked = True
+                result.rate_limited_slots.append(slot.slot_name)
                 result.error = attempt_result.error or "TheirStack billing required"
+                mark_invalid(self._slots, slot.slot_name)
                 logger.warning(
-                    "TheirStack provider blocked by billing status slot=%s status=%s",
+                    "TheirStack key slot blocked by billing/quota status slot=%s status=%s; trying next slot if configured",
                     slot.slot_name,
                     attempt_result.status_code,
                 )
             elif attempt_result.is_rate_limited:
                 result.rate_limited_slots.append(slot.slot_name)
                 result.error = attempt_result.error or "TheirStack rate limited"
+                mark_invalid(self._slots, slot.slot_name)
             elif attempt_result.is_invalid_key:
                 result.invalid_slots.append(slot.slot_name)
                 result.error = attempt_result.error or "TheirStack key invalid"
+                mark_invalid(self._slots, slot.slot_name)
             elif attempt_result.error:
                 result.error = attempt_result.error
+                break
+
+            slot = get_next_valid_slot(self._slots, after_slot=slot.slot_name)
+
+        if result.billing_required and not result.success and not get_next_valid_slot(self._slots):
+            result.provider_blocked = True
 
         if not result.success:
             if result.provider_blocked:
