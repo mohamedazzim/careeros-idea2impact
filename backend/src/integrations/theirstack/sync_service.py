@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import logging
 import uuid
 from datetime import datetime, timedelta, timezone
@@ -23,6 +24,64 @@ logger = logging.getLogger(__name__)
 
 _BILLING_BLOCKED_UNTIL: datetime | None = None
 _BILLING_BLOCKED_SLOT_COUNT = 0
+_BILLING_COOLDOWN_KEY = "theirstack:billing_cooldown"
+
+
+async def _read_billing_cooldown_until(key_slots_configured: int) -> datetime | None:
+    global _BILLING_BLOCKED_UNTIL, _BILLING_BLOCKED_SLOT_COUNT
+
+    now = datetime.now(timezone.utc)
+    if (
+        _BILLING_BLOCKED_UNTIL is not None
+        and _BILLING_BLOCKED_UNTIL > now
+        and _BILLING_BLOCKED_SLOT_COUNT == key_slots_configured
+    ):
+        return _BILLING_BLOCKED_UNTIL
+
+    try:
+        import redis.asyncio as redis
+
+        client = redis.from_url(settings.REDIS_URL, decode_responses=True)
+        raw = await client.get(_BILLING_COOLDOWN_KEY)
+        await client.aclose()
+        if not raw:
+            return None
+        payload = json.loads(raw)
+        if int(payload.get("slot_count") or 0) != key_slots_configured:
+            return None
+        until = datetime.fromisoformat(str(payload.get("until")).replace("Z", "+00:00"))
+        if until <= now:
+            return None
+        _BILLING_BLOCKED_UNTIL = until
+        _BILLING_BLOCKED_SLOT_COUNT = key_slots_configured
+        return until
+    except Exception as exc:
+        logger.debug("TheirStack billing cooldown read skipped: %s", exc)
+        return None
+
+
+async def _write_billing_cooldown_until(key_slots_configured: int, until: datetime, ttl_seconds: int) -> None:
+    global _BILLING_BLOCKED_UNTIL, _BILLING_BLOCKED_SLOT_COUNT
+
+    _BILLING_BLOCKED_UNTIL = until
+    _BILLING_BLOCKED_SLOT_COUNT = key_slots_configured
+    try:
+        import redis.asyncio as redis
+
+        client = redis.from_url(settings.REDIS_URL, decode_responses=True)
+        await client.setex(
+            _BILLING_COOLDOWN_KEY,
+            ttl_seconds,
+            json.dumps(
+                {
+                    "slot_count": key_slots_configured,
+                    "until": until.isoformat().replace("+00:00", "Z"),
+                }
+            ),
+        )
+        await client.aclose()
+    except Exception as exc:
+        logger.debug("TheirStack billing cooldown write skipped: %s", exc)
 
 
 def _effective_theirstack_page_limit() -> int:
@@ -353,8 +412,6 @@ class TheirStackSyncService:
         resume_profile: Dict[str, Any],
         preferences: Dict[str, Any] | None = None,
     ) -> Dict[str, Any]:
-        global _BILLING_BLOCKED_UNTIL, _BILLING_BLOCKED_SLOT_COUNT
-
         key_slots_configured = len(getattr(self.client, "_slots", []) or [])
         provider_blocked = False
         billing_required = False
@@ -393,14 +450,9 @@ class TheirStackSyncService:
                 },
             }
 
-        now = datetime.now(timezone.utc)
         cooldown_seconds = int(getattr(settings, "THEIRSTACK_BILLING_COOLDOWN_SECONDS", 1800) or 0)
-        if (
-            cooldown_seconds > 0
-            and _BILLING_BLOCKED_UNTIL is not None
-            and _BILLING_BLOCKED_UNTIL > now
-            and _BILLING_BLOCKED_SLOT_COUNT == key_slots_configured
-        ):
+        cooldown_until = await _read_billing_cooldown_until(key_slots_configured) if cooldown_seconds > 0 else None
+        if cooldown_until is not None:
             self.last_query_context = {
                 "provider": "theirstack",
                 "display_name": "TheirStack",
@@ -412,7 +464,7 @@ class TheirStackSyncService:
                 "query_count": 1,
                 "search_mode": str((preferences or {}).get("search_mode") or "resume").strip().lower(),
             }
-            retry_at = _BILLING_BLOCKED_UNTIL.isoformat().replace("+00:00", "Z")
+            retry_at = cooldown_until.isoformat().replace("+00:00", "Z")
             return {
                 "provider": "theirstack",
                 "configured": True,
@@ -609,9 +661,9 @@ class TheirStackSyncService:
             and key_slots_configured > 0
             and len(set(rate_limited_slots)) >= key_slots_configured
         ):
-            _BILLING_BLOCKED_UNTIL = datetime.now(timezone.utc) + timedelta(seconds=cooldown_seconds)
-            _BILLING_BLOCKED_SLOT_COUNT = key_slots_configured
-            retry_at = _BILLING_BLOCKED_UNTIL.isoformat().replace("+00:00", "Z")
+            cooldown_until = datetime.now(timezone.utc) + timedelta(seconds=cooldown_seconds)
+            await _write_billing_cooldown_until(key_slots_configured, cooldown_until, cooldown_seconds)
+            retry_at = cooldown_until.isoformat().replace("+00:00", "Z")
             audit["billing_cooldown_until"] = retry_at
             provider_health["billing_cooldown_until"] = retry_at
             logger.warning(
