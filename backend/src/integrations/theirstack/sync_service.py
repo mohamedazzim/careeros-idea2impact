@@ -23,10 +23,12 @@ logger = logging.getLogger(__name__)
 
 
 def _effective_theirstack_page_limit() -> int:
-    return max(
+    requested_limit = max(
         int(settings.THEIRSTACK_JOB_FETCH_LIMIT),
         int(settings.THEIRSTACK_RESULTS_PER_QUERY),
     )
+    configured_cap = int(getattr(settings, "THEIRSTACK_MAX_RESULTS_PER_REQUEST", 5) or 5)
+    return max(1, min(requested_limit, configured_cap, 5))
 
 INDIA_KEYWORDS = [
     "india", "bengaluru", "bangalore", "hyderabad", "chennai", "pune",
@@ -107,9 +109,10 @@ def build_theirstack_indian_tech_jobs_payload(
     remote: Optional[bool] = None,
 ) -> Dict[str, Any]:
     posted_at_gte = (datetime.now(timezone.utc) - timedelta(days=since_days)).date().isoformat()
+    effective_limit = max(1, min(int(limit or 5), int(getattr(settings, "THEIRSTACK_MAX_RESULTS_PER_REQUEST", 5) or 5), 5))
     payload: Dict[str, Any] = {
         "page": page,
-        "limit": 1 if preview else limit,
+        "limit": 1 if preview else effective_limit,
         "posted_at_gte": posted_at_gte,
         "job_country_code_or": country_codes or ["IN"],
         "company_type": company_type or "direct_employer",

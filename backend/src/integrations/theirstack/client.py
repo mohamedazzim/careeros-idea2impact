@@ -17,6 +17,7 @@ from .credential_resolver import resolve_keys, KeySlot, get_next_valid_slot
 logger = logging.getLogger(__name__)
 
 RETRYABLE_STATUS_CODES = {500, 502, 503, 504}
+THEIRSTACK_PROVIDER_MAX_RESULTS_PER_REQUEST = 5
 
 
 class TheirStackClientError(RuntimeError):
@@ -139,6 +140,19 @@ class TheirStackClient:
         cleaned = " ".join((text or "").split())
         return cleaned[:limit]
 
+    def _sanitize_payload(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+        """Enforce CareerOS' TheirStack quota guard before cache keys or HTTP calls."""
+        sanitized = dict(payload)
+        configured_cap = int(getattr(settings, "THEIRSTACK_MAX_RESULTS_PER_REQUEST", 5) or 5)
+        max_results = max(1, min(configured_cap, THEIRSTACK_PROVIDER_MAX_RESULTS_PER_REQUEST))
+        requested_limit = sanitized.get("limit", max_results)
+        try:
+            effective_limit = int(requested_limit)
+        except (TypeError, ValueError):
+            effective_limit = max_results
+        sanitized["limit"] = max(1, min(effective_limit, max_results))
+        return sanitized
+
     def _is_retryable_status(self, status_code: int) -> bool:
         return status_code in RETRYABLE_STATUS_CODES
 
@@ -199,6 +213,7 @@ class TheirStackClient:
         payload: Dict[str, Any],
         use_cache: bool = True,
     ) -> ClientSearchResult:
+        payload = self._sanitize_payload(payload)
         if not self.configured:
             return ClientSearchResult(
                 success=False,

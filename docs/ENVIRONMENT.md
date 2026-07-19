@@ -44,8 +44,11 @@ At least one usable LLM provider must be configured for generated analysis. Dete
 |---|---|---|---|---|
 | `THEIRSTACK_API_KEY` / `THEIRSTACK_API_KEY_1..15` | Required for live TheirStack ingestion | Backend, worker | Job provider key rotation slots | blank |
 | `THEIRSTACK_API_URL_1..15` | Optional | Backend, worker | Per-slot TheirStack endpoint override | blank |
+| `THEIRSTACK_MAX_RESULTS_PER_REQUEST` | Optional | Backend, worker | Hard CareerOS cap for TheirStack jobs returned per provider request. Must remain `<= 5` for quota-safe demo operation. | `5` |
+| `THEIRSTACK_RESULTS_PER_QUERY` | Optional | Backend, worker | Legacy per-query target, clamped by `THEIRSTACK_MAX_RESULTS_PER_REQUEST`. | `5` |
+| `THEIRSTACK_JOB_FETCH_LIMIT` | Optional | Backend, worker | Legacy fetch target, clamped by `THEIRSTACK_MAX_RESULTS_PER_REQUEST`. | `5` |
 | `THEIRSTACK_MAX_QUERIES_PER_REFRESH` | Optional | Backend, worker | Refresh query cap | `5` |
-| `JOB_AUTO_REFRESH_ENABLED` | Optional | Worker | Scheduled job refresh | `true` |
+| `JOB_AUTO_REFRESH_ENABLED` | Optional | Worker | Scheduled job refresh. Keep `false` for public demo deployments unless quota usage is explicitly approved. | `false` |
 | `TAVILY_API_KEY` | Conditionally required | Backend | Learning-resource web search | blank |
 | `YOUTUBE_API_KEY` | Conditionally required | Backend | YouTube learning-resource discovery | blank |
 | `GITHUB_TOKEN` | Optional | Backend | Higher GitHub discovery rate limits | blank |

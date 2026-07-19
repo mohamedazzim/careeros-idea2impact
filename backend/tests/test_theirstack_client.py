@@ -39,6 +39,30 @@ async def test_search_jobs_requires_posted_at_filter():
 
 
 @pytest.mark.asyncio
+async def test_search_jobs_clamps_limit_before_provider_call(monkeypatch):
+    from src.integrations.theirstack.client import TheirStackClient
+
+    fake_client = _FakeAsyncClient([
+        _make_response(200, {"data": []}),
+    ])
+    monkeypatch.setattr("src.integrations.theirstack.client.httpx.AsyncClient", lambda *args, **kwargs: fake_client)
+
+    captured_payloads = []
+    original_post = fake_client.post
+
+    async def capturing_post(*args, **kwargs):
+        captured_payloads.append(kwargs["json"])
+        return await original_post(*args, **kwargs)
+
+    fake_client.post = capturing_post
+    client = TheirStackClient("test-key")
+    result = await client.search_jobs({"posted_at_gte": "2026-06-01", "limit": 500, "page": 0}, use_cache=False)
+
+    assert result.success is True
+    assert captured_payloads[0]["limit"] == 5
+
+
+@pytest.mark.asyncio
 async def test_try_single_slot_retries_500_then_succeeds(monkeypatch):
     from src.integrations.theirstack.client import TheirStackClient
     from src.integrations.theirstack.credential_resolver import KeySlot

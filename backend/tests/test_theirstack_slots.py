@@ -275,6 +275,17 @@ class TestTheirStackStrictPayload:
         assert payload["job_title_or"] == ["software engineer"]
         assert payload["job_title_not"] == ["sales"]
 
+    def test_module_payload_builder_clamps_non_preview_limit(self):
+        from src.integrations.theirstack.sync_service import build_theirstack_indian_tech_jobs_payload
+
+        payload = build_theirstack_indian_tech_jobs_payload(
+            limit=500,
+            page=0,
+            preview=False,
+        )
+
+        assert payload["limit"] == 5
+
     def test_build_search_payload_is_strict_and_resume_centric(self):
         from src.integrations.theirstack.sync_service import TheirStackSyncService
 
@@ -294,7 +305,7 @@ class TestTheirStackStrictPayload:
         payload = service.build_search_payload(profile, preferences)
 
         assert payload["page"] == 0
-        assert payload["limit"] == 25
+        assert payload["limit"] == 5
         assert payload["job_country_code_or"] == ["IN"]
         assert payload["company_type"] == "direct_employer"
         assert payload["is_closed"] is False
@@ -309,6 +320,18 @@ class TestTheirStackStrictPayload:
 
         expected_date = (datetime.now(timezone.utc) - timedelta(days=7)).date().isoformat()
         assert payload["posted_at_gte"] == expected_date
+
+    def test_build_search_payload_clamps_legacy_high_limits(self, monkeypatch):
+        from src.integrations.theirstack.sync_service import TheirStackSyncService
+
+        monkeypatch.setattr("src.integrations.theirstack.sync_service.settings.THEIRSTACK_RESULTS_PER_QUERY", 500)
+        monkeypatch.setattr("src.integrations.theirstack.sync_service.settings.THEIRSTACK_JOB_FETCH_LIMIT", 250)
+        monkeypatch.setattr("src.integrations.theirstack.sync_service.settings.THEIRSTACK_MAX_RESULTS_PER_REQUEST", 5)
+
+        service = TheirStackSyncService(client=MagicMock())
+        payload = service.build_search_payload({"skills": ["Python"]}, {})
+
+        assert payload["limit"] == 5
 
     def test_preview_payload_enables_free_count_mode(self):
         from src.integrations.theirstack.sync_service import TheirStackSyncService
