@@ -26,3 +26,14 @@ class KnowledgeRepository(BaseRepository[KnowledgeDoc]):
 
     async def get_by_uid(self, doc_uid: str) -> Optional[KnowledgeDoc]:
         return await self.find_one(KnowledgeDoc.doc_uid == doc_uid)
+
+    async def get_by_uid_for_user(
+        self,
+        doc_uid: str,
+        user_id: str,
+    ) -> Optional[KnowledgeDoc]:
+        """Return an active document only when it belongs to the user."""
+        return await self.find_one(
+            KnowledgeDoc.doc_uid == doc_uid,
+            KnowledgeDoc.user_id == user_id,
+        )

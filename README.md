@@ -134,9 +134,17 @@ Public readiness notes, validation scope, and known limitations are in [docs/PUB
 
 ## Deployment
 
-Public deployment URL: **pending deployment-provider selection**.
+Public deployment URL: [https://careeros-idea2impact-azzim.koreacentral.cloudapp.azure.com](https://careeros-idea2impact-azzim.koreacentral.cloudapp.azure.com).
 
-The repository contains local and production Compose variants plus Nginx configuration. The current production path is a Docker Compose/Nginx topology with PostgreSQL, Redis, Qdrant, FastAPI, ARQ worker, and Next.js. Public deployment remains blocked until an authenticated hosting target or VPS is available and credentials are supplied through a secret manager.
+The current judge-facing deployment runs on an Azure Ubuntu VPS using Docker Compose and an Nginx HTTPS edge:
+
+- Frontend: [https://careeros-idea2impact-azzim.koreacentral.cloudapp.azure.com](https://careeros-idea2impact-azzim.koreacentral.cloudapp.azure.com)
+- Backend API: [https://careeros-idea2impact-azzim.koreacentral.cloudapp.azure.com/api](https://careeros-idea2impact-azzim.koreacentral.cloudapp.azure.com/api)
+- Liveness: [https://careeros-idea2impact-azzim.koreacentral.cloudapp.azure.com/api/health/live](https://careeros-idea2impact-azzim.koreacentral.cloudapp.azure.com/api/health/live)
+- Readiness: [https://careeros-idea2impact-azzim.koreacentral.cloudapp.azure.com/api/health/ready](https://careeros-idea2impact-azzim.koreacentral.cloudapp.azure.com/api/health/ready)
+- Docs-RAG health: [https://careeros-idea2impact-azzim.koreacentral.cloudapp.azure.com/api/v1/demo-rag/health](https://careeros-idea2impact-azzim.koreacentral.cloudapp.azure.com/api/v1/demo-rag/health)
+
+The production topology includes PostgreSQL, Redis, persistent Qdrant, FastAPI, ARQ worker, Next.js, and Nginx. The deployed schema head is `034_resume_updated_at_default`. External calls and webhook actions remain dry-run or blocked for public judging; the demo user is non-admin.
 
 ## Privacy and security
 
@@ -155,7 +163,7 @@ Security findings should be reported privately to the repository owner rather th
 - Some analytics require real longitudinal activity and correctly return sparse or `insufficient_data` results.
 - Conversational voice behavior requires provider-side configuration and explicit human-approved testing.
 - Frontend automated coverage is intentionally small at publication time: the current suite covers core CareerOS UI/auth/demo safety behavior, but does not replace browser E2E coverage.
-- Deployment, demo account, and public screenshots remain environment-specific publication tasks.
+- The public deployment uses a temporary hackathon hostname. Demo credentials are stored outside Git and supplied separately through the submission portal.
 
 See [docs/v2/v2-risk-register.md](docs/v2/v2-risk-register.md) and [docs/rag/KNOWN_LIMITATIONS.md](docs/rag/KNOWN_LIMITATIONS.md).
 

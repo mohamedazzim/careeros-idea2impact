@@ -89,12 +89,47 @@ class LearningPathService:
 
         aggregates: dict[str, dict[str, Any]] = {}
         for match, job in result.all():
+            # Prefer the canonical missing-skill list produced by the
+            # opportunity matcher. JobMatch.gaps may contain dimension-level
+            # explanation dictionaries such as "Experience Match", which are
+            # not learnable skill names.
             gap_candidates: list[object] = []
-            if isinstance(match.gaps, list) and match.gaps:
-                gap_candidates.extend(match.gaps)
-            elif isinstance(match.match_details, dict):
-                gap_candidates.extend(match.match_details.get("missing_skills") or [])
-                gap_candidates.extend(match.match_details.get("job_extraction", {}).get("skills", []))
+
+            if isinstance(match.match_details, dict):
+                explicit_missing_skills = (
+                    match.match_details.get("missing_skills")
+                    or []
+                )
+
+                if isinstance(
+                    explicit_missing_skills,
+                    list,
+                ):
+                    gap_candidates.extend(
+                        explicit_missing_skills
+                    )
+
+            # Backward-compatible fallback for legacy matches that stored
+            # actual skill strings directly in JobMatch.gaps.
+            if (
+                not gap_candidates
+                and isinstance(match.gaps, list)
+            ):
+                for value in match.gaps:
+                    if isinstance(value, str):
+                        gap_candidates.append(value)
+                        continue
+
+                    if isinstance(value, dict):
+                        explicit_skill = (
+                            value.get("skill")
+                            or value.get("name")
+                        )
+
+                        if explicit_skill:
+                            gap_candidates.append(
+                                explicit_skill
+                            )
             for normalized in normalize_skill_list(gap_candidates):
                 if not normalized.slug:
                     continue

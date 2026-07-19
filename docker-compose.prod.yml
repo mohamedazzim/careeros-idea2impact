@@ -61,7 +61,7 @@ services:
 
   # Qdrant Vector Store
   qdrant:
-    image: qdrant/qdrant:v1.14.1
+    image: qdrant/qdrant:v1.18.1
     container_name: careeros-qdrant
     ports:
       - "127.0.0.1:6333:6333"  # Bind to localhost only; do not expose publicly
@@ -277,6 +277,9 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-/api/v1}
+        NEXT_PUBLIC_WS_URL: ${NEXT_PUBLIC_WS_URL:-ws://localhost:8000/api/v1/realtime}
     container_name: careeros-frontend
     ports:
       - "127.0.0.1:3000:3000"  # Bind to localhost only

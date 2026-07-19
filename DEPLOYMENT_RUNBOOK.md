@@ -6,6 +6,15 @@ Date: 2026-07-18
 
 This runbook prepares CareerOS for a VPS-style Docker deployment. The public repository is history-free and deployment credentials must be supplied only through an ignored `.env` file or the selected hosting provider's encrypted secret manager.
 
+Current Idea2Impact deployment:
+
+- Frontend: `https://careeros-idea2impact-azzim.koreacentral.cloudapp.azure.com`
+- Backend API: `https://careeros-idea2impact-azzim.koreacentral.cloudapp.azure.com/api`
+- Liveness: `https://careeros-idea2impact-azzim.koreacentral.cloudapp.azure.com/api/health/live`
+- Readiness: `https://careeros-idea2impact-azzim.koreacentral.cloudapp.azure.com/api/health/ready`
+- Docs-RAG health: `https://careeros-idea2impact-azzim.koreacentral.cloudapp.azure.com/api/v1/demo-rag/health`
+- Migration head: `034_resume_updated_at_default`
+
 ## Production Prerequisites
 
 - Linux VPS with Docker and Docker Compose installed.
@@ -127,6 +136,8 @@ Recommended public routes:
 - `https://<domain>/api/` -> backend container port `8000`
 - `wss://<domain>/api/v1/realtime` -> backend websocket endpoint
 
+The included Nginx configuration uses Docker DNS resolver-based upstream targets. This prevents stale upstream IPs after backend or frontend containers are recreated.
+
 Proxy requirements:
 
 - Preserve `Host`, `X-Forwarded-For`, `X-Forwarded-Proto`, and websocket upgrade headers.
@@ -159,6 +170,25 @@ curl -fsS https://<domain>/api/health/live
 curl -fsS https://<domain>/api/health/ready
 curl -fsS https://<domain>/
 ```
+
+For the live Idea2Impact deployment:
+
+```bash
+curl -fsS https://careeros-idea2impact-azzim.koreacentral.cloudapp.azure.com/api/health/live
+curl -fsS https://careeros-idea2impact-azzim.koreacentral.cloudapp.azure.com/api/health/ready
+curl -fsS https://careeros-idea2impact-azzim.koreacentral.cloudapp.azure.com/api/v1/demo-rag/health
+```
+
+Verified production checks:
+
+- Public HTTPS frontend loads.
+- Backend liveness and readiness return `200`.
+- Docs-RAG health returns `200`.
+- Demo user is non-admin.
+- PostgreSQL and Qdrant persistence survive targeted service restart.
+- Docs-RAG indexing produced 18 files, 127 chunks, and 127 Qdrant points.
+- Twilio, Make.com, Pipedream, and automatic job-application actions remain dry-run or blocked.
+- Deepgram speech-to-text remains unavailable/disabled for the public demo.
 
 Application checks:
 
