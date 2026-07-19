@@ -26,3 +26,14 @@ class PackageRepository(BaseRepository[GeneratedPackage]):
 
     async def get_by_uid(self, package_uid: str) -> Optional[GeneratedPackage]:
         return await self.find_one(GeneratedPackage.package_uid == package_uid)
+
+    async def get_by_uid_for_user(
+        self,
+        package_uid: str,
+        user_id: str,
+    ) -> Optional[GeneratedPackage]:
+        """Return a package only when it belongs to the requesting user."""
+        return await self.find_one(
+            GeneratedPackage.package_uid == package_uid,
+            GeneratedPackage.user_id == user_id,
+        )

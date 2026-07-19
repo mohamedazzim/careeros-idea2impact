@@ -369,10 +369,14 @@ async def _generate_with_llm_or_fallback(
 
 
 @router.get("/{pkg_id}")
-async def get_package(pkg_id: str, db: AsyncSession = Depends(get_db)):
+async def get_package(
+    pkg_id: str,
+    db: AsyncSession = Depends(get_db),
+    user: dict = Depends(get_current_user),
+):
     repo = PackageRepository(db)
     job_repo = JobRepository(db)
-    pkg = await repo.get_by_uid(pkg_id)
+    pkg = await repo.get_by_uid_for_user(pkg_id, user["sub"])
     if not pkg:
         raise HTTPException(status_code=404, detail="Package not found")
     display_title = pkg.title
@@ -386,7 +390,7 @@ async def get_package(pkg_id: str, db: AsyncSession = Depends(get_db)):
 @router.delete("/{pkg_id}")
 async def delete_package(pkg_id: str, db: AsyncSession = Depends(get_db), user: dict = Depends(get_current_user)):
     repo = PackageRepository(db)
-    pkg = await repo.get_by_uid(pkg_id)
+    pkg = await repo.get_by_uid_for_user(pkg_id, user["sub"])
     if not pkg:
         raise HTTPException(status_code=404, detail="Package not found")
     await repo.soft_delete(pkg.id)
@@ -396,7 +400,7 @@ async def delete_package(pkg_id: str, db: AsyncSession = Depends(get_db), user: 
 @router.post("/{pkg_id}/regenerate")
 async def regenerate_package(pkg_id: str, db: AsyncSession = Depends(get_db), user: dict = Depends(get_current_user)):
     repo = PackageRepository(db)
-    pkg = await repo.get_by_uid(pkg_id)
+    pkg = await repo.get_by_uid_for_user(pkg_id, user["sub"])
     if not pkg:
         raise HTTPException(status_code=404, detail="Package not found")
     if not pkg.job_id:
@@ -408,10 +412,16 @@ async def regenerate_package(pkg_id: str, db: AsyncSession = Depends(get_db), us
 
 
 @router.get("/{pkg_id}/download")
-async def download_package(pkg_id: str, asset: str = "resume", format: str = "markdown", db: AsyncSession = Depends(get_db)):
+async def download_package(
+    pkg_id: str,
+    asset: str = "resume",
+    format: str = "markdown",
+    db: AsyncSession = Depends(get_db),
+    user: dict = Depends(get_current_user),
+):
     repo = PackageRepository(db)
     job_repo = JobRepository(db)
-    pkg = await repo.get_by_uid(pkg_id)
+    pkg = await repo.get_by_uid_for_user(pkg_id, user["sub"])
     if not pkg:
         raise HTTPException(status_code=404, detail="Package not found")
 
