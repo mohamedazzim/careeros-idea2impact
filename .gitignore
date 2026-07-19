@@ -106,8 +106,8 @@ CLAUDE.md
 project-memory/
 
 # Private local candidate artifacts
-resume/
-resumes/
+/resume/
+/resumes/
 uploads/
 artifacts/
 BEFORE_AFTER_SCREENSHOTS/

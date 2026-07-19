@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 # Qdrant Client connection with timeout configuration
 qdrant_client = AsyncQdrantClient(
     url=settings.QDRANT_URL,
-    api_key=settings.QDRANT_API_KEY,
+    api_key=settings.QDRANT_API_KEY or None,
     timeout=60.0,
 )
 

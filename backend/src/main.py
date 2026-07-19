@@ -285,8 +285,12 @@ class SecurityHeadersMiddleware:
     async def __call__(self, scope: Scope, receive: Receive, send: Send):
         async def send_with_headers(message):
             if message["type"] == "http.response.start":
-                headers = dict(message.get("headers", []))
-                headers.update({
+                # ASGI headers are a list because some headers, especially
+                # Set-Cookie, may legally occur more than once. Converting this
+                # list to a dict would silently discard all but one cookie.
+                headers = list(message.get("headers", []))
+
+                security_headers = {
                     b"x-content-type-options": b"nosniff",
                     b"x-frame-options": b"DENY",
                     b"x-xss-protection": b"1; mode=block",
@@ -294,8 +298,20 @@ class SecurityHeadersMiddleware:
                     b"content-security-policy": b"default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'",
                     b"referrer-policy": b"strict-origin-when-cross-origin",
                     b"permissions-policy": b"camera=(), microphone=(), geolocation=()",
-                })
-                message["headers"] = list(headers.items())
+                }
+
+                security_header_names = set(security_headers)
+
+                # Replace only singleton security headers while preserving
+                # duplicate headers such as Set-Cookie, Vary, and Link.
+                headers = [
+                    (name, value)
+                    for name, value in headers
+                    if name.lower() not in security_header_names
+                ]
+                headers.extend(security_headers.items())
+
+                message["headers"] = headers
             await send(message)
         await self.app(scope, receive, send_with_headers)
 

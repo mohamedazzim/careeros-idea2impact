@@ -19,6 +19,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src.db.session import get_db
 from src.db.repositories.knowledge_repository import KnowledgeRepository
 from src.api.deps import get_current_user_id
+from src.core.config import settings
 
 logger = logging.getLogger(__name__)
 router = APIRouter(prefix="/knowledge", tags=["Knowledge Hub"])
@@ -177,7 +178,7 @@ async def get_knowledge_doc(
 ):
     """Get a single knowledge document."""
     repo = KnowledgeRepository(db)
-    doc = await repo.get_by_uid(doc_id)
+    doc = await repo.get_by_uid_for_user(doc_id, current_user)
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
     return {
@@ -205,7 +206,7 @@ async def delete_knowledge_doc(
 ):
     """Soft-delete a knowledge document."""
     repo = KnowledgeRepository(db)
-    doc = await repo.get_by_uid(doc_id)
+    doc = await repo.get_by_uid_for_user(doc_id, current_user)
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
     await repo.soft_delete(doc.id)
@@ -221,7 +222,7 @@ async def trigger_analysis(
 ):
     """Trigger RAG analysis on a knowledge document."""
     repo = KnowledgeRepository(db)
-    doc = await repo.get_by_uid(doc_id)
+    doc = await repo.get_by_uid_for_user(doc_id, current_user)
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
 
@@ -280,12 +281,56 @@ async def _run_real_analysis(
             # Stage 1-2: Parse + PII Masking
             run["completion_pct"] = 25.0
             run["status"] = "masking_pii"
+            masked_content = content
+
             try:
                 from src.services.resume.processing.masking_pipeline import MaskingPipeline
+
                 masker = MaskingPipeline()
-                masked = await masker.mask(content)
-            except Exception:
-                masked = content
+                masking_result = await masker.mask(content)
+                masked_content = masking_result.masked_text
+
+                run["masking"] = {
+                    "status": "completed",
+                    "entities_masked": masking_result.audit_report.total_entities,
+                    "entities_by_type": masking_result.audit_report.entities_by_type,
+                    "strategy": masking_result.strategy.value,
+                    "content_changed": masked_content != content,
+                }
+
+                logger.info(
+                    "PII masking completed for doc %s: entities=%s",
+                    doc_uid,
+                    masking_result.audit_report.total_entities,
+                )
+            except Exception as exc:
+                logger.error(
+                    "PII masking failed for doc %s: %s",
+                    doc_uid,
+                    exc,
+                )
+
+                run["masking"] = {
+                    "status": "failed",
+                    "error_type": type(exc).__name__,
+                }
+
+                environment = getattr(
+                    settings.ENVIRONMENT,
+                    "value",
+                    settings.ENVIRONMENT,
+                )
+
+                if str(environment).lower() == "production":
+                    raise RuntimeError(
+                        "PII masking failed; refusing to continue with "
+                        "unmasked resume content"
+                    ) from exc
+
+                logger.warning(
+                    "Using unmasked content only because environment is not "
+                    "production"
+                )
 
             # Stage 3: Recursive Character Chunking & Embedding generation
             run["completion_pct"] = 40.0
@@ -347,7 +392,7 @@ async def _run_real_analysis(
                     
                     return chunks
 
-                chunks = chunk_text(content, chunk_size=1000, chunk_overlap=200)
+                chunks = chunk_text(masked_content, chunk_size=1000, chunk_overlap=200)
                 logger.info(f"Generated {len(chunks)} chunks for doc {doc_uid}")
                 
                 embed_svc = get_embedding_service()
@@ -400,7 +445,7 @@ async def _run_real_analysis(
                     """), {
                         "id": synthetic_version_id,
                         "resume_id": synthetic_resume_id,
-                        "raw_content": content[:1000]  # Truncate to avoid oversized fields
+                        "raw_content": masked_content[:1000]  # Persist only masked pipeline text
                     })
                     
                     # Insert ResumeChunks
@@ -420,10 +465,47 @@ async def _run_real_analysis(
                         chunk_count_db += 1
                     
                     await db.commit()
-                    logger.info(f"Persisted {chunk_count_db} chunks to database for doc {doc_uid}")
+
+                    run["persistence"] = {
+                        "status": "completed",
+                        "chunk_count": chunk_count_db,
+                    }
+
+                    logger.info(
+                        "Persisted %s chunks to database for doc %s",
+                        chunk_count_db,
+                        doc_uid,
+                    )
                 except Exception as e:
-                    logger.error(f"Failed to persist chunks to database for doc {doc_uid}: {e}")
+                    logger.error(
+                        "Failed to persist chunks to database for doc %s: %s",
+                        doc_uid,
+                        e,
+                    )
+
                     await db.rollback()
+
+                    run["persistence"] = {
+                        "status": "failed",
+                        "error_type": type(e).__name__,
+                    }
+
+                    environment = getattr(
+                        settings.ENVIRONMENT,
+                        "value",
+                        settings.ENVIRONMENT,
+                    )
+
+                    if str(environment).lower() == "production":
+                        raise RuntimeError(
+                            "Resume chunk persistence failed; refusing to "
+                            "complete analysis"
+                        ) from e
+
+                    logger.warning(
+                        "Continuing after persistence failure only because "
+                        "environment is not production"
+                    )
 
             # Stage 4: Vector indexing to Qdrant
             run["completion_pct"] = 60.0
@@ -554,7 +636,7 @@ async def get_analysis_score(
 ):
     """Get RAG analysis results."""
     repo = KnowledgeRepository(db)
-    doc = await repo.get_by_uid(doc_id)
+    doc = await repo.get_by_uid_for_user(doc_id, current_user)
     if not doc:
         raise HTTPException(status_code=404, detail="Document not found")
 

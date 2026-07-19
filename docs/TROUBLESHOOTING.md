@@ -143,3 +143,33 @@ The synthetic golden path should validate:
 - skill-gap analysis,
 - non-admin API blocking,
 - no live phone call, webhook dispatch, or job application.
+
+---
+
+## 5. Live Idea2Impact Deployment Checks
+
+Current public URLs:
+
+- Frontend: `https://careeros-idea2impact-azzim.koreacentral.cloudapp.azure.com`
+- Backend API: `https://careeros-idea2impact-azzim.koreacentral.cloudapp.azure.com/api`
+- Liveness: `https://careeros-idea2impact-azzim.koreacentral.cloudapp.azure.com/api/health/live`
+- Readiness: `https://careeros-idea2impact-azzim.koreacentral.cloudapp.azure.com/api/health/ready`
+- Docs-RAG health: `https://careeros-idea2impact-azzim.koreacentral.cloudapp.azure.com/api/v1/demo-rag/health`
+
+Expected production status:
+
+- Liveness, readiness, and Docs-RAG health return `200`.
+- Demo credentials authenticate a `User` role, not an administrator.
+- Unauthenticated opportunity access returns `401`.
+- Docs-RAG indexing reports 18 files, 127 chunks, and 0 failed chunks.
+- Qdrant collection `careeros_rag_docs` contains 127 points after indexing.
+- Twilio, Make.com, Pipedream, and automatic external application actions remain dry-run or blocked.
+- Deepgram is unavailable/disabled in the public demo.
+
+If Nginx returns `502` after backend or frontend containers are rebuilt, check whether it cached a stale Docker upstream IP. The production Nginx config uses Docker DNS resolver-based upstreams to prevent this; recreate only the Nginx container after updating that config:
+
+```bash
+docker compose -f docker-compose.prod.yml --env-file .env up -d --no-deps --force-recreate nginx
+```
+
+Do not use this troubleshooting step against unrelated deployments.

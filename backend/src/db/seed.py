@@ -1,4 +1,9 @@
-"""Startup seed logic — creates default admin user if no users exist."""
+"""Explicit demo-user seed logic.
+
+This helper is intentionally not called automatically at application startup.
+It creates a non-admin demo user when invoked by an operator-controlled seed
+step and preserves the legacy SEED_ADMIN_* variables as a compatibility alias.
+"""
 
 import hashlib
 import os
@@ -23,12 +28,12 @@ def _hash_password(password: str) -> str:
 
 
 async def seed_default_user(db: AsyncSession) -> None:
-    """Create an explicitly configured development user. Never called at startup."""
-    email = os.getenv("SEED_ADMIN_EMAIL")
-    password = os.getenv("SEED_ADMIN_PASSWORD")
-    name = os.getenv("SEED_ADMIN_NAME", "CareerOS Administrator")
+    """Create an explicitly configured demo user. Never called at startup."""
+    email = os.getenv("SEED_DEMO_EMAIL") or os.getenv("SEED_ADMIN_EMAIL")
+    password = os.getenv("SEED_DEMO_PASSWORD") or os.getenv("SEED_ADMIN_PASSWORD")
+    name = os.getenv("SEED_DEMO_NAME") or os.getenv("SEED_ADMIN_NAME") or "CareerOS Demo User"
     if not email or not password:
-        raise RuntimeError("SEED_ADMIN_EMAIL and SEED_ADMIN_PASSWORD are required")
+        raise RuntimeError("SEED_DEMO_EMAIL and SEED_DEMO_PASSWORD are required")
 
     count_result = await db.execute(select(func.count()).select_from(User))
     user_count = count_result.scalar()
@@ -41,8 +46,9 @@ async def seed_default_user(db: AsyncSession) -> None:
     if existing:
         return
 
-    # Seed role from environment or default to non-admin User
-    seed_role_str = os.getenv("SEED_ADMIN_ROLE", "User")
+    # Seed role from environment or default to non-admin User. The legacy
+    # SEED_ADMIN_ROLE alias is retained only for old deployments.
+    seed_role_str = os.getenv("SEED_DEMO_ROLE") or os.getenv("SEED_ADMIN_ROLE") or "User"
     try:
         seed_role = Role(seed_role_str)
     except ValueError:
@@ -57,6 +63,6 @@ async def seed_default_user(db: AsyncSession) -> None:
     )
     auth_log.log_event(
         operation="seed_default_user",
-        message="Default admin user created",
+        message="Demo user created",
         metadata={"user_id": str(user.id), "email": email},
     )
