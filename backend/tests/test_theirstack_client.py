@@ -227,6 +227,38 @@ async def test_search_jobs_treats_200_billing_body_as_effective_402(monkeypatch)
 
 
 @pytest.mark.asyncio
+async def test_search_jobs_does_not_treat_successful_credit_metadata_as_billing_required(monkeypatch):
+    from src.integrations.theirstack.client import TheirStackClient
+    from src.integrations.theirstack.credential_resolver import KeySlot
+
+    fake_client = _FakeAsyncClient([
+        _make_response(
+            200,
+            {
+                "data": [{"id": "job-1"}],
+                "metadata": {
+                    "credits_used": 5,
+                    "billing_period": "monthly",
+                },
+            },
+        ),
+    ])
+    monkeypatch.setattr("src.integrations.theirstack.client.httpx.AsyncClient", lambda *args, **kwargs: fake_client)
+
+    client = TheirStackClient("test-key")
+    client._slots = [KeySlot(slot_name="primary", key="secret-1")]
+
+    result = await client.search_jobs({"posted_at_gte": "2026-06-01", "limit": 1, "page": 0}, use_cache=False)
+
+    assert result.success is True
+    assert result.billing_required is False
+    assert result.provider_blocked is False
+    assert result.provider_status_code == 200
+    assert result.fetched_count == 1
+    assert result.provider_http_call_count == 1
+
+
+@pytest.mark.asyncio
 async def test_search_jobs_rotates_on_401_invalid_key(monkeypatch):
     from src.integrations.theirstack.client import TheirStackClient
     from src.integrations.theirstack.credential_resolver import KeySlot

@@ -171,7 +171,34 @@ class TheirStackClient:
     def _is_billing_required(self, status_code: int, response_text: str) -> bool:
         if status_code == 402:
             return True
+        if status_code < 400:
+            return False
         text_lower = response_text.lower()
+        return any(marker in text_lower for marker in [
+            "payment required",
+            "billing",
+            "subscription expired",
+            "credits exhausted",
+            "quota exhausted",
+        ])
+
+    def _json_indicates_billing_required(self, data: Any) -> bool:
+        """Detect explicit provider error envelopes without flagging normal quota metadata."""
+        if not isinstance(data, dict):
+            return False
+        if self._extract_job_list(data):
+            return False
+        error_fields = [
+            data.get("error"),
+            data.get("errors"),
+            data.get("message"),
+            data.get("detail"),
+            data.get("status"),
+        ]
+        text = " ".join(str(value) for value in error_fields if value)
+        if not text.strip():
+            return False
+        text_lower = text.lower()
         return any(marker in text_lower for marker in [
             "payment required",
             "billing",
@@ -347,11 +374,9 @@ class TheirStackClient:
                         audit.error = f"HTTP {response.status_code}"
                         return audit
 
-                    if self._is_billing_required(response.status_code, response.text):
+                    if response.status_code >= 400 and self._is_billing_required(response.status_code, response.text):
                         audit.billing_required = True
                         audit.provider_blocked = True
-                        if response.status_code < 400:
-                            audit.status_code = 402
                         body_snippet = self._safe_response_snippet(response.text)
                         audit.error = (
                             f"HTTP {audit.status_code} Payment Required"
@@ -372,6 +397,16 @@ class TheirStackClient:
                         data = response.json()
                     except ValueError:
                         audit.error = "Invalid JSON response"
+                        return audit
+                    if self._json_indicates_billing_required(data):
+                        audit.billing_required = True
+                        audit.provider_blocked = True
+                        audit.status_code = 402
+                        body_snippet = self._safe_response_snippet(response.text)
+                        audit.error = (
+                            f"HTTP {audit.status_code} Payment Required"
+                            + (f": {body_snippet}" if body_snippet else "")
+                        )
                         return audit
                     if isinstance(data, dict):
                         data.setdefault("quota", monitor["quota"])
