@@ -1,7 +1,6 @@
 """Production TheirStack Jobs API client with key rotation."""
 from __future__ import annotations
 
-import asyncio
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
@@ -17,6 +16,7 @@ from .credential_resolver import resolve_keys, KeySlot, get_next_valid_slot
 logger = logging.getLogger(__name__)
 
 RETRYABLE_STATUS_CODES = {500, 502, 503, 504}
+THEIRSTACK_PROVIDER_MAX_RESULTS_PER_REQUEST = 5
 
 
 class TheirStackClientError(RuntimeError):
@@ -37,6 +37,7 @@ class ClientAuditRecord:
     success: bool = False
     data: Optional[Dict[str, Any]] = None
     fetched_count: int = 0
+    provider_http_call_count: int = 0
 
 
 @dataclass
@@ -51,6 +52,7 @@ class ClientSearchResult:
     provider_blocked: bool = False
     provider_status_code: int = 0
     fetched_count: int = 0
+    provider_http_call_count: int = 0
     cache_hit: bool = False
     success: bool = False
     error: Optional[str] = None
@@ -139,6 +141,19 @@ class TheirStackClient:
         cleaned = " ".join((text or "").split())
         return cleaned[:limit]
 
+    def _sanitize_payload(self, payload: Dict[str, Any]) -> Dict[str, Any]:
+        """Enforce CareerOS' TheirStack quota guard before cache keys or HTTP calls."""
+        sanitized = dict(payload)
+        configured_cap = int(getattr(settings, "THEIRSTACK_MAX_RESULTS_PER_REQUEST", 5) or 5)
+        max_results = max(1, min(configured_cap, THEIRSTACK_PROVIDER_MAX_RESULTS_PER_REQUEST))
+        requested_limit = sanitized.get("limit", max_results)
+        try:
+            effective_limit = int(requested_limit)
+        except (TypeError, ValueError):
+            effective_limit = max_results
+        sanitized["limit"] = max(1, min(effective_limit, max_results))
+        return sanitized
+
     def _is_retryable_status(self, status_code: int) -> bool:
         return status_code in RETRYABLE_STATUS_CODES
 
@@ -199,6 +214,7 @@ class TheirStackClient:
         payload: Dict[str, Any],
         use_cache: bool = True,
     ) -> ClientSearchResult:
+        payload = self._sanitize_payload(payload)
         if not self.configured:
             return ClientSearchResult(
                 success=False,
@@ -224,51 +240,38 @@ class TheirStackClient:
         result = ClientSearchResult()
         slot = get_next_valid_slot(self._slots)
 
-        while slot is not None:
+        if slot is not None:
             result.attempted_key_slots.append(slot.slot_name)
             attempt_result = await self._try_single_slot(url, payload, slot)
+            result.provider_http_call_count = attempt_result.provider_http_call_count
+            result.selected_key_slot = slot.slot_name
+            result.provider_status_code = attempt_result.status_code
 
             if attempt_result.success:
                 result.data = attempt_result.data
-                result.selected_key_slot = slot.slot_name
-                result.provider_status_code = attempt_result.status_code
                 result.fetched_count = attempt_result.fetched_count
                 result.cache_hit = attempt_result.cache_hit
                 result.success = True
 
                 if use_cache and attempt_result.data:
                     await self.cache.set(payload, attempt_result.data)
-                break
-
-            if attempt_result.billing_required:
+            elif attempt_result.billing_required:
                 result.billing_required = True
                 result.provider_blocked = True
-                result.selected_key_slot = slot.slot_name
-                result.provider_status_code = attempt_result.status_code
                 result.error = attempt_result.error or "TheirStack billing required"
                 logger.warning(
                     "TheirStack provider blocked by billing status slot=%s status=%s",
                     slot.slot_name,
                     attempt_result.status_code,
                 )
-                break
-
-            if attempt_result.is_rate_limited:
+            elif attempt_result.is_rate_limited:
                 result.rate_limited_slots.append(slot.slot_name)
-                logger.info(
-                    "TheirStack key slot %s rate limited, rotating",
-                    slot.slot_name,
-                )
-
-            if attempt_result.is_invalid_key:
+                result.error = attempt_result.error or "TheirStack rate limited"
+            elif attempt_result.is_invalid_key:
                 result.invalid_slots.append(slot.slot_name)
-                slot.valid = False
-                logger.info(
-                    "TheirStack key slot %s invalid (401/403), marking invalid",
-                    slot.slot_name,
-                )
-
-            slot = get_next_valid_slot(self._slots, after_slot=slot.slot_name)
+                result.error = attempt_result.error or "TheirStack key invalid"
+            elif attempt_result.error:
+                result.error = attempt_result.error
 
         if not result.success:
             if result.provider_blocked:
@@ -308,8 +311,9 @@ class TheirStackClient:
             timeout=self.timeout,
             follow_redirects=True,
         ) as http_client:
-            for attempt in range(self.max_retries):
+            for attempt in range(1):
                 try:
+                    audit.provider_http_call_count = 1
                     response = await http_client.post(
                         url,
                         headers=self._headers_for_key(slot.key),
@@ -320,14 +324,8 @@ class TheirStackClient:
 
                     if response.status_code == 429:
                         audit.is_rate_limited = True
-                        retry_after = response.headers.get("Retry-After")
-                        delay = (
-                            float(retry_after)
-                            if retry_after
-                            else min(self.backoff_base ** attempt, 30.0)
-                        )
-                        await asyncio.sleep(delay)
-                        continue
+                        audit.error = "HTTP 429 rate limited"
+                        return audit
 
                     if response.status_code in (401, 403):
                         audit.is_invalid_key = True
@@ -345,8 +343,8 @@ class TheirStackClient:
                         return audit
 
                     if self._is_retryable_status(response.status_code):
-                        await asyncio.sleep(min(self.backoff_base ** attempt, 30.0))
-                        continue
+                        audit.error = f"HTTP {response.status_code}"
+                        return audit
 
                     if response.status_code >= 400:
                         body_snippet = self._safe_response_snippet(response.text)
@@ -375,13 +373,14 @@ class TheirStackClient:
 
                 except (httpx.TimeoutException, httpx.NetworkError) as exc:
                     last_exc = exc
+                    audit.error = str(exc)[:256]
                     logger.warning(
-                        "TheirStack transient transport error slot=%s attempt=%s error=%s",
+                        "TheirStack transport error slot=%s attempt=%s error=%s",
                         slot.slot_name,
                         attempt + 1,
                         str(exc)[:200],
                     )
-                    await asyncio.sleep(min(self.backoff_base ** attempt, 30.0))
+                    return audit
 
         audit.error = str(last_exc)[:256] if last_exc else "unknown"
         return audit

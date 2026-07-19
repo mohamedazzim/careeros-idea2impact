@@ -1020,14 +1020,22 @@ async def refresh_jobs(
     except Exception:
         logger.warning("Failed to emit JobRefreshStarted audit event", exc_info=True)
 
-    await enqueue_job_refresh(session.id)
+    reused_existing_refresh = bool((session.metadata_ or {}).get("reused_existing_refresh"))
+    if not reused_existing_refresh:
+        await enqueue_job_refresh(session.id)
 
     message = "Job matching enqueued." if resume else "Provider ingestion enqueued (no resume for matching)."
     return {
         "session_uid": session.session_uid,
         "session_id": session.id,
         "status": session.status,
-        "message": f"{message} Poll GET /jobs/refresh/{session.id} for progress.",
+        "message": (
+            f"{message} Poll GET /jobs/refresh/{session.id} for progress."
+            if not reused_existing_refresh
+            else f"Recent matching run reused. Poll GET /jobs/refresh/{session.id} for progress."
+        ),
+        "reused_existing_refresh": reused_existing_refresh,
+        "next_refresh_at": (session.metadata_ or {}).get("next_refresh_at"),
         "started_at": _utc_iso(session.created_at),
         "active_resume": {k: v for k, v in profile.items() if k != "content"} if profile else None,
         "provider_catalog": REAL_PROVIDER_CATALOG,

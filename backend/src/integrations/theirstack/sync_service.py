@@ -23,10 +23,12 @@ logger = logging.getLogger(__name__)
 
 
 def _effective_theirstack_page_limit() -> int:
-    return max(
+    requested_limit = max(
         int(settings.THEIRSTACK_JOB_FETCH_LIMIT),
         int(settings.THEIRSTACK_RESULTS_PER_QUERY),
     )
+    configured_cap = int(getattr(settings, "THEIRSTACK_MAX_RESULTS_PER_REQUEST", 5) or 5)
+    return max(1, min(requested_limit, configured_cap, 5))
 
 INDIA_KEYWORDS = [
     "india", "bengaluru", "bangalore", "hyderabad", "chennai", "pune",
@@ -107,9 +109,10 @@ def build_theirstack_indian_tech_jobs_payload(
     remote: Optional[bool] = None,
 ) -> Dict[str, Any]:
     posted_at_gte = (datetime.now(timezone.utc) - timedelta(days=since_days)).date().isoformat()
+    effective_limit = max(1, min(int(limit or 5), int(getattr(settings, "THEIRSTACK_MAX_RESULTS_PER_REQUEST", 5) or 5), 5))
     payload: Dict[str, Any] = {
         "page": page,
-        "limit": 1 if preview else limit,
+        "limit": 1 if preview else effective_limit,
         "posted_at_gte": posted_at_gte,
         "job_country_code_or": country_codes or ["IN"],
         "company_type": company_type or "direct_employer",
@@ -330,9 +333,14 @@ class TheirStackSyncService:
         resume_profile: Dict[str, Any],
         preferences: Dict[str, Any] | None = None,
     ) -> List[Dict[str, Any]]:
-        base_payload = self.build_search_payload(resume_profile, preferences)
-        max_pages = max(1, int(settings.THEIRSTACK_MAX_QUERIES_PER_REFRESH))
-        return [{**base_payload, "page": page} for page in range(max_pages)]
+        preferences = preferences or {}
+        search_mode = str(preferences.get("search_mode") or "resume").strip().lower()
+        if search_mode == "broad":
+            base_payload = self.build_broad_search_payload(resume_profile, preferences)
+        else:
+            search_mode = "resume"
+            base_payload = self.build_search_payload(resume_profile, preferences)
+        return [{**base_payload, "page": 0, "include_total_results": False, "_search_mode": search_mode}]
 
     async def health_check(self) -> Dict[str, Any]:
         return await self.client.health_check()
@@ -389,6 +397,10 @@ class TheirStackSyncService:
         skipped_missing_apply = 0
         skipped_duplicates = 0
         skipped_invalid_jobs = 0
+        provider_http_call_count = 0
+        search_mode = str((preferences or {}).get("search_mode") or "resume").strip().lower()
+        if search_mode not in {"resume", "broad"}:
+            search_mode = "resume"
 
         payload = self.build_search_payload(resume_profile, preferences)
         query_payloads = self.build_search_queries(resume_profile, preferences)
@@ -405,6 +417,7 @@ class TheirStackSyncService:
             "configured": True,
             "query_count": len(query_payloads),
             "skill_terms": skill_terms[:5],
+            "search_mode": search_mode,
         }
         self.last_updated_jobs = []
         preview_result: Dict[str, Any] | None = None
@@ -416,83 +429,15 @@ class TheirStackSyncService:
             payload.get("posted_at_gte"),
             payload.get("job_country_code_or"),
         )
-        if settings.THEIRSTACK_ENABLE_FREE_COUNT_PREVIEW:
-            preview_payload = self.build_preview_payload(resume_profile, preferences)
-            try:
-                preview = await self.client.search_jobs(preview_payload, use_cache=False)
-                preview_result = {
-                    "query": preview_payload,
-                    "fetched": preview.fetched_count,
-                    "total_results": preview.data.get("metadata", {}).get("total_results") if isinstance(preview.data, dict) else None,
-                    "total_companies": preview.data.get("metadata", {}).get("total_companies") if isinstance(preview.data, dict) else None,
-                    "key_slot": preview.selected_key_slot,
-                    "cache_hit": preview.cache_hit,
-                }
-                request_evidence.append({"type": "preview", **preview_result})
-                if preview.billing_required:
-                    provider_blocked = True
-                    billing_required = True
-                    provider_status_code = preview.provider_status_code or 402
-                    selected_key_slot = preview.selected_key_slot
-                    attempted_key_slots = list(preview.attempted_key_slots)
-                    rate_limited_slots = list(preview.rate_limited_slots)
-                    invalid_slots = list(preview.invalid_slots)
-                    errors.append(preview.error or "TheirStack billing required")
-                    provider_health = {
-                        "provider": "theirstack",
-                        "status": "blocked",
-                        "configured": True,
-                        "billing_required": True,
-                        "provider_blocked": True,
-                        "key_slots_configured": key_slots_configured,
-                        "selected_key_slot": selected_key_slot,
-                        "attempted_key_slots": attempted_key_slots,
-                        "rate_limited_slots": rate_limited_slots,
-                        "invalid_slots": invalid_slots,
-                        "provider_status_code": provider_status_code,
-                    }
-                    return {
-                        "provider": "theirstack",
-                        "configured": True,
-                        "provider_blocked": provider_blocked,
-                        "billing_required": billing_required,
-                        "provider_status_code": provider_status_code,
-                        "found": 0,
-                        "normalized": 0,
-                        "india_likely": 0,
-                        "non_india_rejected": 0,
-                        "skipped_missing_apply": 0,
-                        "skipped_duplicates": 0,
-                        "skipped_invalid_jobs": 0,
-                        "jobs": [],
-                        "preview": preview_result,
-                        "queries": request_evidence or [preview_payload],
-                        "errors": errors,
-                        "audit": {
-                            "selected_key_slot": selected_key_slot,
-                            "attempted_key_slots": attempted_key_slots,
-                            "rate_limited_slots": rate_limited_slots,
-                            "invalid_slots": invalid_slots,
-                            "provider_status_code": provider_status_code,
-                            "billing_required": True,
-                            "provider_blocked": True,
-                        },
-                        "provider_health": provider_health,
-                    }
-                logger.info(
-                    "TheirStack preview result total_results=%s total_companies=%s fetched=%s",
-                    preview_result.get("total_results"),
-                    preview_result.get("total_companies"),
-                    preview_result.get("fetched"),
-                )
-            except Exception as exc:
-                logger.warning("TheirStack preview query failed: %s", exc)
-                errors.append(f"preview:{str(exc)[:256]}")
+        # User-triggered refreshes are quota-bounded to a single paid provider
+        # request. Preview/count probes are intentionally not dispatched here.
 
         for idx, query_payload in enumerate(query_payloads):
             try:
-                result = await self.client.search_jobs(query_payload, use_cache=(idx == 0))
+                paid_query_payload = {k: v for k, v in query_payload.items() if not k.startswith("_")}
+                result = await self.client.search_jobs(paid_query_payload, use_cache=(idx == 0))
                 last_search_result = result
+                provider_http_call_count += int(result.provider_http_call_count or 0)
                 attempted_key_slots = list(result.attempted_key_slots)
                 rate_limited_slots = list(result.rate_limited_slots)
                 invalid_slots = list(result.invalid_slots)
@@ -500,17 +445,21 @@ class TheirStackSyncService:
                 if result.success:
                     raw_jobs = self._extract_jobs(result.data)
                     total_fetched += len(raw_jobs)
+                    max_accept_count = min(int(paid_query_payload.get("limit") or 5), 5)
                     request_evidence.append({
                         "type": "search",
-                        "query": query_payload,
+                        "query": paid_query_payload,
                         "fetched": len(raw_jobs),
                         "key_slot": result.selected_key_slot,
                         "cache_hit": result.cache_hit,
+                        "provider_http_call_count": result.provider_http_call_count,
+                        "credit_upper_bound": min(len(raw_jobs), int(paid_query_payload.get("limit") or 5), 5),
+                        "search_mode": query_payload.get("_search_mode", search_mode),
                         "total_results": result.data.get("metadata", {}).get("total_results") if isinstance(result.data, dict) else None,
                         "total_companies": result.data.get("metadata", {}).get("total_companies") if isinstance(result.data, dict) else None,
                     })
 
-                    for raw in raw_jobs:
+                    for raw in raw_jobs[:max_accept_count]:
                         if not raw.get("final_url") and not raw.get("apply_url") and not raw.get("url") and not raw.get("source_url"):
                             skipped_missing_apply += 1
                             continue
@@ -541,64 +490,6 @@ class TheirStackSyncService:
                 errors.append(str(exc)[:256])
                 break
 
-        if not jobs and not provider_blocked:
-            broad_payload = self.build_broad_search_payload(resume_profile, preferences)
-            broad_queries = [
-                {**broad_payload, "page": page}
-                for page in range(max(1, int(settings.THEIRSTACK_MAX_QUERIES_PER_REFRESH)))
-            ]
-            logger.info(
-                "TheirStack primary query produced no jobs; retrying with broader India-tech payload limit=%s pages=%s posted_at_gte=%s",
-                broad_payload.get("limit"),
-                len(broad_queries),
-                broad_payload.get("posted_at_gte"),
-            )
-            for idx, broad_query in enumerate(broad_queries):
-                try:
-                    broad_result = await self.client.search_jobs(broad_query, use_cache=(idx > 0))
-                    last_search_result = broad_result
-                    if broad_result.success:
-                        broad_jobs = self._extract_jobs(broad_result.data)
-                        total_fetched += len(broad_jobs)
-                        request_evidence.append({
-                            "type": "fallback_search",
-                            "query": broad_query,
-                            "fetched": len(broad_jobs),
-                            "key_slot": broad_result.selected_key_slot,
-                            "cache_hit": broad_result.cache_hit,
-                            "total_results": broad_result.data.get("metadata", {}).get("total_results") if isinstance(broad_result.data, dict) else None,
-                            "total_companies": broad_result.data.get("metadata", {}).get("total_companies") if isinstance(broad_result.data, dict) else None,
-                        })
-                        for raw in broad_jobs:
-                            if not raw.get("final_url") and not raw.get("apply_url") and not raw.get("url") and not raw.get("source_url"):
-                                skipped_missing_apply += 1
-                                continue
-                            normalized = normalize_job(raw)
-                            if not normalized:
-                                skipped_invalid_jobs += 1
-                                continue
-                            if normalized.source_job_id in seen_ids:
-                                skipped_duplicates += 1
-                                continue
-                            seen_ids.add(normalized.source_job_id)
-                            jobs.append(normalized)
-                        if len(broad_jobs) < int(broad_query.get("limit", 0) or 0):
-                            break
-                    elif broad_result.billing_required:
-                        provider_blocked = True
-                        billing_required = True
-                        provider_status_code = broad_result.provider_status_code or 402
-                        selected_key_slot = broad_result.selected_key_slot
-                        errors.append(broad_result.error or "TheirStack billing required")
-                        break
-                    elif broad_result.error:
-                        errors.append(f"fallback:{broad_result.error}")
-                        break
-                except Exception as exc:
-                    logger.warning("TheirStack fallback query failed: %s", exc)
-                    errors.append(f"fallback:{str(exc)[:256]}")
-                    break
-
         india_count = sum(1 for j in jobs if self._is_likely_india(j))
         non_india_count = len(jobs) - india_count
 
@@ -614,6 +505,15 @@ class TheirStackSyncService:
                 "provider_status_code": provider_status_code or last_search_result.provider_status_code,
                 "billing_required": billing_required or last_search_result.billing_required,
                 "provider_blocked": provider_blocked or last_search_result.provider_blocked,
+                "provider_http_call_count": provider_http_call_count,
+                "requested_limit": int(payload.get("limit") or _effective_theirstack_page_limit()),
+                "returned_count": total_fetched,
+                "accepted_count": len(jobs),
+                "rejected_count": skipped_missing_apply + skipped_duplicates + skipped_invalid_jobs,
+                "duplicate_count": skipped_duplicates,
+                "cache_hit": bool(last_search_result.cache_hit),
+                "search_mode": search_mode,
+                "credit_upper_bound": min(total_fetched, int(payload.get("limit") or 5), 5),
             }
         provider_health = {
             "provider": "theirstack",
@@ -627,6 +527,8 @@ class TheirStackSyncService:
             "rate_limited_slots": rate_limited_slots,
             "invalid_slots": invalid_slots,
             "provider_status_code": provider_status_code,
+            "provider_http_call_count": provider_http_call_count,
+            "credit_upper_bound": min(total_fetched, int(payload.get("limit") or 5), 5),
         }
 
         log_msg = (
@@ -658,6 +560,8 @@ class TheirStackSyncService:
             "skipped_missing_apply": skipped_missing_apply,
             "skipped_duplicates": skipped_duplicates,
             "skipped_invalid_jobs": skipped_invalid_jobs,
+            "provider_http_call_count": provider_http_call_count,
+            "credit_upper_bound": min(total_fetched, int(payload.get("limit") or 5), 5),
             "jobs": jobs,
             "preview": preview_result,
             "queries": request_evidence or query_payloads,

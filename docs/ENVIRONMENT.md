@@ -44,11 +44,24 @@ At least one usable LLM provider must be configured for generated analysis. Dete
 |---|---|---|---|---|
 | `THEIRSTACK_API_KEY` / `THEIRSTACK_API_KEY_1..15` | Required for live TheirStack ingestion | Backend, worker | Job provider key rotation slots | blank |
 | `THEIRSTACK_API_URL_1..15` | Optional | Backend, worker | Per-slot TheirStack endpoint override | blank |
-| `THEIRSTACK_MAX_QUERIES_PER_REFRESH` | Optional | Backend, worker | Refresh query cap | `5` |
-| `JOB_AUTO_REFRESH_ENABLED` | Optional | Worker | Scheduled job refresh | `true` |
+| `THEIRSTACK_MAX_RESULTS_PER_REQUEST` | Optional | Backend, worker | Hard CareerOS cap for TheirStack jobs returned per provider request. Must remain `<= 5` for quota-safe demo operation. | `5` |
+| `THEIRSTACK_RESULTS_PER_QUERY` | Optional | Backend, worker | Legacy per-query target, clamped by `THEIRSTACK_MAX_RESULTS_PER_REQUEST`. | `5` |
+| `THEIRSTACK_JOB_FETCH_LIMIT` | Optional | Backend, worker | Legacy fetch target, clamped by `THEIRSTACK_MAX_RESULTS_PER_REQUEST`. | `5` |
+| `THEIRSTACK_MAX_PAID_REQUESTS_PER_REFRESH` | Optional | Backend, worker | Immutable quota guard: one paid TheirStack Job Search request per refresh. | `1` |
+| `THEIRSTACK_MAX_QUERIES_PER_REFRESH` | Optional | Backend, worker | Backward-compatible query cap, validated to one paid request per refresh. | `1` |
+| `THEIRSTACK_ENABLE_FREE_COUNT_PREVIEW` | Optional | Backend, worker | TheirStack blurred/free-count preview. Disabled in normal refresh so navigation or refresh does not create a second provider HTTP request. | `false` |
+| `JOB_AUTO_REFRESH_ENABLED` | Optional | Worker | Scheduled job refresh. Keep `false` for public demo deployments unless quota usage is explicitly approved. | `false` |
+| `JOB_REFRESH_COOLDOWN_SECONDS` | Optional | Backend | Reuses a matching queued/running/recent refresh instead of enqueueing duplicate provider work. | `120` |
 | `TAVILY_API_KEY` | Conditionally required | Backend | Learning-resource web search | blank |
 | `YOUTUBE_API_KEY` | Conditionally required | Backend | YouTube learning-resource discovery | blank |
 | `GITHUB_TOKEN` | Optional | Backend | Higher GitHub discovery rate limits | blank |
+
+TheirStack quota note:
+- TheirStack Job Search consumes one API credit for each returned job.
+- CareerOS caps normal job refreshes to one paid Job Search request, `page=0`, and at most five returned jobs.
+- Maximum TheirStack credit exposure for one normal refresh is therefore five credits.
+- Scheduled refresh remains disabled by default.
+- Re-fetching the same provider jobs can consume credits again; use `discovered_at_gte` or `job_id_not` where appropriate to reduce duplicate retrieval.
 | `BRAVE_SEARCH_API_KEY` | Optional | Backend | Alternative web search | blank |
 | `SERPAPI_API_KEY` | Optional | Backend | Alternative search provider | blank |
 | `GOOGLE_CSE_API_KEY` / `GOOGLE_CSE_CX` | Optional | Backend | Google custom search | blank |

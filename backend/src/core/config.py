@@ -62,7 +62,7 @@ class Settings(BaseSettings):
     # Fallback
     FALLBACK_LLM_PROVIDER: str = "deepseek"
 
-    # TheirStack Jobs API — 15 key slots with legacy URL aliases
+    # TheirStack Jobs API - 15 key slots with legacy URL aliases
     THEIRSTACK_API_KEY: Optional[str] = None
     THEIRSTACK_API_KEY_1: Optional[str] = None
     THEIRSTACK_API_KEY_2: Optional[str] = None
@@ -98,13 +98,15 @@ class Settings(BaseSettings):
     THEIRSTACK_TIMEOUT_SECONDS: int = 30
     THEIRSTACK_MAX_RETRIES: int = 3
     THEIRSTACK_RETRY_BACKOFF_BASE: float = 1.5
-    THEIRSTACK_RESULTS_PER_QUERY: int = 25
+    THEIRSTACK_MAX_RESULTS_PER_REQUEST: int = Field(default=5, ge=1, le=5)
+    THEIRSTACK_RESULTS_PER_QUERY: int = 5
     THEIRSTACK_POSTED_MAX_AGE_DAYS: int = 14
-    THEIRSTACK_MAX_QUERIES_PER_REFRESH: int = 5
+    THEIRSTACK_MAX_PAID_REQUESTS_PER_REFRESH: int = Field(default=1, ge=1, le=1)
+    THEIRSTACK_MAX_QUERIES_PER_REFRESH: int = Field(default=1, ge=1, le=1)
     THEIRSTACK_MAX_KEY_SLOTS: int = 15
-    THEIRSTACK_JOB_FETCH_LIMIT: int = 10
+    THEIRSTACK_JOB_FETCH_LIMIT: int = 5
     THEIRSTACK_JOB_FETCH_DAYS: int = 7
-    THEIRSTACK_ENABLE_FREE_COUNT_PREVIEW: bool = True
+    THEIRSTACK_ENABLE_FREE_COUNT_PREVIEW: bool = False
     THEIRSTACK_COMPANY_TYPE: str = "direct_employer"
     THEIRSTACK_COUNTRY_CODES: List[str] = Field(default_factory=lambda: ["IN"])
     THEIRSTACK_EMPLOYMENT_STATUSES: List[str] = Field(default_factory=lambda: ["full_time"])
@@ -205,9 +207,10 @@ class Settings(BaseSettings):
     OUTBOUND_TEST_TO_NUMBER: Optional[str] = None
 
     # Auto Job Refresh
-    JOB_AUTO_REFRESH_ENABLED: bool = True
+    JOB_AUTO_REFRESH_ENABLED: bool = False
     JOB_AUTO_REFRESH_INTERVAL_MINUTES: int = 30
     JOB_AUTO_REFRESH_EMBED_BATCH_SIZE: int = 50
+    JOB_REFRESH_COOLDOWN_SECONDS: int = 120
 
     # Reranker Resilience
     RERANKER_TIMEOUT: int = 30
