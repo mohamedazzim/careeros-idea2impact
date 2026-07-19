@@ -312,116 +312,140 @@ class JobIngestionEngine:
             await sleep(JOB_SYNC_WAIT_INTERVAL_SECONDS)
             waited_seconds += JOB_SYNC_WAIT_INTERVAL_SECONDS
 
-        try:
-            from src.db.session import async_session
-            from src.integrations.theirstack.sync_service import TheirStackSyncService
-            service = TheirStackSyncService()
-            async with async_session() as db:
-                repo = JobRepository(db)
-                last_fetched_at = await repo.get_last_fetched_at_for_source("theirstack")
-                recent_source_job_ids = await repo.find_recent_source_job_ids("theirstack", limit=250)
+        if admin_initiated:
+            try:
+                from src.db.session import async_session
+                from src.integrations.theirstack.sync_service import TheirStackSyncService
+                service = TheirStackSyncService()
+                async with async_session() as db:
+                    repo = JobRepository(db)
+                    last_fetched_at = await repo.get_last_fetched_at_for_source("theirstack")
+                    recent_source_job_ids = await repo.find_recent_source_job_ids("theirstack", limit=250)
 
-                provider_preferences = dict(preferences or {})
-                if last_fetched_at:
-                    provider_preferences["discovered_at_gte"] = last_fetched_at
-                elif recent_source_job_ids:
-                    provider_preferences["exclude_job_ids"] = recent_source_job_ids
+                    provider_preferences = dict(preferences or {})
+                    if last_fetched_at:
+                        provider_preferences["discovered_at_gte"] = last_fetched_at
+                    elif recent_source_job_ids:
+                        provider_preferences["exclude_job_ids"] = recent_source_job_ids
 
-                logger.info(
-                    "TheirStack incremental hints discovered_at_gte=%s exclude_job_ids_count=%s",
-                    last_fetched_at.isoformat() if last_fetched_at else None,
-                    len(provider_preferences.get("exclude_job_ids", []) or []),
-                )
+                    logger.info(
+                        "TheirStack incremental hints discovered_at_gte=%s exclude_job_ids_count=%s",
+                        last_fetched_at.isoformat() if last_fetched_at else None,
+                        len(provider_preferences.get("exclude_job_ids", []) or []),
+                    )
 
-                if stage_callback:
-                    await stage_callback("fetch_jobs")
-                discovered = await service.search_from_resume(resume_profile or {}, provider_preferences)
-                if stage_callback:
-                    await stage_callback("normalize")
-                added, updated, expired = await service.upsert_jobs(db, discovered.get("jobs", []))
-                if stage_callback:
-                    await stage_callback("deduplicate")
-                    await stage_callback("enrich")
-            theirstack_result = {
-                "configured": discovered.get("configured", False),
-                "found": discovered.get("found", 0),
-                "normalized": discovered.get("normalized", 0),
-                "india_likely": discovered.get("india_likely", 0),
-                "non_india_rejected": discovered.get("non_india_rejected", 0),
-                "added": added,
-                "updated": updated,
-                "expired_removed": expired,
-                "queries": discovered.get("queries", []),
-                "errors": discovered.get("errors", []),
-                "audit": discovered.get("audit", {}),
-                "provider_blocked": discovered.get("provider_blocked", False),
-                "billing_required": discovered.get("billing_required", False),
-                "provider_status_code": discovered.get("provider_status_code", 0),
-                "provider_health": discovered.get("provider_health", {}),
-            }
-            provider_results.append(
-                provider_result_payload(
-                    provider="theirstack",
-                    display_name=self._provider_display_name("theirstack"),
-                    status="blocked" if discovered.get("provider_blocked") else "completed",
-                    configured=discovered.get("configured", False),
-                    provider_blocked=discovered.get("provider_blocked", False),
-                    billing_required=discovered.get("billing_required", False),
-                    provider_status_code=discovered.get("provider_status_code", 0),
-                    found=discovered.get("found", 0),
-                    normalized=discovered.get("normalized", 0),
-                    added=added,
-                    updated=updated,
-                    duplicates_removed=0,
-                    expired_removed=expired,
-                    error_count=len(discovered.get("errors", [])),
-                    message=(
-                        "Billing required"
-                        if discovered.get("billing_required")
-                        else "Provider blocked"
-                        if discovered.get("provider_blocked")
-                        else provider_refresh_message(
-                            "theirstack",
-                            found=discovered.get("found", 0),
-                            added=added,
-                            updated=updated,
-                            duplicates=0,
-                            expired=expired,
-                        )
+                    if stage_callback:
+                        await stage_callback("fetch_jobs")
+                    discovered = await service.search_from_resume(resume_profile or {}, provider_preferences)
+                    if stage_callback:
+                        await stage_callback("normalize")
+                    added, updated, expired = await service.upsert_jobs(db, discovered.get("jobs", []))
+                    if stage_callback:
+                        await stage_callback("deduplicate")
+                        await stage_callback("enrich")
+                theirstack_result = {
+                    "configured": discovered.get("configured", False),
+                    "found": discovered.get("found", 0),
+                    "normalized": discovered.get("normalized", 0),
+                    "india_likely": discovered.get("india_likely", 0),
+                    "non_india_rejected": discovered.get("non_india_rejected", 0),
+                    "added": added,
+                    "updated": updated,
+                    "expired_removed": expired,
+                    "queries": discovered.get("queries", []),
+                    "errors": discovered.get("errors", []),
+                    "audit": discovered.get("audit", {}),
+                    "provider_blocked": discovered.get("provider_blocked", False),
+                    "billing_required": discovered.get("billing_required", False),
+                    "provider_status_code": discovered.get("provider_status_code", 0),
+                    "provider_health": discovered.get("provider_health", {}),
+                }
+                provider_results.append(
+                    provider_result_payload(
+                        provider="theirstack",
+                        display_name=self._provider_display_name("theirstack"),
+                        status="blocked" if discovered.get("provider_blocked") else "completed",
+                        configured=discovered.get("configured", False),
+                        provider_blocked=discovered.get("provider_blocked", False),
+                        billing_required=discovered.get("billing_required", False),
+                        provider_status_code=discovered.get("provider_status_code", 0),
+                        found=discovered.get("found", 0),
+                        normalized=discovered.get("normalized", 0),
+                        added=added,
+                        updated=updated,
+                        duplicates_removed=0,
+                        expired_removed=expired,
+                        error_count=len(discovered.get("errors", [])),
+                        message=(
+                            "Billing required"
+                            if discovered.get("billing_required")
+                            else "Provider blocked"
+                            if discovered.get("provider_blocked")
+                            else provider_refresh_message(
+                                "theirstack",
+                                found=discovered.get("found", 0),
+                                added=added,
+                                updated=updated,
+                                duplicates=0,
+                                expired=expired,
+                            )
+                        ),
+                        query_context=getattr(service, "last_query_context", None),
+                        sample_updated_jobs=list(getattr(service, "last_updated_jobs", []) or []),
                     ),
-                    query_context=getattr(service, "last_query_context", None),
-                    sample_updated_jobs=list(getattr(service, "last_updated_jobs", []) or []),
                 )
-            )
-            total_found += int(discovered.get("found", 0))
-            total_added += added
-            total_updated += updated
-            total_expired += expired
-            logger.info(
-                "TheirStack sync complete: found=%s, india=%s, added=%s, "
-                "slot=%s, rate_limited=%s",
-                discovered.get("found", 0),
-                discovered.get("india_likely", 0),
-                added,
-                discovered.get("audit", {}).get("selected_key_slot", ""),
-                discovered.get("audit", {}).get("rate_limited_slots", []),
-            )
-        except Exception as e:
-            errors += 1
+                total_found += int(discovered.get("found", 0))
+                total_added += added
+                total_updated += updated
+                total_expired += expired
+                logger.info(
+                    "TheirStack sync complete: found=%s, india=%s, added=%s, "
+                    "slot=%s, rate_limited=%s",
+                    discovered.get("found", 0),
+                    discovered.get("india_likely", 0),
+                    added,
+                    discovered.get("audit", {}).get("selected_key_slot", ""),
+                    discovered.get("audit", {}).get("rate_limited_slots", []),
+                )
+            except Exception as e:
+                errors += 1
+                theirstack_result = {
+                    "configured": bool(getattr(settings, "THEIRSTACK_API_KEY", None)),
+                    "found": 0,
+                    "errors": [str(e)[:256]],
+                    "audit": {},
+                    "provider_health": {
+                        "provider": "theirstack",
+                        "status": "error",
+                        "configured": bool(getattr(settings, "THEIRSTACK_API_KEY", None)),
+                        "billing_required": False,
+                        "provider_blocked": False,
+                    },
+                }
+                logger.error("TheirStack sync failed: %s", e)
+        else:
             theirstack_result = {
-                "configured": bool(getattr(settings, "THEIRSTACK_API_KEY", None)),
+                "configured": False,
                 "found": 0,
-                "errors": [str(e)[:256]],
+                "added": 0,
+                "updated": 0,
+                "expired_removed": 0,
+                "errors": [],
                 "audit": {},
                 "provider_health": {
                     "provider": "theirstack",
-                    "status": "error",
-                    "configured": bool(getattr(settings, "THEIRSTACK_API_KEY", None)),
+                    "status": "skipped",
+                    "configured": True,
                     "billing_required": False,
                     "provider_blocked": False,
+                    "provider_http_call_count": 0,
+                    "reason": "automatic_refresh_skips_paid_provider",
                 },
             }
-            logger.error("TheirStack sync failed: %s", e)
+            logger.info(
+                "Skipping TheirStack during automatic job refresh; paid provider is reserved for manual refresh clicks",
+                extra={"provider": "theirstack", "admin_initiated": admin_initiated},
+            )
 
         for source in sources:
             try:

@@ -379,3 +379,33 @@ async def test_other_providers_continue_after_greenhouse_duplicates():
     assert call_order == ["remoteok", "arbeitnow", "adzuna", "usajobs", "greenhouse", "lever"]
     assert result["duplicates_removed"] == 1
     assert result["added"] == 5
+
+
+@pytest.mark.asyncio
+async def test_automatic_job_refresh_skips_theirstack_paid_provider():
+    from src.services.jobs import JobIngestionEngine
+
+    engine = JobIngestionEngine()
+    call_order: list[str] = []
+
+    async def fake_sync_source(source: str, stage_callback=None):
+        call_order.append(source)
+        return 2, 1, 0, 0, 0, {}, []
+
+    fake_redis = SimpleNamespace(
+        set=AsyncMock(return_value=True),
+        get=AsyncMock(return_value="lease-1"),
+        delete=AsyncMock(return_value=1),
+    )
+
+    with patch.object(engine, "_sync_source", side_effect=fake_sync_source), \
+         patch.object(engine, "embed_jobs_batch", new=AsyncMock(return_value={"embedded": 0})), \
+         patch("src.db.redis.redis_client", fake_redis), \
+         patch("src.integrations.theirstack.sync_service.TheirStackSyncService", side_effect=AssertionError("TheirStack must not run automatically")):
+        result = await engine.sync_jobs(admin_initiated=False)
+
+    assert call_order == ["remoteok", "arbeitnow", "adzuna", "usajobs", "greenhouse", "lever"]
+    assert result["theirstack"]["provider_health"]["status"] == "skipped"
+    assert result["theirstack"]["provider_health"]["provider_http_call_count"] == 0
+    assert result["found"] == 12
+    assert result["added"] == 6
