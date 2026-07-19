@@ -507,6 +507,14 @@ async def job_stats(
     latest_sample_updated_jobs = latest_refresh_meta.get("sample_updated_jobs") or []
     latest_visibility_reason = latest_refresh_meta.get("visibility_reason") or {}
     latest_refresh_summary = latest_refresh_meta.get("refresh_summary") or {}
+    if latest_provider_results and latest_refresh_summary and latest_visibility_reason.get("code") in {"provider_billing_required", "provider_blocked"}:
+        from src.services.job_refresh import JobRefreshService
+
+        latest_visibility_reason = JobRefreshService._build_visibility_reason(
+            resume_doc_uid=latest_refresh_meta.get("resume_doc_uid"),
+            provider_results=list(latest_provider_results),
+            refresh_summary=dict(latest_refresh_summary),
+        )
     theirstack_health = {
         "provider": "theirstack",
         "configured": resolver.has_keys,

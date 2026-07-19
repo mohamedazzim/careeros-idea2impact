@@ -142,14 +142,16 @@ class JobRefreshService:
             refresh_summary = self._summarize_provider_results(provider_results)
         for key, value in self._default_refresh_summary().items():
             refresh_summary.setdefault(key, value)
-        visibility_reason = dict(
-            meta.get("visibility_reason")
-            or self._build_visibility_reason(
-                resume_doc_uid=meta.get("resume_doc_uid"),
-                provider_results=provider_results,
-                refresh_summary=refresh_summary,
-            )
+        computed_visibility_reason = self._build_visibility_reason(
+            resume_doc_uid=meta.get("resume_doc_uid"),
+            provider_results=provider_results,
+            refresh_summary=refresh_summary,
         )
+        stored_visibility_reason = dict(meta.get("visibility_reason") or {})
+        if stored_visibility_reason.get("code") in {"provider_billing_required", "provider_blocked"}:
+            visibility_reason = computed_visibility_reason
+        else:
+            visibility_reason = stored_visibility_reason or computed_visibility_reason
         diagnostics = dict(meta.get("diagnostics") or {})
         diagnostics.setdefault("status", session.status)
         diagnostics.setdefault("reason_code", visibility_reason.get("code", "unknown"))

@@ -226,8 +226,8 @@ def test_job_refresh_service_builds_diagnostics_payload():
     payload = service.build_diagnostics_payload(session)
 
     assert payload["status"] == "completed"
-    assert payload["reason_code"] == "provider_billing_required"
-    assert payload["reason"].startswith("TheirStack returned a billing-required response")
+    assert payload["reason_code"] == "duplicate_only"
+    assert payload["reason"].startswith("The refresh found jobs")
     assert payload["summary"]["found"] == 4
     assert payload["summary"]["duplicates_removed"] == 4
     assert payload["provider_results"][0]["provider"] == "theirstack"
