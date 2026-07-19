@@ -15,14 +15,31 @@ export function readAuthToken(): string | null {
 export function decodeTokenExpiry(token: string | null): number | null {
   if (!token) return null;
   try {
-    const parts = token.split('.');
-    if (parts.length < 2) return null;
-    const payload = JSON.parse(atob(parts[1]));
+    const payload = decodeAuthTokenPayload(token);
     if (!payload || typeof payload.exp !== 'number') return null;
     return payload.exp * 1000;
   } catch {
     return null;
   }
+}
+
+export function decodeAuthTokenPayload(token: string | null): Record<string, unknown> | null {
+  if (!token) return null;
+  try {
+    const parts = token.split('.');
+    if (parts.length < 2) return null;
+    const base64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+    const padded = base64.padEnd(Math.ceil(base64.length / 4) * 4, '=');
+    return JSON.parse(atob(padded)) as Record<string, unknown>;
+  } catch {
+    return null;
+  }
+}
+
+export function readAuthUserStorageScope(token: string | null = readAuthToken()): string {
+  const payload = decodeAuthTokenPayload(token);
+  const subject = typeof payload?.sub === 'string' ? payload.sub.trim() : '';
+  return subject ? `user_${subject}` : 'unknown_user';
 }
 
 export function clearAuthSession(): void {

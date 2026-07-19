@@ -16,12 +16,16 @@ import {
   setDemoRagSessionId,
   submitDemoRagChat,
 } from "@/lib/demo-rag";
-import { readAuthToken } from "@/lib/auth-session";
+import { readAuthToken, readAuthUserStorageScope } from "@/lib/auth-session";
 import { isPublicRoute } from "@/lib/rbac";
 
-const MESSAGES_KEY = "careeros_demo_rag_messages_v1";
-const PANEL_KEY = "careeros_demo_rag_panel_state_v1";
-const DRAFT_KEY = "careeros_demo_rag_draft_v1";
+const MESSAGES_KEY_PREFIX = "careeros_demo_rag_messages_v1";
+const PANEL_KEY_PREFIX = "careeros_demo_rag_panel_state_v1";
+const DRAFT_KEY_PREFIX = "careeros_demo_rag_draft_v1";
+
+function scopedKey(prefix: string, scope: string): string {
+  return `${prefix}_${scope.replace(/[^a-zA-Z0-9_-]/g, "_")}`;
+}
 
 function createMessageId(prefix: string): string {
   if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
@@ -54,21 +58,38 @@ function safeParse<T>(value: string | null, fallback: T): T {
   }
 }
 
-function loadMessages(): RagChatMessage[] {
+function normalizeLoadedMessages(messages: RagChatMessage[]): RagChatMessage[] {
+  return messages.map((message) => {
+    if (!message.pending) return message;
+    return {
+      ...message,
+      pending: false,
+      content: "The previous chatbot request did not finish. Please ask again.",
+      error: {
+        code: "REQUEST_INTERRUPTED",
+        message: "The previous chatbot request did not finish.",
+      },
+      needsVerification: true,
+      followUpQuestions: [],
+    };
+  });
+}
+
+function loadMessages(scope: string): RagChatMessage[] {
   if (typeof window === "undefined") return [defaultWelcomeMessage()];
   try {
-    const stored = window.localStorage.getItem(MESSAGES_KEY);
+    const stored = window.localStorage.getItem(scopedKey(MESSAGES_KEY_PREFIX, scope));
     const parsed = safeParse<RagChatMessage[]>(stored, []);
-    return parsed.length ? parsed : [defaultWelcomeMessage()];
+    return parsed.length ? normalizeLoadedMessages(parsed) : [defaultWelcomeMessage()];
   } catch {
     return [defaultWelcomeMessage()];
   }
 }
 
-function loadPanelState(): RagPanelState {
+function loadPanelState(scope: string): RagPanelState {
   if (typeof window === "undefined") return "closed";
   try {
-    const stored = window.localStorage.getItem(PANEL_KEY);
+    const stored = window.localStorage.getItem(scopedKey(PANEL_KEY_PREFIX, scope));
     if (stored === "open" || stored === "minimized" || stored === "maximized" || stored === "closed") {
       return stored;
     }
@@ -76,6 +97,15 @@ function loadPanelState(): RagPanelState {
     // ignore
   }
   return "closed";
+}
+
+function loadDraft(scope: string): string {
+  if (typeof window === "undefined") return "";
+  try {
+    return window.localStorage.getItem(scopedKey(DRAFT_KEY_PREFIX, scope)) || "";
+  } catch {
+    return "";
+  }
 }
 
 function saveJson(key: string, value: unknown): void {
@@ -134,19 +164,13 @@ export default function FloatingRagChatbot() {
   const pathname = usePathname();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
-  const [sessionId] = useState<string>(() => getOrCreateDemoRagSessionId());
-  const [panelState, setPanelState] = useState<RagPanelState>(() => loadPanelState());
-  const [draft, setDraft] = useState<string>(() => {
-    if (typeof window === "undefined") return "";
-    try {
-      return window.localStorage.getItem(DRAFT_KEY) || "";
-    } catch {
-      return "";
-    }
-  });
-  const [messages, setMessages] = useState<RagChatMessage[]>(() => loadMessages());
-  const [loading, setLoading] = useState(false);
   const [authToken, setAuthToken] = useState<string | null>(() => readAuthToken());
+  const [storageScope, setStorageScope] = useState<string>(() => readAuthUserStorageScope(authToken));
+  const [sessionId, setSessionId] = useState<string>(() => getOrCreateDemoRagSessionId(storageScope));
+  const [panelState, setPanelState] = useState<RagPanelState>(() => loadPanelState(storageScope));
+  const [draft, setDraft] = useState<string>(() => loadDraft(storageScope));
+  const [messages, setMessages] = useState<RagChatMessage[]>(() => loadMessages(storageScope));
+  const [loading, setLoading] = useState(false);
   const [sessionExpired, setSessionExpired] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -158,22 +182,22 @@ export default function FloatingRagChatbot() {
   }, []);
 
   useEffect(() => {
-    setDemoRagSessionId(sessionId);
-    saveJson(MESSAGES_KEY, messages);
-  }, [sessionId, messages]);
+    setDemoRagSessionId(sessionId, storageScope);
+    saveJson(scopedKey(MESSAGES_KEY_PREFIX, storageScope), messages);
+  }, [sessionId, storageScope, messages]);
 
   useEffect(() => {
-    saveJson(PANEL_KEY, panelState);
-  }, [panelState]);
+    saveJson(scopedKey(PANEL_KEY_PREFIX, storageScope), panelState);
+  }, [storageScope, panelState]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
     try {
-      window.localStorage.setItem(DRAFT_KEY, draft);
+      window.localStorage.setItem(scopedKey(DRAFT_KEY_PREFIX, storageScope), draft);
     } catch {
       // ignore
     }
-  }, [draft]);
+  }, [storageScope, draft]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
@@ -181,7 +205,19 @@ export default function FloatingRagChatbot() {
 
   useEffect(() => {
     const syncAuth = () => {
-      setAuthToken(readAuthToken());
+      const nextToken = readAuthToken();
+      setAuthToken(nextToken);
+      const nextScope = readAuthUserStorageScope(nextToken);
+      setStorageScope((currentScope) => {
+        if (currentScope === nextScope) return currentScope;
+        setSessionId(getOrCreateDemoRagSessionId(nextScope));
+        setMessages(loadMessages(nextScope));
+        setPanelState(loadPanelState(nextScope));
+        setDraft(loadDraft(nextScope));
+        setLoading(false);
+        setSessionExpired(false);
+        return nextScope;
+      });
     };
 
     const handleStorage = (event: StorageEvent) => {
@@ -258,7 +294,7 @@ export default function FloatingRagChatbot() {
         question: trimmed,
         viewer_role: "mentor",
         top_k: 6,
-      });
+      }, { timeoutMs: 60000 });
 
       const assistantMessage = mapChatResponseToMessage(response);
       setMessages((current) => {
