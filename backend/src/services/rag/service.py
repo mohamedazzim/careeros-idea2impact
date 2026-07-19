@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import asyncio
 import json
 import logging
 import re
@@ -27,6 +28,8 @@ DEFAULT_TOP_K = 6
 DEFAULT_SCORE_THRESHOLD = 0.25
 MAX_CONTEXT_CHARS = 12_000
 MAKE_TIMEOUT_SECONDS = 25.0
+MIN_CHAT_TIMEOUT_SECONDS = 5.0
+MIN_STAGE_TIMEOUT_SECONDS = 3.0
 DOCS_DIR_NAME = "docs"
 RAG_DIR_NAME = "rag"
 
@@ -486,13 +489,17 @@ class DemoRagService:
         provider = get_llm_provider()
         parsed: Optional[RagLLMOutput] = None
         try:
-            response = await provider.structured_generate(
-                system_prompt=system_prompt,
-                user_message=json.dumps(prompt, ensure_ascii=False),
-                output_schema=RagLLMOutput,
-                max_tokens=1200,
-                temperature=0.0,
-                cache_key_hint=f"demo-rag:{_short_hash(question)}:{session_id}:{viewer_role}:{len(retrieval.chunks)}",
+            llm_timeout_seconds = max(MIN_STAGE_TIMEOUT_SECONDS, float(settings.RAG_LLM_TIMEOUT_SECONDS or 0))
+            response = await asyncio.wait_for(
+                provider.structured_generate(
+                    system_prompt=system_prompt,
+                    user_message=json.dumps(prompt, ensure_ascii=False),
+                    output_schema=RagLLMOutput,
+                    max_tokens=1200,
+                    temperature=0.0,
+                    cache_key_hint=f"demo-rag:{_short_hash(question)}:{session_id}:{viewer_role}:{len(retrieval.chunks)}",
+                ),
+                timeout=llm_timeout_seconds,
             )
             parsed = response.get("parsed") if isinstance(response, dict) else None
             if parsed is None and isinstance(response, dict):
@@ -643,11 +650,38 @@ class DemoRagService:
             error=error,
         )
 
-    async def chat(self, request: DemoRagChatRequest) -> DemoRagChatResponse:
+    async def _chat_impl(self, request: DemoRagChatRequest) -> DemoRagChatResponse:
         validated_question = self.validate_question(request.question)
         normalized_request = request.model_copy(update={"question": validated_question})
 
-        retrieval = await self.retrieve(validated_question, top_k=normalized_request.top_k)
+        retrieval_timeout_seconds = max(MIN_STAGE_TIMEOUT_SECONDS, float(settings.RAG_RETRIEVAL_TIMEOUT_SECONDS or 0))
+        try:
+            retrieval = await asyncio.wait_for(
+                self.retrieve(validated_question, top_k=normalized_request.top_k),
+                timeout=retrieval_timeout_seconds,
+            )
+        except asyncio.TimeoutError:
+            logger.warning(
+                "demo_rag_retrieval_timeout",
+                extra={
+                    "session_id": normalized_request.session_id,
+                    "viewer_role": normalized_request.viewer_role,
+                    "timeout_seconds": retrieval_timeout_seconds,
+                    "question_preview": _sanitize_for_logging(validated_question),
+                },
+            )
+            return DemoRagChatResponse(
+                status="error",
+                answer="Needs verification: document retrieval timed out before relevant context could be loaded. Please try again.",
+                confidence=0.0,
+                citations=[],
+                follow_up_questions=[],
+                needs_verification=True,
+                error=DemoRagError(
+                    code="RAG_RETRIEVAL_TIMEOUT",
+                    message="Document retrieval timed out before relevant context could be loaded.",
+                ),
+            )
 
         make_response: Optional[Dict[str, Any]] = None
         if settings.RAG_USE_MAKE and settings.MAKE_RAG_WEBHOOK_URL:
@@ -667,6 +701,33 @@ class DemoRagService:
             viewer_role=normalized_request.viewer_role,
         )
         return response
+
+    async def chat(self, request: DemoRagChatRequest) -> DemoRagChatResponse:
+        timeout_seconds = max(MIN_CHAT_TIMEOUT_SECONDS, float(settings.RAG_CHAT_TIMEOUT_SECONDS or 0))
+        try:
+            return await asyncio.wait_for(self._chat_impl(request), timeout=timeout_seconds)
+        except asyncio.TimeoutError:
+            logger.warning(
+                "demo_rag_chat_timeout",
+                extra={
+                    "session_id": request.session_id,
+                    "viewer_role": request.viewer_role,
+                    "timeout_seconds": timeout_seconds,
+                    "question_preview": _sanitize_for_logging(request.question),
+                },
+            )
+            return DemoRagChatResponse(
+                status="error",
+                answer="Needs verification: the docs chatbot timed out before completing the request. Please try again.",
+                confidence=0.0,
+                citations=[],
+                follow_up_questions=[],
+                needs_verification=True,
+                error=DemoRagError(
+                    code="RAG_CHAT_TIMEOUT",
+                    message="The docs chatbot timed out before completing the request.",
+                ),
+            )
 
     async def health(self) -> DemoRagHealthResponse:
         files = self._discover_markdown_files()

@@ -139,6 +139,9 @@ class Settings(BaseSettings):
     RAG_EMBEDDING_MODEL: str = "nvidia/nv-embed-v1"
     RAG_LLM_MODEL: str = "gemini-2.5-flash"
     RAG_USE_MAKE: bool = True
+    RAG_CHAT_TIMEOUT_SECONDS: int = 55
+    RAG_RETRIEVAL_TIMEOUT_SECONDS: int = 25
+    RAG_LLM_TIMEOUT_SECONDS: int = 25
 
     # LLM Intelligence Orchestration
     CLAUDE_MODEL: str = "gemini-2.5-flash"

@@ -4,6 +4,7 @@ from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import AsyncMock
 
+import asyncio
 import inspect
 
 import httpx
@@ -215,6 +216,75 @@ async def test_chat_response_schema(monkeypatch, tmp_path):
     assert response.citations[0].source_path == "docs/rag/sample.md"
     assert response.confidence == pytest.approx(0.91, 0.01)
     assert not response.needs_verification
+
+
+@pytest.mark.asyncio
+async def test_chat_timeout_returns_structured_error(monkeypatch):
+    import src.services.rag.service as rag_service_module
+
+    service = DemoRagService()
+
+    async def slow_chat_impl(request):
+        await asyncio.sleep(0.05)
+        return DemoRagChatResponse(status="ok", answer="late")
+
+    monkeypatch.setattr(service, "_chat_impl", slow_chat_impl)
+    monkeypatch.setattr(rag_service_module.settings, "RAG_CHAT_TIMEOUT_SECONDS", 0.001)
+    monkeypatch.setattr(rag_service_module, "MIN_CHAT_TIMEOUT_SECONDS", 0.001)
+
+    response = await service.chat(
+        DemoRagChatRequest(
+            session_id="mentor-demo-session",
+            question="What is CareerOS?",
+            viewer_role="mentor",
+            top_k=6,
+        )
+    )
+
+    assert response.status == "error"
+    assert response.error is not None
+    assert response.error.code == "RAG_CHAT_TIMEOUT"
+    assert response.needs_verification
+
+
+@pytest.mark.asyncio
+async def test_llm_timeout_returns_extractive_fallback(monkeypatch):
+    import src.services.rag.service as rag_service_module
+    from src.services.rag.service import RagRetrievalHit, RagRetrievalResult
+
+    hit = RagRetrievalHit(
+        chunk_id="rag-123",
+        doc_name="README.md",
+        section_title="Overview",
+        source_path="docs/rag/README.md",
+        score=0.88,
+        text="CareerOS is an explainable AI career platform.",
+        chunk_index=0,
+        updated_at="2026-06-13T00:00:00+00:00",
+    )
+    retrieval = RagRetrievalResult(status="OK", top_score=0.88, chunks=[hit])
+
+    async def slow_generate(**kwargs):
+        await asyncio.sleep(0.05)
+        return {"parsed": None}
+
+    fake_provider = SimpleNamespace(structured_generate=slow_generate)
+    monkeypatch.setattr(rag_service_module, "get_llm_provider", lambda: fake_provider)
+    monkeypatch.setattr(rag_service_module.settings, "RAG_LLM_TIMEOUT_SECONDS", 0.001)
+    monkeypatch.setattr(rag_service_module, "MIN_STAGE_TIMEOUT_SECONDS", 0.001)
+
+    service = DemoRagService()
+    response = await service._generate_answer(
+        question="What is CareerOS?",
+        retrieval=retrieval,
+        session_id="mentor-demo-session",
+        viewer_role="mentor",
+    )
+
+    assert response.status == "ok"
+    assert response.answer == "CareerOS is an explainable AI career platform."
+    assert response.citations
+    assert response.error is None
 
 
 def test_prompt_injection_rejection():
