@@ -10,6 +10,7 @@ from typing import Any, Dict, Optional
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from src.core.config import settings
 from src.models.orchestration import OrchestrationSession
 
 
@@ -217,11 +218,12 @@ class JobRefreshService:
     ) -> OrchestrationSession:
         """Create a new queued session and return it. Does NOT run matching."""
         requested_preferences = preferences or {}
+        cooldown_seconds = max(1, int(getattr(settings, "JOB_REFRESH_COOLDOWN_SECONDS", 120) or 120))
         results = await db.execute(
             select(OrchestrationSession).where(
                 OrchestrationSession.user_id == user_id,
                 OrchestrationSession.graph_name == "job_refresh",
-                OrchestrationSession.status.in_(["queued", "running"]),
+                OrchestrationSession.status.in_(["queued", "running", "completed"]),
                 OrchestrationSession.deleted_at.is_(None),
             ).order_by(OrchestrationSession.created_at.desc()).limit(1)
         )
@@ -229,7 +231,7 @@ class JobRefreshService:
         if existing:
             metadata = existing.metadata_ or {}
             recently_updated = bool(
-                existing.updated_at and existing.updated_at >= datetime.utcnow() - timedelta(minutes=2)
+                existing.updated_at and existing.updated_at >= datetime.utcnow() - timedelta(seconds=cooldown_seconds)
             )
             if (
                 recently_updated
@@ -237,6 +239,14 @@ class JobRefreshService:
                 metadata.get("resume_doc_uid") == resume_doc_uid
                 and (metadata.get("preferences") or {}) == requested_preferences
             ):
+                metadata = dict(metadata)
+                metadata["reused_existing_refresh"] = True
+                metadata["next_refresh_at"] = (
+                    (existing.updated_at or datetime.utcnow()) + timedelta(seconds=cooldown_seconds)
+                ).replace(tzinfo=timezone.utc).isoformat().replace("+00:00", "Z")
+                existing.metadata_ = metadata
+                await db.commit()
+                await db.refresh(existing)
                 return existing
 
         session = OrchestrationSession(
@@ -250,6 +260,8 @@ class JobRefreshService:
                 "resume_doc_uid": resume_doc_uid,
                 "resume": {k: v for k, v in resume_profile.items() if k != "content"},
                 "preferences": requested_preferences,
+                "reused_existing_refresh": False,
+                "next_refresh_at": None,
                 "progress": {"processed": 0, "total": 0, "failed": 0},
                 "stage_history": [],
                 "provider_results": [],

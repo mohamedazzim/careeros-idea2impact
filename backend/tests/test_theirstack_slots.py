@@ -251,6 +251,26 @@ class TestNoKeyValuesInLogs:
 class TestTheirStackStrictPayload:
     """Verify strict India-only job discovery payload construction."""
 
+    def test_quota_safe_config_defaults(self):
+        from src.core.config import Settings
+
+        cfg = Settings(_env_file=None)
+
+        assert cfg.THEIRSTACK_MAX_RESULTS_PER_REQUEST == 5
+        assert cfg.THEIRSTACK_RESULTS_PER_QUERY == 5
+        assert cfg.THEIRSTACK_JOB_FETCH_LIMIT == 5
+        assert cfg.THEIRSTACK_MAX_PAID_REQUESTS_PER_REFRESH == 1
+        assert cfg.THEIRSTACK_MAX_QUERIES_PER_REFRESH == 1
+        assert cfg.THEIRSTACK_ENABLE_FREE_COUNT_PREVIEW is False
+        assert cfg.JOB_AUTO_REFRESH_ENABLED is False
+
+    def test_config_rejects_multiple_paid_queries(self):
+        from pydantic import ValidationError
+        from src.core.config import Settings
+
+        with pytest.raises(ValidationError):
+            Settings(_env_file=None, THEIRSTACK_MAX_QUERIES_PER_REFRESH=2)
+
     def test_module_payload_builder_supports_preview_and_optional_incremental_fields(self):
         from src.integrations.theirstack.sync_service import build_theirstack_indian_tech_jobs_payload
 
@@ -320,6 +340,30 @@ class TestTheirStackStrictPayload:
 
         expected_date = (datetime.now(timezone.utc) - timedelta(days=7)).date().isoformat()
         assert payload["posted_at_gte"] == expected_date
+
+    def test_build_search_queries_returns_one_paid_page_zero_payload(self):
+        from src.integrations.theirstack.sync_service import TheirStackSyncService
+
+        service = TheirStackSyncService(client=MagicMock())
+        queries = service.build_search_queries({"skills": ["Python"]}, {})
+
+        assert len(queries) == 1
+        assert queries[0]["page"] == 0
+        assert queries[0]["limit"] == 5
+        assert queries[0]["include_total_results"] is False
+        assert queries[0]["_search_mode"] == "resume"
+
+    def test_explicit_broad_mode_returns_one_paid_page_zero_payload(self):
+        from src.integrations.theirstack.sync_service import TheirStackSyncService
+
+        service = TheirStackSyncService(client=MagicMock())
+        queries = service.build_search_queries({"skills": ["Python"]}, {"search_mode": "broad"})
+
+        assert len(queries) == 1
+        assert queries[0]["page"] == 0
+        assert queries[0]["limit"] == 5
+        assert queries[0]["include_total_results"] is False
+        assert queries[0]["_search_mode"] == "broad"
 
     def test_build_search_payload_clamps_legacy_high_limits(self, monkeypatch):
         from src.integrations.theirstack.sync_service import TheirStackSyncService
