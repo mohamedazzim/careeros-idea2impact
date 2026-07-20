@@ -292,6 +292,7 @@ async def enqueue_job_refresh(session_id: int) -> str:
     job = await pool.enqueue_job(
         "recalculate_all_jobs_async",
         session_id,
+        True,
         _queue_name="arq:queue",
         _expires=3600,
         _timeout=600,

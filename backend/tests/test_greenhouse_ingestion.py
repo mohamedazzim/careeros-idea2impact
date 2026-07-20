@@ -427,6 +427,112 @@ async def test_legacy_ingestion_pipeline_does_not_use_paid_theirstack_mode():
 
 
 @pytest.mark.asyncio
+async def test_auto_rematch_enqueues_matching_without_paid_provider_refresh():
+    from src.workers.tasks import job_ingestion
+
+    fake_redis = SimpleNamespace(
+        exists=AsyncMock(return_value=False),
+        set=AsyncMock(return_value=True),
+        delete=AsyncMock(return_value=1),
+    )
+    fake_pool = SimpleNamespace(enqueue_job=AsyncMock())
+
+    class FakeResult:
+        def all(self):
+            return [(123,)]
+
+        def scalar_one_or_none(self):
+            return 456
+
+    @asynccontextmanager
+    async def fake_session():
+        fake_db = SimpleNamespace(execute=AsyncMock(return_value=FakeResult()))
+        yield fake_db
+
+    with patch("src.db.redis.redis_client", fake_redis), \
+         patch("src.db.session.async_session", fake_session), \
+         patch("src.workers.arq_worker.get_arq_pool", AsyncMock(return_value=fake_pool)):
+        enqueued = await job_ingestion._rematch_active_users()
+
+    assert enqueued == 1
+    fake_pool.enqueue_job.assert_awaited_once_with(
+        "recalculate_all_jobs_async",
+        456,
+        False,
+        _queue_name="arq:queue",
+        _expires=3600,
+        _timeout=600,
+    )
+
+
+@pytest.mark.asyncio
+async def test_job_matching_can_disable_paid_provider_refresh():
+    from src.workers.tasks.job_matching import recalculate_all_jobs_async
+
+    session = SimpleNamespace(
+        id=99,
+        session_uid="refresh-99",
+        user_id="user-1",
+        status="queued",
+        current_node=None,
+        metadata_={"resume_doc_uid": None, "preferences": {}},
+        completion_pct=0.0,
+    )
+
+    class SessionResult:
+        def scalar_one_or_none(self):
+            return session
+
+    class ResumeResult:
+        def scalar_one_or_none(self):
+            return None
+
+    fake_db = SimpleNamespace(
+        execute=AsyncMock(side_effect=[SessionResult(), ResumeResult()]),
+        commit=AsyncMock(),
+    )
+
+    @asynccontextmanager
+    async def fake_session():
+        yield fake_db
+
+    fake_intelligence = SimpleNamespace(resume_profile=MagicMock(return_value={}))
+    fake_engine = SimpleNamespace(
+        sync_jobs=AsyncMock(
+            return_value={
+                "found": 0,
+                "added": 0,
+                "updated": 0,
+                "duplicates_removed": 0,
+                "expired_removed": 0,
+                "errors": 0,
+                "embedded": 0,
+                "theirstack": {"provider_health": {"status": "skipped"}},
+                "provider_results": [],
+                "provider_query_contexts": [],
+                "sample_updated_jobs": [],
+                "refresh_summary": {},
+                "visibility_reason": {},
+            }
+        )
+    )
+
+    with patch("src.workers.tasks.job_matching.async_session", fake_session), \
+         patch("src.services.opportunity.job_intelligence_service.get_job_intelligence_service", return_value=fake_intelligence), \
+         patch("src.services.jobs.get_job_ingestion_engine", return_value=fake_engine), \
+         patch("src.services.events.get_career_event_service", side_effect=RuntimeError("skip events")):
+        result = await recalculate_all_jobs_async(
+            {"job_id": "unit-test"},
+            99,
+            allow_paid_providers=False,
+        )
+
+    fake_engine.sync_jobs.assert_awaited_once()
+    assert fake_engine.sync_jobs.await_args.kwargs["admin_initiated"] is False
+    assert result["status"] == "completed"
+
+
+@pytest.mark.asyncio
 async def test_opportunity_discovery_does_not_use_paid_theirstack_mode():
     from fastapi import HTTPException
     from src.api.v1.endpoints.opportunities_api import DiscoverRequest, discover_opportunities

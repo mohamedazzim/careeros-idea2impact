@@ -34,7 +34,11 @@ def _clone_metadata(payload: Dict[str, Any] | None) -> Dict[str, Any]:
 
 
 @traceable(name="recalculate_all_jobs_async")
-async def recalculate_all_jobs_async(ctx: Dict[str, Any], session_id: int) -> Dict[str, Any]:
+async def recalculate_all_jobs_async(
+    ctx: Dict[str, Any],
+    session_id: int,
+    allow_paid_providers: bool = True,
+) -> Dict[str, Any]:
     """Background task to score all jobs against a resume and update session progress.
 
     Called by ARQ worker via: pool.enqueue_job('recalculate_all_jobs_async', session_id)
@@ -42,7 +46,15 @@ async def recalculate_all_jobs_async(ctx: Dict[str, Any], session_id: int) -> Di
     Updates orchestration_sessions row with progress as each job is scored.
     """
     job_id = ctx.get('job_id', 'unknown')
-    logger.info("async job matching started", extra={"task": "recalculate_all_jobs_async", "job_id": job_id, "session_id": session_id})
+    logger.info(
+        "async job matching started",
+        extra={
+            "task": "recalculate_all_jobs_async",
+            "job_id": job_id,
+            "session_id": session_id,
+            "allow_paid_providers": allow_paid_providers,
+        },
+    )
 
     async with async_session() as db:
         result = await db.execute(select(OrchestrationSession).where(OrchestrationSession.id == session_id))
@@ -170,7 +182,7 @@ async def recalculate_all_jobs_async(ctx: Dict[str, Any], session_id: int) -> Di
 
             from src.services.jobs import get_job_ingestion_engine
             sync_result = await get_job_ingestion_engine().sync_jobs(
-                admin_initiated=True,
+                admin_initiated=allow_paid_providers,
                 resume_profile=profile or None,
                 preferences=preferences,
                 stage_callback=_publish_stage,

@@ -263,6 +263,7 @@ async def _rematch_active_users() -> int:
                         await pool.enqueue_job(
                             "recalculate_all_jobs_async",
                             sid,
+                            False,
                             _queue_name="arq:queue",
                             _expires=3600,
                             _timeout=600,
