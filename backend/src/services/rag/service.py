@@ -30,6 +30,7 @@ MAX_CONTEXT_CHARS = 12_000
 MAKE_TIMEOUT_SECONDS = 25.0
 MIN_CHAT_TIMEOUT_SECONDS = 5.0
 MIN_STAGE_TIMEOUT_SECONDS = 3.0
+INDEX_UPSERT_BATCH_SIZE = 64
 DOCS_DIR_NAME = "docs"
 DEFAULT_RAG_DIR_NAME = "rag_v2"
 
@@ -252,6 +253,10 @@ def _split_long_section(text: str, max_chars: int = 2800) -> List[str]:
     return [chunk for chunk in final_chunks if chunk.strip()]
 
 
+def _batched(items: Sequence[PointStruct], batch_size: int) -> List[Sequence[PointStruct]]:
+    return [items[index : index + batch_size] for index in range(0, len(items), batch_size)]
+
+
 def _sanitize_for_logging(text: str, max_len: int = 160) -> str:
     clean = ai_security.redact_pii(text).replace("\n", " ").strip()
     return clean[:max_len]
@@ -363,7 +368,21 @@ class DemoRagService:
 
         upserted = 0
         if points:
-            upserted = await qdrant_service.upsert_points(self.collection_name, points)
+            for batch_index, batch in enumerate(_batched(points, INDEX_UPSERT_BATCH_SIZE), start=1):
+                try:
+                    upserted += await qdrant_service.upsert_points(self.collection_name, list(batch))
+                except Exception:
+                    failed_chunks += len(batch)
+                    logger.exception(
+                        "Docs RAG upsert batch failed",
+                        extra={
+                            "collection": self.collection_name,
+                            "batch_index": batch_index,
+                            "batch_size": len(batch),
+                            "files_indexed": len(files),
+                            "chunks_indexed": len(all_chunks),
+                        },
+                    )
 
         logger.info(
             "Indexed docs RAG collection",
