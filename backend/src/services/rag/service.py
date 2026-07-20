@@ -554,8 +554,8 @@ class DemoRagService:
                 excerpts = []
                 for hit in selected_hits:
                     excerpt = hit.text.strip()
-                    if len(excerpt) > 1400:
-                        excerpt = excerpt[:1400].rstrip() + "..."
+                    if len(excerpt) > 2400:
+                        excerpt = excerpt[:2400].rstrip() + "..."
                     excerpts.append(f"From `{hit.source_path}` ({hit.section_title}):\n{excerpt}")
                 answer_text = "Retrieved documentation says:\n\n" + "\n\n".join(excerpts)
             follow_ups = list(ANSWER_FOLLOW_UPS)
