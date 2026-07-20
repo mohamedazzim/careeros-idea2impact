@@ -188,16 +188,6 @@ The call should be marked `started` or `in_progress` after provider start. It sh
 
 The repository has a naming mismatch: the generic voice bridge is named `PIPEDREAM_WEBHOOK_URL`, while the operator workflow can be a Make.com scenario. A future hardening step should add a dedicated `MAKE_OUTBOUND_CALL_WEBHOOK_URL` or `ELEVENLABS_CONVAI_WEBHOOK_URL` while preserving backward compatibility.
 
-## Verification Questions For RAG
-
-- Explain the full ElevenLabs, Make.com, and Twilio opportunity-call flow.
-- Where does CareerOS pass the JD into ElevenLabs ConvAI?
-- What threshold triggers an outbound opportunity call?
-- Does CareerOS use Twilio Say or Play for opportunity calls?
-- How does CareerOS support Tamil and English calls?
-- What happens if salary or location is missing?
-- Which tables store the call and transcript?
-
 ## Verified Source Files
 
 - `backend/src/api/v1/endpoints/opportunities_api.py`

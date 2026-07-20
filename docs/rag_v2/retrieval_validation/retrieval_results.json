@@ -15,12 +15,12 @@
       ],
       "top_docs": [
         {
-          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
           "score": 1.0
         },
         {
-          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
-          "score": 1.0
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.909
         },
         {
           "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
@@ -46,12 +46,12 @@
       ],
       "top_docs": [
         {
-          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
           "score": 1.0
         },
         {
-          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
-          "score": 1.0
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.889
         },
         {
           "doc": "14_ELEVENLABS_VOICE_AGENT.md",
@@ -78,7 +78,7 @@
       "top_docs": [
         {
           "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
-          "score": 1.0
+          "score": 0.857
         },
         {
           "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
@@ -208,12 +208,12 @@
           "score": 1.0
         },
         {
-          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "doc": "25_KNOWN_LIMITATIONS_AND_TECHNICAL_DEBT.md",
           "score": 0.857
         },
         {
-          "doc": "25_KNOWN_LIMITATIONS_AND_TECHNICAL_DEBT.md",
-          "score": 0.857
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.714
         },
         {
           "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
@@ -268,12 +268,12 @@
       ],
       "top_docs": [
         {
-          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
           "score": 1.0
         },
         {
-          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
-          "score": 1.0
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.9
         },
         {
           "doc": "14_ELEVENLABS_VOICE_AGENT.md",
@@ -300,12 +300,12 @@
       ],
       "top_docs": [
         {
-          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
           "score": 1.0
         },
         {
-          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
-          "score": 1.0
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.875
         },
         {
           "doc": "14_ELEVENLABS_VOICE_AGENT.md",
@@ -508,7 +508,7 @@
           "score": 0.6
         },
         {
-          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
           "score": 0.4
         }
       ],
