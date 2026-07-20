@@ -172,16 +172,16 @@
       ],
       "top_docs": [
         {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 1.0
+        },
+        {
           "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
           "score": 1.0
         },
         {
           "doc": "05_END_TO_END_USER_JOURNEYS.md",
           "score": 1.0
-        },
-        {
-          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
-          "score": 0.857
         },
         {
           "doc": "27_GLOSSARY.md",

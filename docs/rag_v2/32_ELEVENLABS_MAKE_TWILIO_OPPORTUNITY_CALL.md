@@ -27,7 +27,13 @@ This is the flagship CareerOS engagement workflow: a high-fit opportunity can tr
 
 ## Executive Summary
 
-CareerOS does not use static TTS for opportunity calls. The supported live path is ElevenLabs Conversational AI (ConvAI). Twilio is the telephony rail connected to the ElevenLabs phone number. Make.com can act as an external relay into the same ElevenLabs ConvAI outbound-call API, but the repository does not store the exported Make.com scenario.
+CareerOS does not use static TTS for opportunity calls. The supported live path is ElevenLabs Conversational AI (ConvAI). A high match score reaches `POST /api/v1/opportunities/alert`, passes through `OpportunityAlertAgent`, `AlertActionService`, `CommunicationOrchestrator`, and `ElevenLabsConversationalOutboundCallService`, then starts a ConvAI outbound call. The call is selected when the normalized match score is greater than or equal to `CALL_ALERT_MIN_MATCH_SCORE`, subject to lifecycle, URL, duplicate-suppression, recipient-validation, and dry-run safety checks.
+
+CareerOS shares the JD and match context with ElevenLabs through `conversation_initiation_client_data.dynamic_variables`, including `job_description`, `job_title`, `company`, `location`, `salary_range`, `match_score`, `matching_skills`, `missing_skills`, `deadline`, and `application_url`. ElevenLabs ConvAI uses those variables to answer salary, location, company, deadline, skills, match-reason, and application questions without inventing unavailable facts.
+
+Twilio is the telephony rail connected to the ElevenLabs phone number ID. CareerOS does not use Twilio `Say` or `Play` for this opportunity-agent path. Make.com can act as an external relay into the same ElevenLabs ConvAI outbound-call API, but the repository does not store the exported Make.com scenario. If the configured webhook bridge URL points to Make.com, Make relays the payload; otherwise CareerOS can call ElevenLabs directly.
+
+The live agent can support English and Tamil when the external ElevenLabs agent has both languages and voices configured. The backend normalizes English and Tamil language preferences, while dynamic variables remain language-neutral.
 
 ## End-to-End Flow
 
