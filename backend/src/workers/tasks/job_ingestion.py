@@ -38,7 +38,9 @@ async def jobs_ingestion_pipeline(ctx: Dict[str, Any], session_uid: str = None) 
         from src.services.jobs import get_job_ingestion_engine
         engine = get_job_ingestion_engine()
 
-        result = await engine.sync_jobs(admin_initiated=True)
+        # Legacy/general ingestion jobs should not spend paid TheirStack credits.
+        # TheirStack is reserved for the explicit Jobs page refresh pipeline.
+        result = await engine.sync_jobs(admin_initiated=False)
 
         logger.info("Job ingestion completed", extra={
             "task": "jobs_ingestion_pipeline",

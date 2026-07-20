@@ -409,3 +409,38 @@ async def test_automatic_job_refresh_skips_theirstack_paid_provider():
     assert result["theirstack"]["provider_health"]["provider_http_call_count"] == 0
     assert result["found"] == 12
     assert result["added"] == 6
+
+
+@pytest.mark.asyncio
+async def test_legacy_ingestion_pipeline_does_not_use_paid_theirstack_mode():
+    from src.workers.tasks.job_ingestion import jobs_ingestion_pipeline
+
+    fake_engine = SimpleNamespace(
+        sync_jobs=AsyncMock(return_value={"found": 0, "added": 0, "errors": 0})
+    )
+
+    with patch("src.services.jobs.get_job_ingestion_engine", return_value=fake_engine):
+        result = await jobs_ingestion_pipeline({"job_id": "unit-test"})
+
+    fake_engine.sync_jobs.assert_awaited_once_with(admin_initiated=False)
+    assert result["added"] == 0
+
+
+@pytest.mark.asyncio
+async def test_opportunity_discovery_does_not_use_paid_theirstack_mode():
+    from fastapi import HTTPException
+    from src.api.v1.endpoints.opportunities_api import DiscoverRequest, discover_opportunities
+
+    fake_engine = SimpleNamespace(sync_jobs=AsyncMock(return_value={"found": 0, "added": 0}))
+    fake_intelligence = SimpleNamespace(get_active_resume=AsyncMock(return_value=None))
+
+    with patch("src.services.jobs.get_job_ingestion_engine", return_value=fake_engine), \
+         patch("src.services.opportunity.job_intelligence_service.get_job_intelligence_service", return_value=fake_intelligence):
+        with pytest.raises(HTTPException):
+            await discover_opportunities(
+                DiscoverRequest(),
+                user={"sub": "user-1"},
+                db=MagicMock(),
+            )
+
+    fake_engine.sync_jobs.assert_awaited_once_with(admin_initiated=False)

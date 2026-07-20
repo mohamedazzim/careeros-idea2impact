@@ -118,7 +118,10 @@ async def discover_opportunities(
     t0 = time.monotonic()
     try:
         await asyncio.wait_for(
-            get_job_ingestion_engine().sync_jobs(admin_initiated=True),
+            # Provider ingestion from this convenience endpoint must not spend
+            # paid TheirStack credits. The canonical paid refresh path is the
+            # Jobs page "Refresh Pipeline" action: POST /api/v1/jobs/refresh.
+            get_job_ingestion_engine().sync_jobs(admin_initiated=False),
             timeout=20.0,
         )
     except TimeoutError:
