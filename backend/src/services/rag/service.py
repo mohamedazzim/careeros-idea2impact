@@ -538,8 +538,16 @@ class DemoRagService:
             logger.warning("RAG answer generation failed, using extractive fallback: %s", exc)
 
         if parsed is None:
-            preferred_hits = [hit for hit in retrieval.chunks if "GOLDEN_QUESTIONS" not in hit.doc_name]
-            selected_hits = (preferred_hits or retrieval.chunks)[:3]
+            def useful_hit(hit: RagRetrievalHit) -> bool:
+                text = hit.text.strip()
+                return bool(text) and not text.startswith("---") and len(text) >= 120
+
+            preferred_hits = [
+                hit
+                for hit in retrieval.chunks
+                if "GOLDEN_QUESTIONS" not in hit.doc_name and useful_hit(hit)
+            ]
+            selected_hits = (preferred_hits or [hit for hit in retrieval.chunks if useful_hit(hit)] or retrieval.chunks)[:3]
             if len(selected_hits) == 1:
                 answer_text = selected_hits[0].text.strip()
             else:
