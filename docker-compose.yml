@@ -115,6 +115,7 @@ services:
       - MAKE_RAG_WEBHOOK_URL=${MAKE_RAG_WEBHOOK_URL:-}
       - MAKE_RAG_API_KEY=${MAKE_RAG_API_KEY:-}
       - QDRANT_RAG_DOCS_COLLECTION=${QDRANT_RAG_DOCS_COLLECTION:-careeros_rag_docs}
+      - RAG_DIR_NAME=${RAG_DIR_NAME:-rag_v2}
       - RAG_EMBEDDING_MODEL=${RAG_EMBEDDING_MODEL:-nvidia/nv-embed-v1}
       - RAG_LLM_MODEL=${RAG_LLM_MODEL:-gemini-2.5-flash}
       - RAG_USE_MAKE=${RAG_USE_MAKE:-true}
@@ -242,6 +243,7 @@ services:
       - MAKE_RAG_WEBHOOK_URL=${MAKE_RAG_WEBHOOK_URL:-}
       - MAKE_RAG_API_KEY=${MAKE_RAG_API_KEY:-}
       - QDRANT_RAG_DOCS_COLLECTION=${QDRANT_RAG_DOCS_COLLECTION:-careeros_rag_docs}
+      - RAG_DIR_NAME=${RAG_DIR_NAME:-rag_v2}
       - RAG_EMBEDDING_MODEL=${RAG_EMBEDDING_MODEL:-nvidia/nv-embed-v1}
       - RAG_LLM_MODEL=${RAG_LLM_MODEL:-gemini-2.5-flash}
       - RAG_USE_MAKE=${RAG_USE_MAKE:-true}

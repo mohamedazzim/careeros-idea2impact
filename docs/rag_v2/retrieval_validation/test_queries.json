@@ -1,0 +1,758 @@
+[
+  {
+    "question": "Explain the full ElevenLabs, Make.com, and Twilio opportunity-call flow.",
+    "expected_docs": [
+      "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "15_VOICE_AGENT_DATA_FLOW.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "Where does CareerOS pass the JD into ElevenLabs ConvAI?",
+    "expected_docs": [
+      "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+      "14_ELEVENLABS_VOICE_AGENT.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "What threshold triggers an outbound opportunity call?",
+    "expected_docs": [
+      "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+      "14_ELEVENLABS_VOICE_AGENT.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "How does CareerOS support Tamil and English opportunity calls?",
+    "expected_docs": [
+      "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+      "14_ELEVENLABS_VOICE_AGENT.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "Does CareerOS use Twilio Say or Play for opportunity calls?",
+    "expected_docs": [
+      "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "20_EXTERNAL_INTEGRATIONS.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "What starts an outbound opportunity voice call?",
+    "expected_docs": [
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "15_VOICE_AGENT_DATA_FLOW.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "Which provider initiates the active conversational call?",
+    "expected_docs": [
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "15_VOICE_AGENT_DATA_FLOW.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "Does CareerOS call Twilio REST directly for the main opportunity call path?",
+    "expected_docs": [
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "15_VOICE_AGENT_DATA_FLOW.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "Which environment variables are required for a real ElevenLabs call?",
+    "expected_docs": [
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "15_VOICE_AGENT_DATA_FLOW.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "What happens in outbound call dry-run mode?",
+    "expected_docs": [
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "15_VOICE_AGENT_DATA_FLOW.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "How are recipient phone numbers protected?",
+    "expected_docs": [
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "15_VOICE_AGENT_DATA_FLOW.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "Where are voice sessions stored?",
+    "expected_docs": [
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "15_VOICE_AGENT_DATA_FLOW.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "Where are ElevenLabs transcripts stored?",
+    "expected_docs": [
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "15_VOICE_AGENT_DATA_FLOW.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "Is there an inbound ElevenLabs webhook endpoint?",
+    "expected_docs": [
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "15_VOICE_AGENT_DATA_FLOW.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "Which service fetches transcripts?",
+    "expected_docs": [
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "15_VOICE_AGENT_DATA_FLOW.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "Which worker retries missing transcripts?",
+    "expected_docs": [
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "15_VOICE_AGENT_DATA_FLOW.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "What prompt does the repository define for the voice agent?",
+    "expected_docs": [
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "15_VOICE_AGENT_DATA_FLOW.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "Is that prompt injected into the active outbound call payload?",
+    "expected_docs": [
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "15_VOICE_AGENT_DATA_FLOW.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "What job data is passed to ElevenLabs?",
+    "expected_docs": [
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "15_VOICE_AGENT_DATA_FLOW.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "What is the Pipedream role in voice?",
+    "expected_docs": [
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "15_VOICE_AGENT_DATA_FLOW.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "Is Make.com used for the voice call path?",
+    "expected_docs": [
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "15_VOICE_AGENT_DATA_FLOW.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "What provider error maps to a missing destination number?",
+    "expected_docs": [
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "15_VOICE_AGENT_DATA_FLOW.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "How does CareerOS correlate calls after initiation?",
+    "expected_docs": [
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "15_VOICE_AGENT_DATA_FLOW.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "Can a call be captured without a conversation ID?",
+    "expected_docs": [
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "15_VOICE_AGENT_DATA_FLOW.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "Which frontend areas can surface opportunity voice actions?",
+    "expected_docs": [
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "15_VOICE_AGENT_DATA_FLOW.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "What table records sync retries?",
+    "expected_docs": [
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "15_VOICE_AGENT_DATA_FLOW.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "What endpoint returns a stored conversation?",
+    "expected_docs": [
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "15_VOICE_AGENT_DATA_FLOW.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "What endpoint processes conversation outcomes?",
+    "expected_docs": [
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "15_VOICE_AGENT_DATA_FLOW.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "What external configuration is still required?",
+    "expected_docs": [
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "15_VOICE_AGENT_DATA_FLOW.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "What is the safest production rollout mode?",
+    "expected_docs": [
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "15_VOICE_AGENT_DATA_FLOW.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "What status should voice be documented as?",
+    "expected_docs": [
+      "14_ELEVENLABS_VOICE_AGENT.md",
+      "15_VOICE_AGENT_DATA_FLOW.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "voice"
+  },
+  {
+    "question": "What does CareerOS implement for authentication?",
+    "expected_docs": [
+      "11_AUTHENTICATION_AUTHORIZATION_AND_SECURITY.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for resume upload?",
+    "expected_docs": [
+      "17_RESUME_AND_COVER_LETTER_WORKFLOWS.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for job refresh?",
+    "expected_docs": [
+      "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for matching?",
+    "expected_docs": [
+      "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for application packages?",
+    "expected_docs": [
+      "17_RESUME_AND_COVER_LETTER_WORKFLOWS.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for interview prep?",
+    "expected_docs": [
+      "18_INTERVIEW_PREPARATION.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for docs RAG?",
+    "expected_docs": [
+      "12_RAG_AND_MENTOR_CHATBOT.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for Qdrant?",
+    "expected_docs": [
+      "03_COMPLETE_FEATURE_CATALOG.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for LLM provider?",
+    "expected_docs": [
+      "03_COMPLETE_FEATURE_CATALOG.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for Make.com?",
+    "expected_docs": [
+      "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for Pipedream?",
+    "expected_docs": [
+      "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for TheirStack?",
+    "expected_docs": [
+      "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for learning paths?",
+    "expected_docs": [
+      "03_COMPLETE_FEATURE_CATALOG.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for orchestration?",
+    "expected_docs": [
+      "03_COMPLETE_FEATURE_CATALOG.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for authentication?",
+    "expected_docs": [
+      "11_AUTHENTICATION_AUTHORIZATION_AND_SECURITY.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for resume upload?",
+    "expected_docs": [
+      "17_RESUME_AND_COVER_LETTER_WORKFLOWS.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for job refresh?",
+    "expected_docs": [
+      "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for matching?",
+    "expected_docs": [
+      "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for application packages?",
+    "expected_docs": [
+      "17_RESUME_AND_COVER_LETTER_WORKFLOWS.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for interview prep?",
+    "expected_docs": [
+      "18_INTERVIEW_PREPARATION.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for docs RAG?",
+    "expected_docs": [
+      "12_RAG_AND_MENTOR_CHATBOT.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for Qdrant?",
+    "expected_docs": [
+      "03_COMPLETE_FEATURE_CATALOG.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for LLM provider?",
+    "expected_docs": [
+      "03_COMPLETE_FEATURE_CATALOG.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for Make.com?",
+    "expected_docs": [
+      "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for Pipedream?",
+    "expected_docs": [
+      "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for TheirStack?",
+    "expected_docs": [
+      "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for learning paths?",
+    "expected_docs": [
+      "03_COMPLETE_FEATURE_CATALOG.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for orchestration?",
+    "expected_docs": [
+      "03_COMPLETE_FEATURE_CATALOG.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for authentication?",
+    "expected_docs": [
+      "11_AUTHENTICATION_AUTHORIZATION_AND_SECURITY.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for resume upload?",
+    "expected_docs": [
+      "17_RESUME_AND_COVER_LETTER_WORKFLOWS.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for job refresh?",
+    "expected_docs": [
+      "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for matching?",
+    "expected_docs": [
+      "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for application packages?",
+    "expected_docs": [
+      "17_RESUME_AND_COVER_LETTER_WORKFLOWS.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for interview prep?",
+    "expected_docs": [
+      "18_INTERVIEW_PREPARATION.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for docs RAG?",
+    "expected_docs": [
+      "12_RAG_AND_MENTOR_CHATBOT.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for Qdrant?",
+    "expected_docs": [
+      "03_COMPLETE_FEATURE_CATALOG.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for LLM provider?",
+    "expected_docs": [
+      "03_COMPLETE_FEATURE_CATALOG.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for Make.com?",
+    "expected_docs": [
+      "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for Pipedream?",
+    "expected_docs": [
+      "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for TheirStack?",
+    "expected_docs": [
+      "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for learning paths?",
+    "expected_docs": [
+      "03_COMPLETE_FEATURE_CATALOG.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for orchestration?",
+    "expected_docs": [
+      "03_COMPLETE_FEATURE_CATALOG.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for authentication?",
+    "expected_docs": [
+      "11_AUTHENTICATION_AUTHORIZATION_AND_SECURITY.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for resume upload?",
+    "expected_docs": [
+      "17_RESUME_AND_COVER_LETTER_WORKFLOWS.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for job refresh?",
+    "expected_docs": [
+      "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for matching?",
+    "expected_docs": [
+      "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for application packages?",
+    "expected_docs": [
+      "17_RESUME_AND_COVER_LETTER_WORKFLOWS.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for interview prep?",
+    "expected_docs": [
+      "18_INTERVIEW_PREPARATION.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for docs RAG?",
+    "expected_docs": [
+      "12_RAG_AND_MENTOR_CHATBOT.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for Qdrant?",
+    "expected_docs": [
+      "03_COMPLETE_FEATURE_CATALOG.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for LLM provider?",
+    "expected_docs": [
+      "03_COMPLETE_FEATURE_CATALOG.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for Make.com?",
+    "expected_docs": [
+      "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for Pipedream?",
+    "expected_docs": [
+      "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for TheirStack?",
+    "expected_docs": [
+      "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for learning paths?",
+    "expected_docs": [
+      "03_COMPLETE_FEATURE_CATALOG.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for orchestration?",
+    "expected_docs": [
+      "03_COMPLETE_FEATURE_CATALOG.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for authentication?",
+    "expected_docs": [
+      "11_AUTHENTICATION_AUTHORIZATION_AND_SECURITY.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for resume upload?",
+    "expected_docs": [
+      "17_RESUME_AND_COVER_LETTER_WORKFLOWS.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for job refresh?",
+    "expected_docs": [
+      "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  },
+  {
+    "question": "What does CareerOS implement for matching?",
+    "expected_docs": [
+      "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+      "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+    ],
+    "category": "general"
+  }
+]

@@ -1,0 +1,2858 @@
+{
+  "summary": {
+    "total": 91,
+    "hits": 91,
+    "hit_rate": 1.0
+  },
+  "results": [
+    {
+      "question": "Explain the full ElevenLabs, Make.com, and Twilio opportunity-call flow.",
+      "category": "voice",
+      "expected_docs": [
+        "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "15_VOICE_AGENT_DATA_FLOW.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 1.0
+        },
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.818
+        },
+        {
+          "doc": "15_VOICE_AGENT_DATA_FLOW.md",
+          "score": 0.818
+        },
+        {
+          "doc": "14_ELEVENLABS_VOICE_AGENT.md",
+          "score": 0.818
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "Where does CareerOS pass the JD into ElevenLabs ConvAI?",
+      "category": "voice",
+      "expected_docs": [
+        "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+        "14_ELEVENLABS_VOICE_AGENT.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 1.0
+        },
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "14_ELEVENLABS_VOICE_AGENT.md",
+          "score": 0.778
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.667
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.667
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What threshold triggers an outbound opportunity call?",
+      "category": "voice",
+      "expected_docs": [
+        "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+        "14_ELEVENLABS_VOICE_AGENT.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 1.0
+        },
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 0.714
+        },
+        {
+          "doc": "27_GLOSSARY.md",
+          "score": 0.714
+        },
+        {
+          "doc": "26_FEATURE_IMPLEMENTATION_STATUS.md",
+          "score": 0.714
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.714
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "How does CareerOS support Tamil and English opportunity calls?",
+      "category": "voice",
+      "expected_docs": [
+        "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+        "14_ELEVENLABS_VOICE_AGENT.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 1.0
+        },
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.556
+        },
+        {
+          "doc": "14_ELEVENLABS_VOICE_AGENT.md",
+          "score": 0.556
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.444
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "Does CareerOS use Twilio Say or Play for opportunity calls?",
+      "category": "voice",
+      "expected_docs": [
+        "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "20_EXTERNAL_INTEGRATIONS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 1.0
+        },
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.8
+        },
+        {
+          "doc": "14_ELEVENLABS_VOICE_AGENT.md",
+          "score": 0.7
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.6
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What starts an outbound opportunity voice call?",
+      "category": "voice",
+      "expected_docs": [
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "15_VOICE_AGENT_DATA_FLOW.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "05_END_TO_END_USER_JOURNEYS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.857
+        },
+        {
+          "doc": "27_GLOSSARY.md",
+          "score": 0.857
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.857
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "Which provider initiates the active conversational call?",
+      "category": "voice",
+      "expected_docs": [
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "15_VOICE_AGENT_DATA_FLOW.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.857
+        },
+        {
+          "doc": "25_KNOWN_LIMITATIONS_AND_TECHNICAL_DEBT.md",
+          "score": 0.857
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.714
+        },
+        {
+          "doc": "27_GLOSSARY.md",
+          "score": 0.714
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "Does CareerOS call Twilio REST directly for the main opportunity call path?",
+      "category": "voice",
+      "expected_docs": [
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "15_VOICE_AGENT_DATA_FLOW.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.818
+        },
+        {
+          "doc": "03_COMPLETE_FEATURE_CATALOG.md",
+          "score": 0.818
+        },
+        {
+          "doc": "00_REPOSITORY_AUDIT.md",
+          "score": 0.818
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.727
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "Which environment variables are required for a real ElevenLabs call?",
+      "category": "voice",
+      "expected_docs": [
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "15_VOICE_AGENT_DATA_FLOW.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 1.0
+        },
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "14_ELEVENLABS_VOICE_AGENT.md",
+          "score": 0.9
+        },
+        {
+          "doc": "00_REPOSITORY_AUDIT.md",
+          "score": 0.8
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.7
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What happens in outbound call dry-run mode?",
+      "category": "voice",
+      "expected_docs": [
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "15_VOICE_AGENT_DATA_FLOW.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 1.0
+        },
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "14_ELEVENLABS_VOICE_AGENT.md",
+          "score": 0.875
+        },
+        {
+          "doc": "26_FEATURE_IMPLEMENTATION_STATUS.md",
+          "score": 0.75
+        },
+        {
+          "doc": "03_COMPLETE_FEATURE_CATALOG.md",
+          "score": 0.75
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "How are recipient phone numbers protected?",
+      "category": "voice",
+      "expected_docs": [
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "15_VOICE_AGENT_DATA_FLOW.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.667
+        },
+        {
+          "doc": "14_ELEVENLABS_VOICE_AGENT.md",
+          "score": 0.667
+        },
+        {
+          "doc": "21_CONFIGURATION_AND_ENVIRONMENT_VARIABLES.md",
+          "score": 0.5
+        },
+        {
+          "doc": "05_END_TO_END_USER_JOURNEYS.md",
+          "score": 0.5
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "Where are voice sessions stored?",
+      "category": "voice",
+      "expected_docs": [
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "15_VOICE_AGENT_DATA_FLOW.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "15_VOICE_AGENT_DATA_FLOW.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.8
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.8
+        },
+        {
+          "doc": "09_API_REFERENCE.md",
+          "score": 0.8
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "Where are ElevenLabs transcripts stored?",
+      "category": "voice",
+      "expected_docs": [
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "15_VOICE_AGENT_DATA_FLOW.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "15_VOICE_AGENT_DATA_FLOW.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.8
+        },
+        {
+          "doc": "25_KNOWN_LIMITATIONS_AND_TECHNICAL_DEBT.md",
+          "score": 0.8
+        },
+        {
+          "doc": "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+          "score": 0.8
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "Is there an inbound ElevenLabs webhook endpoint?",
+      "category": "voice",
+      "expected_docs": [
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "15_VOICE_AGENT_DATA_FLOW.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "15_VOICE_AGENT_DATA_FLOW.md",
+          "score": 0.857
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.714
+        },
+        {
+          "doc": "26_FEATURE_IMPLEMENTATION_STATUS.md",
+          "score": 0.714
+        },
+        {
+          "doc": "05_END_TO_END_USER_JOURNEYS.md",
+          "score": 0.714
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "Which service fetches transcripts?",
+      "category": "voice",
+      "expected_docs": [
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "15_VOICE_AGENT_DATA_FLOW.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "25_KNOWN_LIMITATIONS_AND_TECHNICAL_DEBT.md",
+          "score": 0.75
+        },
+        {
+          "doc": "15_VOICE_AGENT_DATA_FLOW.md",
+          "score": 0.75
+        },
+        {
+          "doc": "13_AGENTS_PROMPTS_AND_LLM_WORKFLOWS.md",
+          "score": 0.75
+        },
+        {
+          "doc": "00_REPOSITORY_AUDIT.md",
+          "score": 0.75
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "Which worker retries missing transcripts?",
+      "category": "voice",
+      "expected_docs": [
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "15_VOICE_AGENT_DATA_FLOW.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "15_VOICE_AGENT_DATA_FLOW.md",
+          "score": 1.0
+        },
+        {
+          "doc": "06_SYSTEM_ARCHITECTURE.md",
+          "score": 0.6
+        },
+        {
+          "doc": "00_REPOSITORY_AUDIT.md",
+          "score": 0.6
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.4
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What prompt does the repository define for the voice agent?",
+      "category": "voice",
+      "expected_docs": [
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "15_VOICE_AGENT_DATA_FLOW.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.889
+        },
+        {
+          "doc": "14_ELEVENLABS_VOICE_AGENT.md",
+          "score": 0.889
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.778
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.667
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "Is that prompt injected into the active outbound call payload?",
+      "category": "voice",
+      "expected_docs": [
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "15_VOICE_AGENT_DATA_FLOW.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.9
+        },
+        {
+          "doc": "25_KNOWN_LIMITATIONS_AND_TECHNICAL_DEBT.md",
+          "score": 0.8
+        },
+        {
+          "doc": "14_ELEVENLABS_VOICE_AGENT.md",
+          "score": 0.8
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.6
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What job data is passed to ElevenLabs?",
+      "category": "voice",
+      "expected_docs": [
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "15_VOICE_AGENT_DATA_FLOW.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "27_GLOSSARY.md",
+          "score": 1.0
+        },
+        {
+          "doc": "14_ELEVENLABS_VOICE_AGENT.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.857
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.857
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What is the Pipedream role in voice?",
+      "category": "voice",
+      "expected_docs": [
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "15_VOICE_AGENT_DATA_FLOW.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 1.0
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 1.0
+        },
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "26_FEATURE_IMPLEMENTATION_STATUS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 1.0
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "Is Make.com used for the voice call path?",
+      "category": "voice",
+      "expected_docs": [
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "15_VOICE_AGENT_DATA_FLOW.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 1.0
+        },
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "26_FEATURE_IMPLEMENTATION_STATUS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "20_EXTERNAL_INTEGRATIONS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "03_COMPLETE_FEATURE_CATALOG.md",
+          "score": 1.0
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What provider error maps to a missing destination number?",
+      "category": "voice",
+      "expected_docs": [
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "15_VOICE_AGENT_DATA_FLOW.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "14_ELEVENLABS_VOICE_AGENT.md",
+          "score": 0.889
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.778
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.667
+        },
+        {
+          "doc": "26_FEATURE_IMPLEMENTATION_STATUS.md",
+          "score": 0.556
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "How does CareerOS correlate calls after initiation?",
+      "category": "voice",
+      "expected_docs": [
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "15_VOICE_AGENT_DATA_FLOW.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.714
+        },
+        {
+          "doc": "14_ELEVENLABS_VOICE_AGENT.md",
+          "score": 0.571
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.429
+        },
+        {
+          "doc": "23_TESTING_AND_VERIFICATION.md",
+          "score": 0.429
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "Can a call be captured without a conversation ID?",
+      "category": "voice",
+      "expected_docs": [
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "15_VOICE_AGENT_DATA_FLOW.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.875
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.75
+        },
+        {
+          "doc": "14_ELEVENLABS_VOICE_AGENT.md",
+          "score": 0.75
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.625
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "Which frontend areas can surface opportunity voice actions?",
+      "category": "voice",
+      "expected_docs": [
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "15_VOICE_AGENT_DATA_FLOW.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "26_FEATURE_IMPLEMENTATION_STATUS.md",
+          "score": 0.75
+        },
+        {
+          "doc": "03_COMPLETE_FEATURE_CATALOG.md",
+          "score": 0.75
+        },
+        {
+          "doc": "27_GLOSSARY.md",
+          "score": 0.625
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.625
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What table records sync retries?",
+      "category": "voice",
+      "expected_docs": [
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "15_VOICE_AGENT_DATA_FLOW.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "15_VOICE_AGENT_DATA_FLOW.md",
+          "score": 0.8
+        },
+        {
+          "doc": "10_DATABASE_AND_DATA_MODELS.md",
+          "score": 0.8
+        },
+        {
+          "doc": "00_REPOSITORY_AUDIT.md",
+          "score": 0.8
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.6
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What endpoint returns a stored conversation?",
+      "category": "voice",
+      "expected_docs": [
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "15_VOICE_AGENT_DATA_FLOW.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.833
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.833
+        },
+        {
+          "doc": "15_VOICE_AGENT_DATA_FLOW.md",
+          "score": 0.833
+        },
+        {
+          "doc": "14_ELEVENLABS_VOICE_AGENT.md",
+          "score": 0.667
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What endpoint processes conversation outcomes?",
+      "category": "voice",
+      "expected_docs": [
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "15_VOICE_AGENT_DATA_FLOW.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "15_VOICE_AGENT_DATA_FLOW.md",
+          "score": 0.8
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.6
+        },
+        {
+          "doc": "10_DATABASE_AND_DATA_MODELS.md",
+          "score": 0.6
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.4
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What external configuration is still required?",
+      "category": "voice",
+      "expected_docs": [
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "15_VOICE_AGENT_DATA_FLOW.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "14_ELEVENLABS_VOICE_AGENT.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.833
+        },
+        {
+          "doc": "00_REPOSITORY_AUDIT.md",
+          "score": 0.833
+        },
+        {
+          "doc": "26_FEATURE_IMPLEMENTATION_STATUS.md",
+          "score": 0.667
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What is the safest production rollout mode?",
+      "category": "voice",
+      "expected_docs": [
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "15_VOICE_AGENT_DATA_FLOW.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "14_ELEVENLABS_VOICE_AGENT.md",
+          "score": 0.714
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.571
+        },
+        {
+          "doc": "25_KNOWN_LIMITATIONS_AND_TECHNICAL_DEBT.md",
+          "score": 0.571
+        },
+        {
+          "doc": "23_TESTING_AND_VERIFICATION.md",
+          "score": 0.571
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What status should voice be documented as?",
+      "category": "voice",
+      "expected_docs": [
+        "14_ELEVENLABS_VOICE_AGENT.md",
+        "15_VOICE_AGENT_DATA_FLOW.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 1.0
+        },
+        {
+          "doc": "14_ELEVENLABS_VOICE_AGENT.md",
+          "score": 0.857
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.714
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.714
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for authentication?",
+      "category": "general",
+      "expected_docs": [
+        "11_AUTHENTICATION_AUTHORIZATION_AND_SECURITY.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.833
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.667
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.667
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.667
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for resume upload?",
+      "category": "general",
+      "expected_docs": [
+        "17_RESUME_AND_COVER_LETTER_WORKFLOWS.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.714
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.714
+        },
+        {
+          "doc": "26_FEATURE_IMPLEMENTATION_STATUS.md",
+          "score": 0.714
+        },
+        {
+          "doc": "25_KNOWN_LIMITATIONS_AND_TECHNICAL_DEBT.md",
+          "score": 0.714
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for job refresh?",
+      "category": "general",
+      "expected_docs": [
+        "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.857
+        },
+        {
+          "doc": "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+          "score": 0.857
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.714
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.714
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for matching?",
+      "category": "general",
+      "expected_docs": [
+        "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+          "score": 0.833
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.667
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.667
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.667
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for application packages?",
+      "category": "general",
+      "expected_docs": [
+        "17_RESUME_AND_COVER_LETTER_WORKFLOWS.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.714
+        },
+        {
+          "doc": "17_RESUME_AND_COVER_LETTER_WORKFLOWS.md",
+          "score": 0.714
+        },
+        {
+          "doc": "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+          "score": 0.714
+        },
+        {
+          "doc": "13_AGENTS_PROMPTS_AND_LLM_WORKFLOWS.md",
+          "score": 0.714
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for interview prep?",
+      "category": "general",
+      "expected_docs": [
+        "18_INTERVIEW_PREPARATION.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.571
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.571
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.571
+        },
+        {
+          "doc": "27_GLOSSARY.md",
+          "score": 0.571
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for docs RAG?",
+      "category": "general",
+      "expected_docs": [
+        "12_RAG_AND_MENTOR_CHATBOT.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.857
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.857
+        },
+        {
+          "doc": "20_EXTERNAL_INTEGRATIONS.md",
+          "score": 0.857
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.857
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for Qdrant?",
+      "category": "general",
+      "expected_docs": [
+        "03_COMPLETE_FEATURE_CATALOG.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.833
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.833
+        },
+        {
+          "doc": "20_EXTERNAL_INTEGRATIONS.md",
+          "score": 0.833
+        },
+        {
+          "doc": "31_INDEXING_MANIFEST.md",
+          "score": 0.667
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for LLM provider?",
+      "category": "general",
+      "expected_docs": [
+        "03_COMPLETE_FEATURE_CATALOG.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "20_EXTERNAL_INTEGRATIONS.md",
+          "score": 0.857
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.857
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.714
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.714
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for Make.com?",
+      "category": "general",
+      "expected_docs": [
+        "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.857
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.857
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.857
+        },
+        {
+          "doc": "20_EXTERNAL_INTEGRATIONS.md",
+          "score": 0.857
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for Pipedream?",
+      "category": "general",
+      "expected_docs": [
+        "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.833
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.833
+        },
+        {
+          "doc": "20_EXTERNAL_INTEGRATIONS.md",
+          "score": 0.833
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.833
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for TheirStack?",
+      "category": "general",
+      "expected_docs": [
+        "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.833
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.833
+        },
+        {
+          "doc": "20_EXTERNAL_INTEGRATIONS.md",
+          "score": 0.833
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.833
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for learning paths?",
+      "category": "general",
+      "expected_docs": [
+        "03_COMPLETE_FEATURE_CATALOG.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.714
+        },
+        {
+          "doc": "26_FEATURE_IMPLEMENTATION_STATUS.md",
+          "score": 0.714
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.714
+        },
+        {
+          "doc": "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+          "score": 0.714
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for orchestration?",
+      "category": "general",
+      "expected_docs": [
+        "03_COMPLETE_FEATURE_CATALOG.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.833
+        },
+        {
+          "doc": "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+          "score": 0.833
+        },
+        {
+          "doc": "14_ELEVENLABS_VOICE_AGENT.md",
+          "score": 0.833
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.667
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for authentication?",
+      "category": "general",
+      "expected_docs": [
+        "11_AUTHENTICATION_AUTHORIZATION_AND_SECURITY.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.833
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.667
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.667
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.667
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for resume upload?",
+      "category": "general",
+      "expected_docs": [
+        "17_RESUME_AND_COVER_LETTER_WORKFLOWS.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.714
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.714
+        },
+        {
+          "doc": "26_FEATURE_IMPLEMENTATION_STATUS.md",
+          "score": 0.714
+        },
+        {
+          "doc": "25_KNOWN_LIMITATIONS_AND_TECHNICAL_DEBT.md",
+          "score": 0.714
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for job refresh?",
+      "category": "general",
+      "expected_docs": [
+        "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.857
+        },
+        {
+          "doc": "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+          "score": 0.857
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.714
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.714
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for matching?",
+      "category": "general",
+      "expected_docs": [
+        "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+          "score": 0.833
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.667
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.667
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.667
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for application packages?",
+      "category": "general",
+      "expected_docs": [
+        "17_RESUME_AND_COVER_LETTER_WORKFLOWS.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.714
+        },
+        {
+          "doc": "17_RESUME_AND_COVER_LETTER_WORKFLOWS.md",
+          "score": 0.714
+        },
+        {
+          "doc": "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+          "score": 0.714
+        },
+        {
+          "doc": "13_AGENTS_PROMPTS_AND_LLM_WORKFLOWS.md",
+          "score": 0.714
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for interview prep?",
+      "category": "general",
+      "expected_docs": [
+        "18_INTERVIEW_PREPARATION.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.571
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.571
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.571
+        },
+        {
+          "doc": "27_GLOSSARY.md",
+          "score": 0.571
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for docs RAG?",
+      "category": "general",
+      "expected_docs": [
+        "12_RAG_AND_MENTOR_CHATBOT.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.857
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.857
+        },
+        {
+          "doc": "20_EXTERNAL_INTEGRATIONS.md",
+          "score": 0.857
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.857
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for Qdrant?",
+      "category": "general",
+      "expected_docs": [
+        "03_COMPLETE_FEATURE_CATALOG.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.833
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.833
+        },
+        {
+          "doc": "20_EXTERNAL_INTEGRATIONS.md",
+          "score": 0.833
+        },
+        {
+          "doc": "31_INDEXING_MANIFEST.md",
+          "score": 0.667
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for LLM provider?",
+      "category": "general",
+      "expected_docs": [
+        "03_COMPLETE_FEATURE_CATALOG.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "20_EXTERNAL_INTEGRATIONS.md",
+          "score": 0.857
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.857
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.714
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.714
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for Make.com?",
+      "category": "general",
+      "expected_docs": [
+        "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.857
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.857
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.857
+        },
+        {
+          "doc": "20_EXTERNAL_INTEGRATIONS.md",
+          "score": 0.857
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for Pipedream?",
+      "category": "general",
+      "expected_docs": [
+        "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.833
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.833
+        },
+        {
+          "doc": "20_EXTERNAL_INTEGRATIONS.md",
+          "score": 0.833
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.833
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for TheirStack?",
+      "category": "general",
+      "expected_docs": [
+        "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.833
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.833
+        },
+        {
+          "doc": "20_EXTERNAL_INTEGRATIONS.md",
+          "score": 0.833
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.833
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for learning paths?",
+      "category": "general",
+      "expected_docs": [
+        "03_COMPLETE_FEATURE_CATALOG.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.714
+        },
+        {
+          "doc": "26_FEATURE_IMPLEMENTATION_STATUS.md",
+          "score": 0.714
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.714
+        },
+        {
+          "doc": "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+          "score": 0.714
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for orchestration?",
+      "category": "general",
+      "expected_docs": [
+        "03_COMPLETE_FEATURE_CATALOG.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.833
+        },
+        {
+          "doc": "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+          "score": 0.833
+        },
+        {
+          "doc": "14_ELEVENLABS_VOICE_AGENT.md",
+          "score": 0.833
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.667
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for authentication?",
+      "category": "general",
+      "expected_docs": [
+        "11_AUTHENTICATION_AUTHORIZATION_AND_SECURITY.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.833
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.667
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.667
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.667
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for resume upload?",
+      "category": "general",
+      "expected_docs": [
+        "17_RESUME_AND_COVER_LETTER_WORKFLOWS.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.714
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.714
+        },
+        {
+          "doc": "26_FEATURE_IMPLEMENTATION_STATUS.md",
+          "score": 0.714
+        },
+        {
+          "doc": "25_KNOWN_LIMITATIONS_AND_TECHNICAL_DEBT.md",
+          "score": 0.714
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for job refresh?",
+      "category": "general",
+      "expected_docs": [
+        "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.857
+        },
+        {
+          "doc": "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+          "score": 0.857
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.714
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.714
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for matching?",
+      "category": "general",
+      "expected_docs": [
+        "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+          "score": 0.833
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.667
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.667
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.667
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for application packages?",
+      "category": "general",
+      "expected_docs": [
+        "17_RESUME_AND_COVER_LETTER_WORKFLOWS.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.714
+        },
+        {
+          "doc": "17_RESUME_AND_COVER_LETTER_WORKFLOWS.md",
+          "score": 0.714
+        },
+        {
+          "doc": "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+          "score": 0.714
+        },
+        {
+          "doc": "13_AGENTS_PROMPTS_AND_LLM_WORKFLOWS.md",
+          "score": 0.714
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for interview prep?",
+      "category": "general",
+      "expected_docs": [
+        "18_INTERVIEW_PREPARATION.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.571
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.571
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.571
+        },
+        {
+          "doc": "27_GLOSSARY.md",
+          "score": 0.571
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for docs RAG?",
+      "category": "general",
+      "expected_docs": [
+        "12_RAG_AND_MENTOR_CHATBOT.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.857
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.857
+        },
+        {
+          "doc": "20_EXTERNAL_INTEGRATIONS.md",
+          "score": 0.857
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.857
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for Qdrant?",
+      "category": "general",
+      "expected_docs": [
+        "03_COMPLETE_FEATURE_CATALOG.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.833
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.833
+        },
+        {
+          "doc": "20_EXTERNAL_INTEGRATIONS.md",
+          "score": 0.833
+        },
+        {
+          "doc": "31_INDEXING_MANIFEST.md",
+          "score": 0.667
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for LLM provider?",
+      "category": "general",
+      "expected_docs": [
+        "03_COMPLETE_FEATURE_CATALOG.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "20_EXTERNAL_INTEGRATIONS.md",
+          "score": 0.857
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.857
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.714
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.714
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for Make.com?",
+      "category": "general",
+      "expected_docs": [
+        "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.857
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.857
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.857
+        },
+        {
+          "doc": "20_EXTERNAL_INTEGRATIONS.md",
+          "score": 0.857
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for Pipedream?",
+      "category": "general",
+      "expected_docs": [
+        "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.833
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.833
+        },
+        {
+          "doc": "20_EXTERNAL_INTEGRATIONS.md",
+          "score": 0.833
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.833
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for TheirStack?",
+      "category": "general",
+      "expected_docs": [
+        "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.833
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.833
+        },
+        {
+          "doc": "20_EXTERNAL_INTEGRATIONS.md",
+          "score": 0.833
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.833
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for learning paths?",
+      "category": "general",
+      "expected_docs": [
+        "03_COMPLETE_FEATURE_CATALOG.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.714
+        },
+        {
+          "doc": "26_FEATURE_IMPLEMENTATION_STATUS.md",
+          "score": 0.714
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.714
+        },
+        {
+          "doc": "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+          "score": 0.714
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for orchestration?",
+      "category": "general",
+      "expected_docs": [
+        "03_COMPLETE_FEATURE_CATALOG.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.833
+        },
+        {
+          "doc": "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+          "score": 0.833
+        },
+        {
+          "doc": "14_ELEVENLABS_VOICE_AGENT.md",
+          "score": 0.833
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.667
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for authentication?",
+      "category": "general",
+      "expected_docs": [
+        "11_AUTHENTICATION_AUTHORIZATION_AND_SECURITY.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.833
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.667
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.667
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.667
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for resume upload?",
+      "category": "general",
+      "expected_docs": [
+        "17_RESUME_AND_COVER_LETTER_WORKFLOWS.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.714
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.714
+        },
+        {
+          "doc": "26_FEATURE_IMPLEMENTATION_STATUS.md",
+          "score": 0.714
+        },
+        {
+          "doc": "25_KNOWN_LIMITATIONS_AND_TECHNICAL_DEBT.md",
+          "score": 0.714
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for job refresh?",
+      "category": "general",
+      "expected_docs": [
+        "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.857
+        },
+        {
+          "doc": "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+          "score": 0.857
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.714
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.714
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for matching?",
+      "category": "general",
+      "expected_docs": [
+        "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+          "score": 0.833
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.667
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.667
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.667
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for application packages?",
+      "category": "general",
+      "expected_docs": [
+        "17_RESUME_AND_COVER_LETTER_WORKFLOWS.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.714
+        },
+        {
+          "doc": "17_RESUME_AND_COVER_LETTER_WORKFLOWS.md",
+          "score": 0.714
+        },
+        {
+          "doc": "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+          "score": 0.714
+        },
+        {
+          "doc": "13_AGENTS_PROMPTS_AND_LLM_WORKFLOWS.md",
+          "score": 0.714
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for interview prep?",
+      "category": "general",
+      "expected_docs": [
+        "18_INTERVIEW_PREPARATION.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.571
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.571
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.571
+        },
+        {
+          "doc": "27_GLOSSARY.md",
+          "score": 0.571
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for docs RAG?",
+      "category": "general",
+      "expected_docs": [
+        "12_RAG_AND_MENTOR_CHATBOT.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.857
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.857
+        },
+        {
+          "doc": "20_EXTERNAL_INTEGRATIONS.md",
+          "score": 0.857
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.857
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for Qdrant?",
+      "category": "general",
+      "expected_docs": [
+        "03_COMPLETE_FEATURE_CATALOG.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.833
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.833
+        },
+        {
+          "doc": "20_EXTERNAL_INTEGRATIONS.md",
+          "score": 0.833
+        },
+        {
+          "doc": "31_INDEXING_MANIFEST.md",
+          "score": 0.667
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for LLM provider?",
+      "category": "general",
+      "expected_docs": [
+        "03_COMPLETE_FEATURE_CATALOG.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "20_EXTERNAL_INTEGRATIONS.md",
+          "score": 0.857
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.857
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.714
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.714
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for Make.com?",
+      "category": "general",
+      "expected_docs": [
+        "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.857
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.857
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.857
+        },
+        {
+          "doc": "20_EXTERNAL_INTEGRATIONS.md",
+          "score": 0.857
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for Pipedream?",
+      "category": "general",
+      "expected_docs": [
+        "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.833
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.833
+        },
+        {
+          "doc": "20_EXTERNAL_INTEGRATIONS.md",
+          "score": 0.833
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.833
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for TheirStack?",
+      "category": "general",
+      "expected_docs": [
+        "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.833
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.833
+        },
+        {
+          "doc": "20_EXTERNAL_INTEGRATIONS.md",
+          "score": 0.833
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.833
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for learning paths?",
+      "category": "general",
+      "expected_docs": [
+        "03_COMPLETE_FEATURE_CATALOG.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.714
+        },
+        {
+          "doc": "26_FEATURE_IMPLEMENTATION_STATUS.md",
+          "score": 0.714
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.714
+        },
+        {
+          "doc": "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+          "score": 0.714
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for orchestration?",
+      "category": "general",
+      "expected_docs": [
+        "03_COMPLETE_FEATURE_CATALOG.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.833
+        },
+        {
+          "doc": "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+          "score": 0.833
+        },
+        {
+          "doc": "14_ELEVENLABS_VOICE_AGENT.md",
+          "score": 0.833
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.667
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for authentication?",
+      "category": "general",
+      "expected_docs": [
+        "11_AUTHENTICATION_AUTHORIZATION_AND_SECURITY.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "19_WORKFLOW_AUTOMATION_AND_MAKE_COM.md",
+          "score": 0.833
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.667
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.667
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.667
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for resume upload?",
+      "category": "general",
+      "expected_docs": [
+        "17_RESUME_AND_COVER_LETTER_WORKFLOWS.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.714
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.714
+        },
+        {
+          "doc": "26_FEATURE_IMPLEMENTATION_STATUS.md",
+          "score": 0.714
+        },
+        {
+          "doc": "25_KNOWN_LIMITATIONS_AND_TECHNICAL_DEBT.md",
+          "score": 0.714
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for job refresh?",
+      "category": "general",
+      "expected_docs": [
+        "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "24_ERRORS_LOGGING_AND_OBSERVABILITY.md",
+          "score": 0.857
+        },
+        {
+          "doc": "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+          "score": 0.857
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.714
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.714
+        }
+      ],
+      "hit": true
+    },
+    {
+      "question": "What does CareerOS implement for matching?",
+      "category": "general",
+      "expected_docs": [
+        "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+        "28_GOLDEN_QUESTIONS_AND_ANSWERS.md"
+      ],
+      "top_docs": [
+        {
+          "doc": "28_GOLDEN_QUESTIONS_AND_ANSWERS.md",
+          "score": 1.0
+        },
+        {
+          "doc": "16_JOB_DISCOVERY_MATCHING_AND_ELIGIBILITY.md",
+          "score": 0.833
+        },
+        {
+          "doc": "32_ELEVENLABS_MAKE_TWILIO_OPPORTUNITY_CALL.md",
+          "score": 0.667
+        },
+        {
+          "doc": "30_SOURCE_TRACEABILITY_MATRIX.md",
+          "score": 0.667
+        },
+        {
+          "doc": "29_TROUBLESHOOTING_RUNBOOK.md",
+          "score": 0.667
+        }
+      ],
+      "hit": true
+    }
+  ]
+}

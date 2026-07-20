@@ -136,6 +136,7 @@ class Settings(BaseSettings):
     MAKE_RAG_WEBHOOK_URL: Optional[str] = None
     MAKE_RAG_API_KEY: Optional[str] = None
     QDRANT_RAG_DOCS_COLLECTION: str = "careeros_rag_docs"
+    RAG_DIR_NAME: str = "rag_v2"
     RAG_EMBEDDING_MODEL: str = "nvidia/nv-embed-v1"
     RAG_LLM_MODEL: str = "gemini-2.5-flash"
     RAG_USE_MAKE: bool = True

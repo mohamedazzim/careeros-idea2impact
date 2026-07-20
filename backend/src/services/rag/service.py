@@ -31,7 +31,7 @@ MAKE_TIMEOUT_SECONDS = 25.0
 MIN_CHAT_TIMEOUT_SECONDS = 5.0
 MIN_STAGE_TIMEOUT_SECONDS = 3.0
 DOCS_DIR_NAME = "docs"
-RAG_DIR_NAME = "rag"
+DEFAULT_RAG_DIR_NAME = "rag_v2"
 
 SECRET_SEEKING_PATTERNS = (
     "api key",
@@ -135,7 +135,7 @@ class RagChunk:
     updated_at: str
     content_hash: str
     text: str
-    source: str = "docs/rag"
+    source: str = f"{DOCS_DIR_NAME}/{DEFAULT_RAG_DIR_NAME}"
 
     def to_payload(self) -> Dict[str, Any]:
         return {
@@ -180,13 +180,22 @@ class RagLLMOutput(BaseModel):
 def _repo_root() -> Path:
     current = Path(__file__).resolve()
     for parent in current.parents:
-        if (parent / DOCS_DIR_NAME / RAG_DIR_NAME).exists():
+        if (parent / DOCS_DIR_NAME / _rag_dir_name()).exists():
             return parent
     return current.parents[4] if len(current.parents) > 4 else current.parent
 
 
+def _rag_dir_name() -> str:
+    configured = getattr(settings, "RAG_DIR_NAME", DEFAULT_RAG_DIR_NAME) or DEFAULT_RAG_DIR_NAME
+    return str(configured).strip().strip("/\\") or DEFAULT_RAG_DIR_NAME
+
+
 def _docs_root() -> Path:
-    return _repo_root() / DOCS_DIR_NAME / RAG_DIR_NAME
+    return _repo_root() / DOCS_DIR_NAME / _rag_dir_name()
+
+
+def _docs_source_fallback() -> str:
+    return f"{DOCS_DIR_NAME}/{_rag_dir_name()}"
 
 
 def _utc_now_iso() -> str:
@@ -332,7 +341,7 @@ class DemoRagService:
         if not all_chunks:
             return DemoRagIndexResponse(
                 collection=self.collection_name,
-                source_path=str(self.docs_path.relative_to(_repo_root())).replace("\\", "/") if self.docs_path.exists() else "docs/rag",
+                source_path=str(self.docs_path.relative_to(_repo_root())).replace("\\", "/") if self.docs_path.exists() else _docs_source_fallback(),
             )
 
         embedder = get_embedding_service()
@@ -369,7 +378,7 @@ class DemoRagService:
 
         return DemoRagIndexResponse(
             collection=self.collection_name,
-            source_path=str(self.docs_path.relative_to(_repo_root())).replace("\\", "/") if self.docs_path.exists() else "docs/rag",
+            source_path=str(self.docs_path.relative_to(_repo_root())).replace("\\", "/") if self.docs_path.exists() else _docs_source_fallback(),
             files_indexed=len(files),
             chunks_indexed=len(all_chunks),
             successful_upserts=upserted,
@@ -455,7 +464,7 @@ class DemoRagService:
         if retrieval.status == "NO_RELEVANT_CONTEXT" or not retrieval.chunks:
             return DemoRagChatResponse(
                 status="ok",
-                answer="Needs verification: I could not find relevant documentation in `docs/rag/` for that question.",
+                answer=f"Needs verification: I could not find relevant documentation in `{_docs_source_fallback()}/` for that question.",
                 confidence=0.0,
                 citations=[],
                 follow_up_questions=list(ANSWER_FOLLOW_UPS),
@@ -624,9 +633,9 @@ class DemoRagService:
                 continue
             citations.append(
                 DemoRagCitation(
-                    doc_name=str(item.get("doc_name") or item.get("file") or "docs/rag"),
+                    doc_name=str(item.get("doc_name") or item.get("file") or _docs_source_fallback()),
                     section_title=str(item.get("section_title") or item.get("section") or "Unknown section"),
-                    source_path=str(item.get("source_path") or item.get("path") or "docs/rag"),
+                    source_path=str(item.get("source_path") or item.get("path") or _docs_source_fallback()),
                     score=float(item.get("score") or 0.0),
                 )
             )
@@ -747,7 +756,7 @@ class DemoRagService:
 
         return DemoRagHealthResponse(
             collection=self.collection_name,
-            docs_path=str(self.docs_path.relative_to(_repo_root())).replace("\\", "/") if self.docs_path.exists() else "docs/rag",
+            docs_path=str(self.docs_path.relative_to(_repo_root())).replace("\\", "/") if self.docs_path.exists() else _docs_source_fallback(),
             files_found=len(files),
             chunks_known=chunks_known,
             qdrant_ready=qdrant_ready,
