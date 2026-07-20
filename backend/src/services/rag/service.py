@@ -538,16 +538,28 @@ class DemoRagService:
             logger.warning("RAG answer generation failed, using extractive fallback: %s", exc)
 
         if parsed is None:
-            answer_text = retrieval.chunks[0].text.strip()
+            preferred_hits = [hit for hit in retrieval.chunks if "GOLDEN_QUESTIONS" not in hit.doc_name]
+            selected_hits = (preferred_hits or retrieval.chunks)[:3]
+            if len(selected_hits) == 1:
+                answer_text = selected_hits[0].text.strip()
+            else:
+                excerpts = []
+                for hit in selected_hits:
+                    excerpt = hit.text.strip()
+                    if len(excerpt) > 1400:
+                        excerpt = excerpt[:1400].rstrip() + "..."
+                    excerpts.append(f"From `{hit.source_path}` ({hit.section_title}):\n{excerpt}")
+                answer_text = "Retrieved documentation says:\n\n" + "\n\n".join(excerpts)
             follow_ups = list(ANSWER_FOLLOW_UPS)
             confidence = min(0.85, max(0.35, retrieval.top_score))
             citations = [
                 DemoRagCitation(
-                    doc_name=retrieval.chunks[0].doc_name,
-                    section_title=retrieval.chunks[0].section_title,
-                    source_path=retrieval.chunks[0].source_path,
-                    score=retrieval.chunks[0].score,
+                    doc_name=hit.doc_name,
+                    section_title=hit.section_title,
+                    source_path=hit.source_path,
+                    score=hit.score,
                 )
+                for hit in selected_hits
             ]
             return DemoRagChatResponse(
                 status="ok",
